@@ -16,3 +16,14 @@ distribueres til computeactors, gir svar
 - terminated fra compute actors propagerer via supervisor til clientactor
 - router og supervisor registreres på toppnivå
 - client-actor scheduling periodic messages med work. via en message til seg selv tenker jeg.
+
+
+slides :
+	- hva er akka (1-2 slides, uten kode)
+	- motivasjon (1-2 slides)
+	- kodeeksempler rettet mot å løse oppgavene 
+		- lag en actor, hvordan sende beskjed
+		- supervisors, Factory - hvorfor er den her? Kjekk for testing.
+		- poison pill, stoppe systemet
+		- restart : dersom divisjon gir aritmetisk exception kan actor restartes. Andre typer work/exception krever full stopp!
+	- siste slide er et hint om del 2, så folk ser det kommer noe mer
