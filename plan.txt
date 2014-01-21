@@ -1,0 +1,18 @@
+basic branch:
+- 2 enkle tester på compue-actor (2 typer work : Division og Addition fks) -> extends work. 
+	Ser for oss tomme skall av klasser, med tom receive
+- Test mot supervisor. Starter supervisor (med factory i constructor? eller noe lurere)
+	spør denne om den har en barn-node via oppslag 
+- Supervisor-actor må sendes beskjed om at barn-node skal startes (med en id på barnet elns)
+
+scalable branch:
+- supervisor tar i mot forespørsler, sender videre via en round-robin-router, 
+distribueres til computeactors, gir svar
+- client actor sender
+	-> do work
+		-> supervisor
+		(monitorerer compute-actors, har en router)
+- router distribuerer til compute-actors
+- terminated fra compute actors propagerer via supervisor til clientactor
+- router og supervisor registreres på toppnivå
+- client-actor scheduling periodic messages med work. via en message til seg selv tenker jeg.
