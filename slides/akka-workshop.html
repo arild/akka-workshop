@@ -1,0 +1,189 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--This one seems to work all the time, but really small on ipad-->
+    <!--<meta name="viewport" content="initial-scale=0.4">-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" media="all" href="theme/css/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+    <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+    <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+<slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/logo_dropshadow.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+        <h1 data-config-title><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>Motivation</h2>
+    </hgroup>
+    <article>
+        <ul class="build">
+            <li>Data needs are expanding in terms of size</li>
+            <li>Users expect low latency</li>
+            <li>Users expect availability</li>
+            <li>Applications need to scale</li>
+        </ul>
+    </article>
+    <aside class="note">
+        <section>
+            <ul>
+                <li>Point I wanted to make #1</li>
+                <li>Point I wanted to make #2</li>
+                <li>Point I wanted to make #3</li>
+                <li>Example <a href="#">link</a> in notes.</li>
+            </ul>
+            <p><b>Remember to say this tag line!</b></p>
+        </section>
+    </aside>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>Reactive Applications (I)</h2>
+    </hgroup>
+    <article>
+        <ul class="build">
+            <li>Event-driven</li>
+            <li>Scalable</li>
+            <li>Resilient</li>
+            <li>Responsive</li>
+        </ul>
+    </article>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>Reactive Applications (II)</h2>
+    </hgroup>
+    <article class="flexbox vleft auto-fadein">
+        <q>
+            (..) event-driven, scalable, resilient and responsive: delivering highly responsive user experiences with a real-time feel, backed by a scalable and resilient application stack, ready to be deployed on multicore and cloud computing architectures.
+        </q>
+        <div class="author">
+            www.reactivemanifesto.org<br>
+        </div>
+    </article>
+</slide>
+
+
+<slide>
+    <hgroup>
+        <h2>How Akka is Reactive (I)</h2>
+    </hgroup>
+    <article class="flexbox vleft auto-fadein">
+        <q>
+            Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM
+        </q>
+        <div class="author">
+            typesafe.com/platform/runtime/akka<br>
+        </div>
+    </article>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>How Akka is Reactive (II)</h2>
+    </hgroup>
+    <article class="flexbox vleft auto-fadein">
+        <q>
+            Akka actors allow you to implement reliable and maintainable failure handling in a distributed application—across multiple cores and cluster nodes.
+        </q>
+        <div class="author">
+            typesafe.com/platform/runtime/akka<br>
+        </div>
+    </article>
+</slide>
+
+
+<slide>
+    <hgroup>
+        <h2>How Akka is Reactive (III)</h2>
+    </hgroup>
+    <article>
+        <ul class="build">
+            <li>Event driven (asynchronous) middleware for Scala and Java</li>
+            <li>Decouples business logic from scalability (parallelism, threading, blocking.. )</li>
+            <li>Behaves like actors - sends messages</li>
+        </ul>
+    </article>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>How Akka is Reactive (IV)</h2>
+    </hgroup>
+    <article>
+        <ul class="build">
+            <li>Fault tolerant</li>
+            <li>Supervisor hierachies</li>
+            <li>Every actor can create other actors</li>
+            <li>Let it crash</li>
+        </ul>
+    </article>
+</slide>
+
+<slide>
+    <hgroup>
+        <h2>Final sales-pitch</h2>
+    </hgroup>
+    <article>
+        <ul class="build">
+            <li>Simpler concurrency</li>
+            <li>Scalability - hardware supporting thousands of threads support millions of actors</li>
+            <li>Scala & Java APIs</li>
+        </ul>
+    </article>
+</slide>
+
+<slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+        <h2>&lt;Thank You!&gt;</h2>
+    </article>
+</slide>
+
+<slide class="backdrop"></slide>
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+<script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>
