@@ -13,8 +13,13 @@ class GreetSenderActor extends Actor {
     worker ! Messages.Greet
     worker ! Messages.BecomeGreet
     worker ! Messages.Greet
+
+    val fragile = context.actorOf(Props[Fragile], "fragile")
+    context.watch(fragile)
+    fragile ! Messages.Die
+    fragile ! Messages.Greet
   }
-  def receive = {
+  def receivePartial : Receive = {
     case Messages.Done => context.stop(self)
   }
 }
@@ -25,6 +30,13 @@ class Greeter extends Actor {
       println("Hello world!")
       sender ! Messages.Done
   }
+}
+
+class Fragile extends Actor {
+  def receive = {
+    case Messages.Die => context.stop(self)
+  }
+
 }
 
 class Worker extends Actor {
@@ -47,6 +59,7 @@ object Messages {
   case object Work
   case object Done
   case object BecomeGreet
+  case object Die
 }
 
 object Driver {
