@@ -1,4 +1,4 @@
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem}
 import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, FunSpecLike}
 
@@ -14,11 +14,36 @@ with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  it("should handle division") {
-      val actorRef = TestActorRef[ComputeActor]
-      actorRef ! Division(9, 3)
+  it("should handle addition") {
+    val computeActor = TestActorRef[ComputeActor]
 
-      // This method assert that the `testActor` has received a specific message
-      expectMsg(3)
+    computeActor ! Addition(9, 3)
+    expectMsg(12)
     }
+
+  it("should handle division") {
+    val computeActor = TestActorRef[ComputeActor]
+
+    computeActor ! Division(5, 2)
+    expectMsg(2.5);
+    }
+
+  it("should return number of completed tasks") {
+    val computeActor = TestActorRef[ComputeActor]
+
+    computeActor ! GetNumCompletedTasks
+    expectMsg(0)
+
+    computeActor ! Addition(1, 1)
+    expectMsgClass(classOf[Integer]) // Result from addition
+
+    computeActor ! GetNumCompletedTasks
+    expectMsg(1)
+
+    computeActor ! Division(1, 1)
+    expectMsgClass(classOf[Float]) // Result from division
+
+    computeActor ! GetNumCompletedTasks
+    expectMsg(2)
+  }
 }
