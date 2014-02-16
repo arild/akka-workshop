@@ -1,4 +1,4 @@
-import akka.actor.{ActorSystem}
+import akka.actor._
 import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, FunSpecLike}
 
@@ -14,25 +14,29 @@ with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  it("should handle addition") {
+  it("should compute addition") {
     val computeActor = TestActorRef[ComputeActor]
 
     computeActor ! Addition(9, 3)
     expectMsg(12)
-    }
+  }
 
-  it("should handle division") {
+  it("should compute division") {
     val computeActor = TestActorRef[ComputeActor]
 
-    computeActor ! Division(5, 2)
-    expectMsg(2.5);
+    computeActor ! Division(9, 3)
+    expectMsg(3)
     }
 
-  it("should return number of completed tasks") {
+  it("should initially have zero completed tasks") {
     val computeActor = TestActorRef[ComputeActor]
 
     computeActor ! GetNumCompletedTasks
     expectMsg(0)
+  }
+
+  it("should increment number of completed tasks") {
+    val computeActor = TestActorRef[ComputeActor]
 
     computeActor ! Addition(1, 1)
     expectMsgClass(classOf[Integer]) // Result from addition
@@ -41,9 +45,21 @@ with BeforeAndAfterAll {
     expectMsg(1)
 
     computeActor ! Division(1, 1)
-    expectMsgClass(classOf[Float]) // Result from division
+    expectMsgClass(classOf[Integer]) // Result from division
 
     computeActor ! GetNumCompletedTasks
     expectMsg(2)
+  }
+
+  it("should not increment number of completed tasks when division fails with arithmetic exception") {
+    val computeActor = TestActorRef[ComputeActor]
+
+    // Prevents stack trace from displaying when running tests
+    intercept[ArithmeticException] {
+      computeActor.receive(Division(1, 0))
+    }
+
+    computeActor ! GetNumCompletedTasks
+    expectMsg(0)
   }
 }

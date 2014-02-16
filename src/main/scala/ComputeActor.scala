@@ -16,7 +16,8 @@ class ComputeActor extends Actor {
       sender ! result
     }
     case division: Division => {
-      val result: Float = division.dividend.toFloat / division.divisor
+      val result: Integer = division.dividend / division.divisor
+      log.info("division result {}", result)
       incrementNumCompletedTasks
       sender ! result
     }
