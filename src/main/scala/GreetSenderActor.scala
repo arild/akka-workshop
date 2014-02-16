@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Actor, Props}
 
-class GreetSenderActor extends Actor {
+abstract class GreetSenderActor extends Actor {
   override def preStart(): Unit = {
     //create the greeter actor
     val greeter = context.actorOf(Props[Greeter], "greeter")
