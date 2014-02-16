@@ -19,7 +19,7 @@ with Matchers {
     TestKit.shutdownActorSystem(system)
   }
 
-  it("should start ComputeActor and return ActorRef") {
+  it("should start compute actor and return its reference") {
 
     val computeActorFactory = mock[ComputeActorFactory]
     val computeActor: ActorRef = mock[ActorRef]
@@ -31,7 +31,7 @@ with Matchers {
 
     within(500 millis){
       val actor: ActorRef = expectMsgClass(classOf[ActorRef])
-      actor should equal(computeActor)
+      actor shouldBe computeActor
     }
   }
 }
