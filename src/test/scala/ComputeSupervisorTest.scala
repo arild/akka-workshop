@@ -3,12 +3,12 @@ import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
 import actors.{IsRestarted, ComputeTestActor}
 import scala.concurrent.duration._
 import org.scalatest.mock.MockitoSugar
-import org.scalatest.{Matchers, BeforeAndAfterAll, FunSpecLike}
+import org.scalatest.{FlatSpecLike, Matchers, BeforeAndAfterAll}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
 class ComputeSupervisorTest extends TestKit(ActorSystem("testSystem"))
-with FunSpecLike
+with FlatSpecLike
 with ImplicitSender
 with BeforeAndAfterAll
 with MockitoSugar
@@ -18,7 +18,7 @@ with Matchers {
     TestKit.shutdownActorSystem(system)
   }
 
-  it("should start compute actor and return its reference") {
+  it should "start compute actor and return its reference" in {
 
     val computeActorFactory = mock[ComputeActorFactory]
     val computeActor: ActorRef = mock[ActorRef]
@@ -34,7 +34,7 @@ with Matchers {
     }
   }
 
-  it("should resume compute actor on arithmetic exception") {
+  it should "should resume compute actor on arithmetic exception" in {
 
     val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
     computeSupervisor ! StartComputeActor("computeActor-1")
@@ -47,7 +47,7 @@ with Matchers {
     expectMsg(false)
   }
 
-  it("should restart compute actor on any exception other than arithmetic exception") {
+  it should "should restart compute actor on any exception other than arithmetic exception" in {
 
     val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
     computeSupervisor ! StartComputeActor("computeActor-1")
