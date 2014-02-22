@@ -7,14 +7,12 @@ import org.scalatest.{Matchers, BeforeAndAfterAll, FunSpecLike}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-class ComputeSupervisorTest(_system: ActorSystem) extends TestKit(_system)
+class ComputeSupervisorTest extends TestKit(ActorSystem("testSystem"))
 with FunSpecLike
 with ImplicitSender
 with BeforeAndAfterAll
 with MockitoSugar
 with Matchers {
-
-  def this() = this(ActorSystem("testSystem"))
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)

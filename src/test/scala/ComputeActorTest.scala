@@ -3,12 +3,10 @@ import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
 import org.scalatest.{BeforeAndAfterAll, FunSpecLike}
 
 
-class ComputeActorTest(_system: ActorSystem) extends TestKit(_system)
+class ComputeActorTest extends TestKit(ActorSystem("testSystem"))
 with FunSpecLike
 with ImplicitSender
 with BeforeAndAfterAll {
-
-  def this() = this(ActorSystem("testSystem"))
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
