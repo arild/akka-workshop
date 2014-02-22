@@ -1,7 +1,8 @@
-package actors
+package workshop.helpers
 
 import akka.actor.Actor
 import akka.event.Logging
+
 
 case class IsRestarted()
 

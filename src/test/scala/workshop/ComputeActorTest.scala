@@ -1,4 +1,7 @@
+package workshop
+
 import akka.testkit.TestActorRef
+
 
 class ComputeActorTest extends AkkaSpec {
 

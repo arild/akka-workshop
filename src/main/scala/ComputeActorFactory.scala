@@ -1,4 +1,7 @@
+package workshop
+
 import akka.actor.{ActorRef, Props, ActorContext}
+
 
 class ComputeActorFactory {
   def create(context: ActorContext, actorName: String): ActorRef = {

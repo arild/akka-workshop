@@ -1,3 +1,5 @@
+package workshop
+
 import akka.actor.SupervisorStrategy.{Restart, Resume}
 import akka.actor.{OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging

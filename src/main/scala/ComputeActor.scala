@@ -1,5 +1,8 @@
+package workshop
+
 import akka.actor.Actor
 import akka.event.Logging
+
 
 case class Addition(a: Integer, b: Integer)
 case class Division(dividend: Int, divisor: Int)

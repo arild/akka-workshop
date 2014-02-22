@@ -1,9 +1,12 @@
+package workshop
+
 import akka.actor._
 import akka.testkit.{TestActorRef, TestKit}
-import actors.{IsRestarted, ComputeTestActor}
 import scala.concurrent.duration._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import workshop.helpers._
+
 
 class ComputeSupervisorTest extends AkkaSpec {
 
@@ -52,11 +55,5 @@ class ComputeSupervisorTest extends AkkaSpec {
 
       computeTestActor ! IsRestarted
       expectMsg(true)
-  }
-
-  class ComputeActorTestFactory extends ComputeActorFactory {
-    override def create(context: ActorContext, actorName: String): ActorRef = {
-      context.actorOf(Props(classOf[ComputeTestActor]), actorName)
-    }
   }
 }

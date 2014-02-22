@@ -1,6 +1,9 @@
+package workshop
+
 import akka.actor.{ActorSystem, Actor, Props}
 
-abstract class GreetSenderActor extends Actor {
+
+class GreetSenderActor extends Actor {
   override def preStart(): Unit = {
     //create the greeter actor
     val greeter = context.actorOf(Props[Greeter], "greeter")
@@ -19,7 +22,7 @@ abstract class GreetSenderActor extends Actor {
     fragile ! Messages.Die
     fragile ! Messages.Greet
   }
-  def receivePartial : Receive = {
+  def receive : Receive = {
     case Messages.Done => context.stop(self)
   }
 }
@@ -66,5 +69,4 @@ object Driver {
   def main(args: Array[String]) {
     ActorSystem("Main").actorOf(Props[GreetSenderActor])
   }
-
 }
