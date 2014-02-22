@@ -1,18 +1,11 @@
 import akka.actor._
-import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
+import akka.testkit.{TestActorRef, TestKit}
 import actors.{IsRestarted, ComputeTestActor}
 import scala.concurrent.duration._
-import org.scalatest.mock.MockitoSugar
-import org.scalatest.{FlatSpecLike, Matchers, BeforeAndAfterAll}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 
-class ComputeSupervisorTest extends TestKit(ActorSystem("testSystem"))
-with FlatSpecLike
-with ImplicitSender
-with BeforeAndAfterAll
-with MockitoSugar
-with Matchers {
+class ComputeSupervisorTest extends AkkaSpec {
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)

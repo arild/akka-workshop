@@ -1,19 +1,9 @@
-import akka.actor._
-import akka.testkit.{TestActorRef, ImplicitSender, TestKit}
-import org.scalatest._
+import akka.testkit.TestActorRef
 
-
-class ComputeActorTest extends TestKit(ActorSystem("testSystem"))
-with FlatSpecLike
-with ImplicitSender
-with BeforeAndAfterAll {
+class ComputeActorTest extends AkkaSpec {
 
   trait Actor {
     val computeActor = TestActorRef[ComputeActor]
-  }
-
-  override def afterAll {
-    TestKit.shutdownActorSystem(system)
   }
 
   it should "compute addition" in new Actor {
