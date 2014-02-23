@@ -7,9 +7,11 @@ import org.scalatest.{Matchers, BeforeAndAfterAll, FlatSpecLike}
 import com.typesafe.config.ConfigFactory
 
 
-abstract class AkkaSpec extends TestKit(ActorSystem("testSystem",
+abstract class AkkaSpec extends TestKit(ActorSystem("testSystem"
+  ,
   ConfigFactory.parseString(AkkaSpec.config
-  )))
+  )
+))
 with FlatSpecLike
 with ImplicitSender
 with BeforeAndAfterAll

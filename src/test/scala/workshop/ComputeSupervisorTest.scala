@@ -6,13 +6,14 @@ import scala.concurrent.duration._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import workshop.helpers._
+import com.typesafe.config.ConfigFactory
 
 class ComputeSupervisorTest extends AkkaSpec {
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
-
+/*
   it should "start compute actor and return its reference" in {
 
     val computeActorFactory = mock[ComputeActorFactory]
@@ -55,16 +56,20 @@ class ComputeSupervisorTest extends AkkaSpec {
       computeTestActor ! IsRestarted
       expectMsg(true)
   }
+  */
 
   it should "schedule a tick to itself and then receive a tick within resonable time" in {
 
-    val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
+    implicit val system = ActorSystem("testsystem", ConfigFactory.parseString("""
+      akka.loggers = ["akka.testkit.TestEventListener"]
+                                                                              """))
+    val computeSupervisor = system.actorOf(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
 
-    within(4 seconds){
-      EventFilter.info(message = "secretmessage") intercept {
-        println("hmmmmmm")
-      }
+    //kaster timeout etter 3 sek dersom filter ikke mather
+    EventFilter.info(occurrences = 2, message="ticktick") intercept {
+
     }
+
 
   }
 }

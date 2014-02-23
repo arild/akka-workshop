@@ -38,12 +38,12 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
     }
     case Tick => {
       log.info("ticktick")
-      context.system.scheduler.scheduleOnce(1 seconds, self, Tick)
+      context.system.scheduler.scheduleOnce(1200 milliseconds, self, Tick)
     }
 
   }
 
   override def preStart() =
-    context.system.scheduler.scheduleOnce(1 seconds, self, Tick)
+    context.system.scheduler.scheduleOnce(1200 milliseconds, self, Tick)
 
 }
