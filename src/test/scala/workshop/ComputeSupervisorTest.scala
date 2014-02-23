@@ -1,12 +1,11 @@
 package workshop
 
 import akka.actor._
-import akka.testkit.{TestActorRef, TestKit}
+import akka.testkit.{EventFilter, TestActorRef, TestKit}
 import scala.concurrent.duration._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import workshop.helpers._
-
 
 class ComputeSupervisorTest extends AkkaSpec {
 
@@ -55,5 +54,17 @@ class ComputeSupervisorTest extends AkkaSpec {
 
       computeTestActor ! IsRestarted
       expectMsg(true)
+  }
+
+  it should "schedule a tick to itself and then receive a tick within resonable time" in {
+
+    val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
+
+    within(4 seconds){
+      EventFilter.info(message = "secretmessage") intercept {
+        println("hmmmmmm")
+      }
+    }
+
   }
 }

@@ -4,9 +4,13 @@ import akka.actor.SupervisorStrategy.{Restart, Resume}
 import akka.actor.{OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
 
 
 case class StartComputeActor(actorName: String)
+case class Tick()
+case class GotTick()
 
 class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
 
@@ -32,5 +36,14 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
       sender ! computeActor
       log.info("Created compute-actor with name {}", startComputeActor.actorName)
     }
+    case Tick => {
+      log.info("ticktick")
+      context.system.scheduler.scheduleOnce(1 seconds, self, Tick)
+    }
+
   }
+
+  override def preStart() =
+    context.system.scheduler.scheduleOnce(1 seconds, self, Tick)
+
 }
