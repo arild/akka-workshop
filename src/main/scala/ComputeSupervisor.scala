@@ -10,7 +10,6 @@ import ExecutionContext.Implicits.global
 
 case class StartComputeActor(actorName: String)
 case class Tick()
-case class GotTick()
 
 class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
 
@@ -30,20 +29,22 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
       }
     }
 
+  override def preStart() = scheduleTick()
+
   def receive = {
     case startComputeActor : StartComputeActor => {
       val computeActor: ActorRef = computeActorFactory.create(context, startComputeActor.actorName)
       sender ! computeActor
-      log.info("Created compute-actor with name {}", startComputeActor.actorName)
+      log.info("Started compute actor with name {}", startComputeActor.actorName)
     }
     case Tick => {
       log.info("ticktick")
-      context.system.scheduler.scheduleOnce(1200 milliseconds, self, Tick)
+      scheduleTick()
     }
-
   }
 
-  override def preStart() =
-    context.system.scheduler.scheduleOnce(1200 milliseconds, self, Tick)
+  def scheduleTick() = {
+    context.system.scheduler.scheduleOnce(1 second, self, Tick)
+  }
 
 }

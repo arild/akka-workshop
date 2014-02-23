@@ -1,19 +1,14 @@
 package workshop
 
 import akka.actor._
-import akka.testkit.{EventFilter, TestActorRef, TestKit}
-import scala.concurrent.duration._
+import akka.testkit.{EventFilter, TestActorRef}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import workshop.helpers._
-import com.typesafe.config.ConfigFactory
+
 
 class ComputeSupervisorTest extends AkkaSpec {
 
-  override def afterAll {
-    TestKit.shutdownActorSystem(system)
-  }
-/*
   it should "start compute actor and return its reference" in {
 
     val computeActorFactory = mock[ComputeActorFactory]
@@ -24,13 +19,11 @@ class ComputeSupervisorTest extends AkkaSpec {
 
     computeSupervisor ! StartComputeActor("computeActor-1")
 
-    within(500 millis){
-      val actor: ActorRef = expectMsgClass(classOf[ActorRef])
-      actor shouldBe computeActor
-    }
+    val actor: ActorRef = expectMsgClass(classOf[ActorRef])
+    actor shouldBe computeActor
   }
 
-  it should "should resume compute actor on arithmetic exception" in {
+  it should "resume compute actor on arithmetic exception" in {
 
     val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
     computeSupervisor ! StartComputeActor("computeActor-1")
@@ -43,33 +36,26 @@ class ComputeSupervisorTest extends AkkaSpec {
     expectMsg(false)
   }
 
-  it should "should restart compute actor on any exception other than arithmetic exception" in {
+  it should "restart compute actor on any exception other than arithmetic exception" in {
 
     val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
     val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
 
+    computeTestActor ! new NumberFormatException("test exception")
 
-      computeTestActor ! new NumberFormatException("test exception")
-
-      computeTestActor ! IsRestarted
-      expectMsg(true)
+    computeTestActor ! IsRestarted
+    expectMsg(true)
   }
-  */
 
   it should "schedule a tick to itself and then receive a tick within resonable time" in {
 
-    implicit val system = ActorSystem("testsystem", ConfigFactory.parseString("""
-      akka.loggers = ["akka.testkit.TestEventListener"]
-                                                                              """))
-    val computeSupervisor = system.actorOf(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
-
-    //kaster timeout etter 3 sek dersom filter ikke mather
-    EventFilter.info(occurrences = 2, message="ticktick") intercept {
-
-    }
+    system.actorOf(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
 
 
+    // Throws timeout exception after 3 seconds if filter does not match
+    EventFilter.info(message="ticktick", occurrences = 2).intercept( {
+    })
   }
 }

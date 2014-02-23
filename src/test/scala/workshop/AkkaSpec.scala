@@ -7,11 +7,17 @@ import org.scalatest.{Matchers, BeforeAndAfterAll, FlatSpecLike}
 import com.typesafe.config.ConfigFactory
 
 
-abstract class AkkaSpec extends TestKit(ActorSystem("testSystem"
-  ,
-  ConfigFactory.parseString(AkkaSpec.config
-  )
-))
+object AkkaSpec {
+  def getTestSystem(): ActorSystem = {
+    // Replace normal event handler with test event handler supporting
+    // expecting exceptions and log messages during tests
+    val config = ConfigFactory.parseString("""akka.loggers = ["akka.testkit.TestEventListener"]""")
+
+    ActorSystem("testSystem", config)
+  }
+}
+
+abstract class AkkaSpec extends TestKit(AkkaSpec.getTestSystem())
 with FlatSpecLike
 with ImplicitSender
 with BeforeAndAfterAll
@@ -21,11 +27,4 @@ with Matchers {
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
-
-}
-
-object AkkaSpec {
-  val config = """
-    akka.loggers = ["akka.testkit.TestEventListener"]
-  """
 }
