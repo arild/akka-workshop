@@ -7,6 +7,8 @@ import akka.event.Logging
 case class Addition(a: Integer, b: Integer)
 case class Division(dividend: Int, divisor: Int)
 case class GetNumCompletedTasks()
+case class NumCompletedTasks(numCompleted: Integer)
+
 
 class ComputeActor extends Actor {
   val log = Logging(context.system, this)
@@ -24,7 +26,7 @@ class ComputeActor extends Actor {
       sender ! result
     }
     case GetNumCompletedTasks =>  {
-      sender ! numCompletedTasks
+      sender ! NumCompletedTasks(numCompletedTasks)
     }
     case m: Any => {
       log.info("Unhandled message");

@@ -21,7 +21,7 @@ class ComputeActorTest extends AkkaSpec {
 
   it should "initially have zero completed tasks" in new Actor {
     computeActor ! GetNumCompletedTasks
-    expectMsg(0)
+    expectMsg(NumCompletedTasks(0))
   }
 
   it should "increment number of completed tasks" in new Actor {
@@ -29,13 +29,13 @@ class ComputeActorTest extends AkkaSpec {
     expectMsgClass(classOf[Integer]) // Result from addition
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(1)
+    expectMsg(NumCompletedTasks(1))
 
     computeActor ! Division(1, 1)
     expectMsgClass(classOf[Integer]) // Result from division
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(2)
+    expectMsg(NumCompletedTasks(2))
   }
 
   it should "not increment number of completed tasks when division fails with arithmetic exception" in new Actor {
@@ -45,6 +45,6 @@ class ComputeActorTest extends AkkaSpec {
     }
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(0)
+    expectMsg(NumCompletedTasks(0))
   }
 }
