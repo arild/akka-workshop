@@ -1,9 +1,10 @@
 package workshop
 
 import akka.actor._
-import akka.testkit.{EventFilter, TestActorRef}
+import akka.testkit.{TestProbe, EventFilter, TestActorRef}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import scala.concurrent.duration._
 import workshop.helpers._
 
 
@@ -49,13 +50,37 @@ class ComputeSupervisorTest extends AkkaSpec {
     expectMsg(true)
   }
 
-  it should "schedule a tick to itself and then receive a tick within resonable time" in {
+  it should "request num completed tasks from compute actor every configured interval" in {
 
-    system.actorOf(Props(new ComputeSupervisor(new ComputeActorTestFactory)))
+    val computeActorFactory = mock[ComputeActorFactory]
+    val probe = TestProbe()
+    when(computeActorFactory.create(any[ActorContext], anyString())).thenReturn(probe.ref)
 
+    val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(computeActorFactory, 50 millis)))
+
+    computeSupervisor ! StartComputeActor("computeActor-1")
+
+    probe.expectMsg(100 millis, GetNumCompletedTasks)
+    probe.expectMsg(100 millis, GetNumCompletedTasks)
+  }
+
+  it should "log num completed tasks from compute actor every configured interval on format 'Num completed tasks: <num_completed>'" in {
+
+    val computeActorFactory = mock[ComputeActorFactory]
+    val probe = TestProbe()
+    when(computeActorFactory.create(any[ActorContext], anyString())).thenReturn(probe.ref)
+
+    val computeSupervisor = TestActorRef(Props(new ComputeSupervisor(computeActorFactory, 50 millis)))
+
+    computeSupervisor ! StartComputeActor("computeActor-1")
 
     // Throws timeout exception after 3 seconds if filter does not match
-    EventFilter.info(message="ticktick", occurrences = 2).intercept( {
+    EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
+      probe.expectMsg(100 millis, GetNumCompletedTasks)
+      probe.reply(NumCompletedTasks(0))
+
+      probe.expectMsg(100 millis, GetNumCompletedTasks)
+      probe.reply(NumCompletedTasks(1))
     })
   }
 }

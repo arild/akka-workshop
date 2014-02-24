@@ -11,11 +11,10 @@ import ExecutionContext.Implicits.global
 case class StartComputeActor(actorName: String)
 case class Tick()
 
-class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
+class ComputeSupervisor(computeActorFactory: ComputeActorFactory, requestInterval: FiniteDuration = 1 second) extends Actor {
 
   val log = Logging(context.system, this)
-
-  def this() = this(new ComputeActorFactory())
+  var computeActor: Option[ActorRef] = None
 
   override val supervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
@@ -33,18 +32,24 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
 
   def receive = {
     case startComputeActor : StartComputeActor => {
-      val computeActor: ActorRef = computeActorFactory.create(context, startComputeActor.actorName)
-      sender ! computeActor
+      computeActor = Some(computeActorFactory.create(context, startComputeActor.actorName))
+
+      sender ! computeActor.get
+
       log.info("Started compute actor with name {}", startComputeActor.actorName)
     }
     case Tick => {
-      log.info("ticktick")
+      computeActor match {
+        case Some(computeActor) => {
+          computeActor ! GetNumCompletedTasks
+        }
+      }
       scheduleTick()
     }
+    case NumCompletedTasks(numCompleted) => log.info("Num completed tasks: {}", numCompleted)
   }
 
   def scheduleTick() = {
-    context.system.scheduler.scheduleOnce(1 second, self, Tick)
+    context.system.scheduler.scheduleOnce(requestInterval, self, Tick)
   }
-
 }
