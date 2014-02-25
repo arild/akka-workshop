@@ -1,0 +1,79 @@
+
+article > ul, article .noListPadding > ul {
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+}
+
+article ul > li {
+    list-style: none;
+    list-style-type: none;
+    margin-bottom: 1em;
+}
+
+article ul > li:before {
+    content: "";
+}
+
+slides > slide:not(.nobackground):before {
+    background: none;
+}
+
+.quoteLink a, .thank-you-slide a {
+    color: deepskyblue;
+    border-bottom: 2px solid deepskyblue;
+    text-decoration: none;
+}
+
+slides slide.thank-you-slide {
+    background: #797979 !important;
+}
+
+/*.outlineHighlight {*/
+    /*font-weight: bold;*/
+    /*font-size: 120%;*/
+/*}*/
+
+/*.quoteLink {*/
+    /*padding-left: 0px;*/
+    /*padding-top: 20px;*/
+/*}*/
+
+
+/*.mono {*/
+    /*font-family: monospace;*/
+/*}*/
+
+/*.padLeft {*/
+    /*padding-left:  15px;*/
+/*}*/
+
+/*.padRight {*/
+    /*padding-right: 15px;*/
+/*}*/
+
+/*slide article pre[data-lang].plain:after{*/
+    /*content: 'OUTPUT'*/
+/*}*/
+
+/*slide article pre.plain span.kwd,*/
+/*slide article pre.plain span.typ {*/
+    /*color: #515151 !important;*/
+/*}*/
+
+
+/*aside.gdbar {*/
+    /*width: 265px !important;*/
+    /*height: 83px !important;*/
+    /*background: #797979 !important;*/
+/*}*/
+
+/*aside.gdbar img {*/
+    /*width: auto !important;*/
+    /*height: auto !important;*/
+    /*margin: 15px 20px !important;*/
+/*}*/
+
+
+/*slide.resources a {*/
+    /*border: none;*/
+/*}*/
