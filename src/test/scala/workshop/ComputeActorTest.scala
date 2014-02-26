@@ -34,19 +34,19 @@ class ComputeActorTest extends AkkaSpec {
 
   it should "increment number of completed tasks" in new Actor {
     computeActor ! Addition(1, 1)
-    expectMsgClass(classOf[Integer]) // Result from addition
+    expectMsgClass(classOf[Int]) // Result from addition
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(1))
 
     computeActor ! Division(1, 1)
-    expectMsgClass(classOf[Integer]) // Result from division
+    expectMsgClass(classOf[Int]) // Result from division
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(2))
 
     computeActor ! new HeavyAddition(3, 5)
-    expectMsgClass(classOf[Integer]) // Result from heavy addition
+    expectMsgClass(classOf[Int]) // Result from heavy addition
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(3))

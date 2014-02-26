@@ -6,10 +6,10 @@ import scala.concurrent.duration._
 import workshop.work.HeavyWork
 
 
-case class Addition(a: Integer, b: Integer)
+case class Addition(a: Int, b: Int)
 case class Division(dividend: Int, divisor: Int)
 case class GetNumCompletedTasks()
-case class NumCompletedTasks(numCompleted: Integer)
+case class NumCompletedTasks(numCompleted: Int)
 case class Tick()
 
 object ComputeActor {
@@ -18,7 +18,7 @@ object ComputeActor {
 
 class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
-  var numCompletedTasks: Integer = 0
+  var numCompletedTasks: Int = 0
 
   override def preStart() = {
     scheduleTick()
@@ -31,7 +31,7 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
       sender ! result
     }
     case division: Division => {
-      val result: Integer = division.dividend / division.divisor
+      val result: Int = division.dividend / division.divisor
       incrementNumCompletedTasks()
       sender ! result
     }
