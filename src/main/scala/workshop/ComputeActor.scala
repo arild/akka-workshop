@@ -53,8 +53,8 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
     numCompletedTasks += 1
   }
 
-  import context.dispatcher
   def scheduleTick() {
+    import context.dispatcher
     context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, Tick)
   }
 }
