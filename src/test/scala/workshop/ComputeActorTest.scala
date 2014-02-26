@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class ComputeActorTest extends AkkaSpec {
 
   trait Actor {
-    val computeActor = TestActorRef(new ComputeActor)
+    val computeActor = TestActorRef(ComputeActor.props(1 second))
   }
 
   it should "compute addition" in new Actor {

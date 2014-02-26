@@ -1,14 +1,18 @@
 package workshop
 
 import akka.actor.SupervisorStrategy.{Restart, Resume}
-import akka.actor.{OneForOneStrategy, ActorRef, Actor}
+import akka.actor.{Props, OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
 
 
 case class StartComputeActor(actorName: String)
 
-class ComputeSupervisor(computeActorFactory: ComputeActorFactory, requestInterval: FiniteDuration = 1 second) extends Actor {
+object ComputeSupervisor {
+  def props(computeActorFactory: ComputeActorFactory): Props = Props(new ComputeSupervisor(computeActorFactory))
+}
+
+class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
   val log = Logging(context.system, this)
 
   override val supervisorStrategy =

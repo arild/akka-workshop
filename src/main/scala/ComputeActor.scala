@@ -1,6 +1,6 @@
 package workshop
 
-import akka.actor.Actor
+import akka.actor.{Props, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
 
@@ -11,7 +11,11 @@ case class GetNumCompletedTasks()
 case class NumCompletedTasks(numCompleted: Integer)
 case class Tick()
 
-class ComputeActor(logCompleteTasksInterval: FiniteDuration = 1 second) extends Actor {
+object ComputeActor {
+  def props(logCompletedTasksInterval: FiniteDuration): Props = Props(new ComputeActor(logCompletedTasksInterval))
+}
+
+class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
   var numCompletedTasks: Integer = 0
 
@@ -49,6 +53,6 @@ class ComputeActor(logCompleteTasksInterval: FiniteDuration = 1 second) extends 
 
   import context.dispatcher
   def scheduleTick() {
-    context.system.scheduler.scheduleOnce(logCompleteTasksInterval, self, Tick)
+    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, Tick)
   }
 }

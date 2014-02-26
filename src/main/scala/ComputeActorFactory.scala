@@ -1,10 +1,11 @@
 package workshop
 
+import scala.concurrent.duration._
 import akka.actor.{ActorRef, Props, ActorContext}
 
 
-class ComputeActorFactory {
+class ComputeActorFactory(logCompletedTasksInterval: FiniteDuration = 1 second) {
   def create(context: ActorContext, actorName: String): ActorRef = {
-    context.actorOf(Props(classOf[ComputeActor]), actorName)
+    context.actorOf(ComputeActor.props(logCompletedTasksInterval), actorName)
   }
 }
