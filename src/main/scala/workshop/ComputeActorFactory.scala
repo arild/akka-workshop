@@ -1,7 +1,7 @@
 package workshop
 
 import scala.concurrent.duration._
-import akka.actor.{ActorRef, Props, ActorContext}
+import akka.actor.{ActorRef, ActorContext}
 
 
 class ComputeActorFactory(logCompletedTasksInterval: FiniteDuration = 1 second) {

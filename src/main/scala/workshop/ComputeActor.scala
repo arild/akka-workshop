@@ -3,6 +3,7 @@ package workshop
 import akka.actor.{Props, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
+import workshop.work.HeavyWork
 
 
 case class Addition(a: Integer, b: Integer)
@@ -34,16 +35,17 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
       incrementNumCompletedTasks()
       sender ! result
     }
+    case work: HeavyWork => {
+      val result: Any = work.perform()
+      incrementNumCompletedTasks()
+      sender ! result
+    }
     case GetNumCompletedTasks =>  {
       sender ! NumCompletedTasks(numCompletedTasks)
     }
     case Tick => {
       log.info("Num completed tasks: {}", numCompletedTasks)
       scheduleTick()
-    }
-    case m: Any => {
-      log.info("Unhandled message");
-      unhandled(m)
     }
   }
 

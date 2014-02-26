@@ -1,9 +1,10 @@
 package workshop
 
-import akka.actor.SupervisorStrategy.{Restart, Resume}
+import akka.actor.SupervisorStrategy.{Restart, Resume, Stop}
 import akka.actor.{Props, OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
+import workshop.work.HeavyWorkException
 
 
 case class StartComputeActor(actorName: String)
@@ -21,9 +22,13 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
         log.error("Resuming compute actor due to arithmetic exception")
         Resume
       }
-      case e: Exception => {
-        log.error("Restarting compute actor due to exception. Reason: {}", e.getMessage)
+      case e: HeavyWorkException => {
+        log.error("Restarting compute actor due to heavy work exception. Reason: {}", e.getMessage)
         Restart
+      }
+      case e: Exception => {
+        log.error("Stopping compute actor due to exception. Reason: {}", e.getMessage)
+        Stop
       }
     }
 

@@ -1,5 +1,6 @@
 package workshop
 
+import workshop.work._
 import akka.actor._
 import akka.testkit.{EventFilter, TestActorRef}
 import scala.concurrent.duration._
@@ -21,6 +22,11 @@ class ComputeActorTest extends AkkaSpec {
     expectMsg(3)
   }
 
+  it should "perform heavy work" in new Actor {
+    computeActor ! new HeavyAddition(3, 2)
+    expectMsg(5)
+  }
+
   it should "initially have zero completed tasks" in new Actor {
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(0))
@@ -38,6 +44,12 @@ class ComputeActorTest extends AkkaSpec {
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(2))
+
+    computeActor ! new HeavyAddition(3, 5)
+    expectMsgClass(classOf[Integer]) // Result from heavy addition
+
+    computeActor ! GetNumCompletedTasks
+    expectMsg(NumCompletedTasks(3))
   }
 
   it should "not increment number of completed tasks when division fails with arithmetic exception" in new Actor {
