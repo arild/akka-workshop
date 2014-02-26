@@ -1,12 +1,14 @@
 package workshop
 
-import akka.testkit.TestActorRef
+import akka.actor._
+import akka.testkit.{EventFilter, TestActorRef}
+import scala.concurrent.duration._
 
 
 class ComputeActorTest extends AkkaSpec {
 
   trait Actor {
-    val computeActor = TestActorRef[ComputeActor]
+    val computeActor = TestActorRef(new ComputeActor)
   }
 
   it should "compute addition" in new Actor {
@@ -46,5 +48,15 @@ class ComputeActorTest extends AkkaSpec {
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(0))
+  }
+
+  it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
+
+    TestActorRef(Props(new ComputeActor(100 millis)))
+
+    // Throws timeout exception after 3 seconds if filter does not match
+    EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
+
+    })
   }
 }
