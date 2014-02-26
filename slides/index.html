@@ -27,161 +27,229 @@ URL: https://code.google.com/p/io-2012-slides
 
 <slides class="layout-widescreen">
 
-<slide class="title-slide segue nobackground">
-    <aside class="gdbar"><img src="images/logo_dropshadow.png"></aside>
-    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
-    <hgroup class="auto-fadein">
-        <h1 data-config-title><!-- populated from slide_config.json --></h1>
-        <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
-        <p data-config-presenter><!-- populated from slide_config.json --></p>
-    </hgroup>
-</slide>
+    <slide class="title-slide segue nobackground">
+        <aside class="gdbar"><img src="images/BEKK_logo.png"></aside>
+
+        <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+        <hgroup class="auto-fadein">
+            <h1 data-config-title><!-- populated from slide_config.json --></h1>
+            <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+            <p data-config-presenter><!-- populated from slide_config.json --></p>
+        </hgroup>
+    </slide>
 
 
-<slide>
-    <hgroup>
-        <h2>Outline</h2>
-    </hgroup>
-    <article class="large">
-        <ul>
-            <li>Part 1 - Creating actors and sending messages</li>
-            <li>Part 2 - Actor supervision and death watch</li>
-            <li>Part 3 - Scalability</li>
-        </ul>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>Outline</h2>
+        </hgroup>
+        <article class="large">
+            <ul>
+                <li>Part 1 - Creating actors and sending messages</li>
+                <li>Part 2 - Actor supervision and death watch</li>
+                <li>Part 3 - Scalability</li>
+            </ul>
+        </article>
+    </slide>
 
-<slide>
-    <hgroup>
-        <h2>Motivation</h2>
-    </hgroup>
-    <article>
-        <ul class="build">
-            <li>Data needs are expanding in terms of size</li>
-            <li>Users expect low latency</li>
-            <li>Users expect availability</li>
-            <li>Applications need to scale</li>
-        </ul>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>Motivation</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li>Data needs are expanding in terms of size</li>
+                <li>Users expect low latency</li>
+                <li>Users expect availability</li>
+                <li>Applications need to scale</li>
+            </ul>
+        </article>
+    </slide>
 
-<slide>
-    <hgroup>
-        <h2>Reactive Applications (I)</h2>
-    </hgroup>
-    <article>
-        <ul class="build">
-            <li>Event-driven</li>
-            <li>Scalable</li>
-            <li>Resilient</li>
-            <li>Responsive</li>
-        </ul>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>Reactive Applications (I)</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li>Event-driven</li>
+                <li>Scalable</li>
+                <li>Resilient</li>
+                <li>Responsive</li>
+            </ul>
+        </article>
+    </slide>
 
-<slide>
-    <hgroup>
-        <h2>Reactive Applications (II)</h2>
-    </hgroup>
-    <article class="flexbox vleft auto-fadein">
-        <q>
-            (..) event-driven, scalable, resilient and responsive: delivering highly responsive user experiences with a real-time feel, backed by a scalable and resilient application stack, ready to be deployed on multicore and cloud computing architectures.
-        </q>
-        <div class="author">
-            www.reactivemanifesto.org<br>
-        </div>
-    </article>
-</slide>
-
-
-<slide>
-    <hgroup>
-        <h2>How Akka is Reactive (I)</h2>
-    </hgroup>
-    <article class="flexbox vleft auto-fadein">
-        <q>
-            Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM
-        </q>
-        <div class="author">
-            typesafe.com/platform/runtime/akka<br>
-        </div>
-    </article>
-</slide>
-
-<slide>
-    <hgroup>
-        <h2>How Akka is Reactive (II)</h2>
-    </hgroup>
-    <article class="flexbox vleft auto-fadein">
-        <q>
-            Akka actors allow you to implement reliable and maintainable failure handling in a distributed application—across multiple cores and cluster nodes.
-        </q>
-        <div class="author">
-            typesafe.com/platform/runtime/akka<br>
-        </div>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>Reactive Applications (II)</h2>
+        </hgroup>
+        <article class="flexbox vleft auto-fadein">
+            <q>
+                (..) event-driven, scalable, resilient and responsive: delivering highly responsive user experiences with a real-time feel, backed by a scalable and resilient application stack, ready to be deployed on multicore and cloud computing architectures.
+            </q>
+            <div class="author">
+                www.reactivemanifesto.org<br>
+            </div>
+        </article>
+    </slide>
 
 
-<slide>
-    <hgroup>
-        <h2>How Akka is Reactive (III)</h2>
-    </hgroup>
-    <article>
-        <ul class="build">
-            <li>Event driven (asynchronous) middleware for Scala and Java</li>
-            <li>Decouples business logic from scalability (parallelism, threading, blocking.. )</li>
-            <li>Behaves like actors - sends messages</li>
-        </ul>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>How Akka is Reactive (I)</h2>
+        </hgroup>
+        <article class="flexbox vleft auto-fadein">
+            <q>
+                Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM
+            </q>
+            <div class="author">
+                typesafe.com/platform/runtime/akka<br>
+            </div>
+        </article>
+    </slide>
 
-<slide>
-    <hgroup>
-        <h2>How Akka is Reactive (IV)</h2>
-    </hgroup>
-    <article>
-        <ul class="build">
-            <li>Fault tolerant</li>
-            <li>Supervisor hierachies</li>
-            <li>Every actor can create other actors</li>
-            <li>Let it crash</li>
-        </ul>
-    </article>
-</slide>
-
-<slide>
-    <hgroup>
-        <h2>Final sales-pitch</h2>
-    </hgroup>
-    <article>
-        <ul class="build">
-            <li>Simpler concurrency</li>
-            <li>Scalability - hardware supporting thousands of threads support millions of actors</li>
-            <li>Scala & Java APIs</li>
-        </ul>
-    </article>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>How Akka is Reactive (II)</h2>
+        </hgroup>
+        <article class="flexbox vleft auto-fadein">
+            <q>
+                Akka actors allow you to implement reliable and maintainable failure handling in a distributed application—across multiple cores and cluster nodes.
+            </q>
+            <div class="author">
+                typesafe.com/platform/runtime/akka<br>
+            </div>
+        </article>
+    </slide>
 
 
-<slide class="thank-you-slide segue nobackground">
-    <article class="flexbox vleft">
-        <h2>Thanks!</h2>
-        <br><br>
-        <h2>Questions?</h2>
-        <br>
-        <p>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></p>
-        <p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>
-    </article>
-    <p class="auto-fadein" data-config-contact>
-        <!-- populated from slide_config.json -->
-    </p>
-</slide>
+    <slide>
+        <hgroup>
+            <h2>How Akka is Reactive (III)</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li>Event driven (asynchronous) middleware for Scala and Java</li>
+                <li>Decouples business logic from scalability (parallelism, threading, blocking.. )</li>
+                <li>Behaves like actors - sends messages</li>
+            </ul>
+        </article>
+    </slide>
 
 
-<slide class="backdrop"></slide>
+    <slide>
+        <hgroup>
+            <h2>How Akka is Reactive (IV)</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li>Fault tolerant</li>
+                <li>Supervisor hierachies</li>
+                <li>Every actor can create other actors</li>
+                <li>Let it crash</li>
+            </ul>
+        </article>
+    </slide>
 
-</slides>
+
+    <slide>
+        <hgroup>
+            <h2>Final sales-pitch</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li>Simpler concurrency</li>
+                <li>Scalability - hardware supporting thousands of threads support millions of actors</li>
+                <li>Scala & Java APIs</li>
+            </ul>
+        </article>
+    </slide>
+
+
+    <slide>
+        <h2 class="flexbox vleft auto-fadein">Fault Tolerance with Supervision and Death Watch</h2>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>What</h2>
+        </hgroup>
+        <article>
+            <ul>
+                <li>Hierarchy</li>
+                <li>Image?</li>
+            </ul>
+        </article>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>Why</h2>
+        </hgroup>
+        <article>
+            <ul>
+                <li>Hierarchies work</li>
+            </ul>
+        </article>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>Creating a supervisor</h2>
+        </hgroup>
+        <article>
+<pre class="prettyprint" data-lang="scala">class Supervisor extends Actor {
+    import akka.actor.OneForOneStrategy
+    import akka.actor.SupervisorStrategy._
+    import scala.concurrent.duration._
+
+    override val supervisorStrategy =
+      OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+        case _: ArithmeticException      => Resume
+        case _: NullPointerException     => Restart
+        case _: IllegalArgumentException => Stop
+        case _: Exception                => Escalate
+      }
+
+    def receive = {
+      case p: Props => sender() ! context.actorOf(p)
+    }
+  }</pre>
+        </article>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>Using Death Watch</h2>
+        </hgroup>
+        <article>
+        </article>
+    </slide>
+
+
+    <slide class="thank-you-slide segue nobackground">
+        <article class="flexbox vleft">
+            <h2>Thanks!</h2>
+            <br><br>
+            <h2>Questions?</h2>
+            <br>
+            <p>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></p>
+            <p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>
+        </article>
+        <p class="auto-fadein" data-config-contact>
+            <!-- populated from slide_config.json -->
+        </p>
+    </slide>
+
+
+    <slide class="backdrop"></slide>
+
+    </slides>
 
 <script>
 var _gaq = _gaq || [];
