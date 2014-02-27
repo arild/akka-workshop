@@ -27,7 +27,7 @@ class ComputeSupervisorTest extends AkkaSpec {
 
   it should "resume compute actor on arithmetic exception" in {
 
-    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeActorTestFactory))
+    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeTestActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
     val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
@@ -40,7 +40,7 @@ class ComputeSupervisorTest extends AkkaSpec {
 
   it should "restart compute actor on heavy work exception" in {
 
-    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeActorTestFactory))
+    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeTestActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
     val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
@@ -53,7 +53,7 @@ class ComputeSupervisorTest extends AkkaSpec {
 
   it should "stop compute actor on any exception other than arithmetic and heavy work exception" in {
 
-    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeActorTestFactory))
+    val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeTestActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
     val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
