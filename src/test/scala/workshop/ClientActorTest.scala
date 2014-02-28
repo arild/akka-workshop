@@ -1,9 +1,9 @@
 package workshop
 
 import akka.testkit.TestProbe
-import akka.actor.{ActorContext, ActorRef}
-import org.mockito.Matchers._
-import org.mockito.Mockito._
+import akka.actor._
+import workshop.helpers.ComputeTestActor
+import akka.actor.Terminated
 
 class ClientActorTest extends AkkaSpec {
 
@@ -19,13 +19,17 @@ class ClientActorTest extends AkkaSpec {
     computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
   }
 
-  it should "stop if compute actor terminates" in new Actors {
-    val clientActor = system.actorOf(ClientActor.props(computeSupervisor, mock[ActorRef], List()))
+  it should "stop if compute actor terminates" in {
+    val computeTestActor = system.actorOf(Props(classOf[ComputeTestActor]))
+    val computeSupervisorProbe = TestProbe()
+    val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, mock[ActorRef], List()))
 
-    val computeActorFactory = mock[ComputeActorFactory]
-    val computeActor: ActorRef = mock[ActorRef]
-    when(computeActorFactory.create(any[ActorContext], anyString())).thenReturn(computeActor)
+    computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
+    computeSupervisorProbe.reply(computeTestActor)
 
+    watch(clientActor)
+    computeTestActor ! PoisonPill // Poison pill makes actor terminate
+    expectMsgClass(classOf[Terminated])
   }
 
 }
