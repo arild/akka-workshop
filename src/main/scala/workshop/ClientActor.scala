@@ -2,7 +2,7 @@ package workshop
 
 import akka.actor.{Props, Terminated, ActorRef, Actor}
 import akka.event.Logging
-import workshop.work.HeavyWork
+import workshop.work.{HeavyWorkResult, HeavyWork}
 
 object ClientActor {
   def props(computeSupervisor: ActorRef, resultActor: ActorRef, work: List[HeavyWork]) = {
@@ -20,6 +20,10 @@ class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List
   def receive = {
     case computeActor: ActorRef => {
       context.watch(computeActor)
+      work.foreach(w => computeActor ! w)
+    }
+    case result: HeavyWorkResult => {
+      resultActor ! result
     }
     case Terminated => {
       log.error("Compute actor terminated, terminating self")

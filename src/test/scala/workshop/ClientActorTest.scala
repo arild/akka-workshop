@@ -4,6 +4,8 @@ import akka.testkit.TestProbe
 import akka.actor._
 import workshop.helpers.ComputeTestActor
 import akka.actor.Terminated
+import work._
+
 
 class ClientActorTest extends AkkaSpec {
 
@@ -30,6 +32,17 @@ class ClientActorTest extends AkkaSpec {
     watch(clientActor)
     computeTestActor ! PoisonPill // Poison pill makes actor terminate
     expectMsgClass(classOf[Terminated])
+  }
+
+  it should "complete heavy work" in {
+    val work = List(HeavyAddition(2, 3), HeavyAddition(3, 3))
+
+    val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
+    val resultProbe = TestProbe()
+    system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
+
+    resultProbe.expectMsg(HeavyAdditionResult(5))
+    resultProbe.expectMsg(HeavyAdditionResult(6))
   }
 
 }
