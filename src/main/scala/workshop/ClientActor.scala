@@ -22,6 +22,7 @@ class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List
       context.watch(computeActor)
     }
     case Terminated => {
+      log.error("Compute actor terminated, terminating self")
       context.stop(self)
     }
   }
