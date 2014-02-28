@@ -36,7 +36,7 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
       sender ! result
     }
     case work: HeavyWork => {
-      val result: Any = work.perform()
+      val result = work.perform()
       incrementNumCompletedTasks()
       sender ! result
     }
