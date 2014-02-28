@@ -1,14 +1,15 @@
 package workshop.work
 
 abstract class HeavyWork {
-  def perform(): Any
+  def perform(): HeavyWorkResult
 }
+abstract class HeavyWorkResult
+case class HeavyWorkException(msg: String)  extends Exception
 
 class HeavyAddition(a: Int, b: Int, delay: Long = 0) extends HeavyWork {
-  def perform(): Int = {
+  def perform() = {
     Thread.sleep(delay)
-    a + b
+    HeavyAdditionResult(a + b)
   }
 }
-
-case class HeavyWorkException(msg: String)  extends Exception
+case class HeavyAdditionResult(result: Int) extends HeavyWorkResult

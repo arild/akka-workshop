@@ -26,7 +26,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
   it should "restart compute actor on heavy work exception" in {
     class TestWork extends HeavyWork {
-      override def perform(): Any = throw new HeavyWorkException("test exception")
+      override def perform() = throw new HeavyWorkException("test exception")
     }
 
     val computeActor: ActorRef = createAndWatchComputeActor()
@@ -46,7 +46,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
   it should "stop compute actor on any exception other than arithmetic and heavy work exception" in {
     class TestWork extends HeavyWork {
-      override def perform(): Any = throw new NumberFormatException("test exception")
+      override def perform() = throw new NumberFormatException("test exception")
     }
 
     val computeActor: ActorRef = createAndWatchComputeActor()

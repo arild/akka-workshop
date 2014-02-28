@@ -24,7 +24,7 @@ class ComputeActorTest extends AkkaSpec {
 
   it should "perform heavy work" in new Actor {
     computeActor ! new HeavyAddition(3, 2)
-    expectMsg(5)
+    expectMsg(HeavyAdditionResult(5))
   }
 
   it should "initially have zero completed tasks" in new Actor {
@@ -46,7 +46,7 @@ class ComputeActorTest extends AkkaSpec {
     expectMsg(NumCompletedTasks(2))
 
     computeActor ! new HeavyAddition(3, 5)
-    expectMsgClass(classOf[Int]) // Result from heavy addition
+    expectMsgClass(classOf[HeavyAdditionResult]) // Result from heavy addition
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(3))
