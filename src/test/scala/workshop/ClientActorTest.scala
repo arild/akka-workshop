@@ -34,8 +34,23 @@ class ClientActorTest extends AkkaSpec {
     expectMsgClass(classOf[Terminated])
   }
 
-  it should "complete heavy work" in {
+  it should "complete heavy work when work has no failures" in {
     val work = List(HeavyAddition(2, 3), HeavyAddition(3, 3))
+
+    val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
+    val resultProbe = TestProbe()
+    system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
+
+    resultProbe.expectMsg(HeavyAdditionResult(5))
+    resultProbe.expectMsg(HeavyAdditionResult(6))
+  }
+
+  it should "complete remaining heavy work when work throws heavy work exceptions" in {
+    class WorkWithFailure extends HeavyWork {
+      override def perform() = throw new HeavyWorkException("test exception")
+    }
+
+    val work = List(HeavyAddition(2, 3), new WorkWithFailure(), HeavyAddition(3, 3))
 
     val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
     val resultProbe = TestProbe()
