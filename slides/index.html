@@ -67,105 +67,105 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <aside class="note">
+            <ul>
+            <li>Asynchronous and concurrency through high-level absgtranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</li>>
+            <li>Self-healing with supervisor hierarchys<li>
+            <li>Small memory footprint, a node capable of thousands of Threads can handle millions of actors. Msg throughput as high as 60 million msg/sec</li>
+            <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
+            </ul>
+        </aside>
         <hgroup>
-            <h2>Reactive Applications (I)</h2>
+            <h2>What is Akka</h2>
         </hgroup>
         <article>
             <ul class="build">
-                <li>Event-driven</li>
-                <li>Scalable</li>
+                <li>Toolkit + JVM runtime</li>
+                <li>Concurrency & Distribution</li>
                 <li>Resilient</li>
-                <li>Responsive</li>
+                <li>High performance</li>
+                <li>Elastic & Decentralized</li>
             </ul>
         </article>
     </slide>
 
     <slide>
+        <aside class="note">
+            <ul>
+            <li>Scale up, scale out, fault-tolerance / HA</li>
+            <li>Service REST, SOAP, Cometd, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance / HA</li>
+            <li>Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</li>
+            <li>Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</li>
+            </ul>
+        </aside>
         <hgroup>
-            <h2>Reactive Applications (II)</h2>
-        </hgroup>
-        <article class="flexbox vleft auto-fadein">
-            <q>
-                (..) event-driven, scalable, resilient and responsive: delivering highly responsive user experiences with a real-time feel, backed by a scalable and resilient application stack, ready to be deployed on multicore and cloud computing architectures.
-            </q>
-            <div class="author">
-                www.reactivemanifesto.org<br>
-            </div>
-        </article>
-    </slide>
-
-
-    <slide>
-        <hgroup>
-            <h2>How Akka is Reactive (I)</h2>
-        </hgroup>
-        <article class="flexbox vleft auto-fadein">
-            <q>
-                Akka is a toolkit and runtime for building highly concurrent, distributed, and fault tolerant event-driven applications on the JVM
-            </q>
-            <div class="author">
-                typesafe.com/platform/runtime/akka<br>
-            </div>
-        </article>
-    </slide>
-
-    <slide>
-        <hgroup>
-            <h2>How Akka is Reactive (II)</h2>
-        </hgroup>
-        <article class="flexbox vleft auto-fadein">
-            <q>
-                Akka actors allow you to implement reliable and maintainable failure handling in a distributed application—across multiple cores and cluster nodes.
-            </q>
-            <div class="author">
-                typesafe.com/platform/runtime/akka<br>
-            </div>
-        </article>
-    </slide>
-
-
-    <slide>
-        <hgroup>
-            <h2>How Akka is Reactive (III)</h2>
+            <h2>Where should you use Akka</h2>
         </hgroup>
         <article>
             <ul class="build">
-                <li>Event driven (asynchronous) middleware for Scala and Java</li>
-                <li>Decouples business logic from scalability (parallelism, threading, blocking.. )</li>
-                <li>Behaves like actors - sends messages</li>
+                <li>Transaction processing (banking, gaming, stats)</li>
+                <li>Service backend (SOAP, REST, WebSockets)</li>
+                <li>Batch processing</li>
+                <li>Concurrency/parallelism</li>
             </ul>
         </article>
     </slide>
 
+    <slide>
+        <hgroup>Actor</hgroup>
+        <article>
+            <img src="images/actor_illustration1.png" style="max-height: 500px; max-width: 500px;" />
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>Actor</hgroup>
+        <article>
+            <img src="images/actor_illustration2.png" style="max-height: 500px; max-width: 500px;" />
+        </article>
+    </slide>
 
     <slide>
         <hgroup>
-            <h2>How Akka is Reactive (IV)</h2>
+            <h2>Creating an Actor</h2>
         </hgroup>
         <article>
-            <ul class="build">
-                <li>Fault tolerant</li>
-                <li>Supervisor hierachies</li>
-                <li>Every actor can create other actors</li>
-                <li>Let it crash</li>
-            </ul>
+<pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+
+case class MyCommand()
+
+class GreetingActor extends Actor {
+  def receive = {
+    case message : String => println("Hello " + message)
+    case command : MyCommand => println("Got a command!")
+  }
+
+  val system = ActorSystem("MySystem")
+  val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+  greeter ! "Charlie Parker"
+  greeter ! MyCommand
+}</pre>
         </article>
     </slide>
-
 
     <slide>
         <hgroup>
-            <h2>Final sales-pitch</h2>
+            <h2>Part 1</h2>
+            <h3>Creating actors and sending messages</h3>
         </hgroup>
-        <article>
-            <ul class="build">
-                <li>Simpler concurrency</li>
-                <li>Scalability - hardware supporting thousands of threads support millions of actors</li>
-                <li>Scala & Java APIs</li>
+        <article class="large">
+            <ul>
+               <li>Open ComputeActorTest in IDE, run the tests</li>
+               <li>Edit ComputeActor.scala until those tests are green</li>
             </ul>
         </article>
     </slide>
 
+    <slide>
+        <hgroup>
+            <h2>Part 1 - Walkthrough</h2>
+        </hgroup>
+    </slide>
 
     <slide>
         <h2 class="flexbox vleft auto-fadein">Fault Tolerance with Supervision and Death Watch</h2>
