@@ -67,6 +67,14 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <aside class="note">
+            <ul>
+            <li>Asynchronous and concurrency through high-level absgtranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</li>>
+            <li>Self-healing with supervisor hierarchys<li>
+            <li>Small memory footprint, a node capable of thousands of Threads can handle millions of actors. Msg throughput as high as 60 million msg/sec</li>
+            <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
+            </ul>
+        </aside>
         <hgroup>
             <h2>What is Akka</h2>
         </hgroup>
@@ -79,19 +87,17 @@ URL: https://code.google.com/p/io-2012-slides
                 <li>Elastic & Decentralized</li>
             </ul>
         </article>
-        <hgroup>
-            <h2>What is Akka - Speaker notes</h2>
-        </hgroup>
-        <article>
-            <p>Asynchronous and concurrency through high-level absgtranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</p>
-            <p>Self-healing with supervisor hierarchys</p>
-            <p>Small memory footprint, a node capable of thousands of Threads can handle millions of actors. Msg throughput as high as 60 million msg/sec</p>
-            <p>Adaptive load balancing, routing, partitioning and configuration-driven remoting
-                (Actors are location transparent and distributable by design. This means that you can write your application without hardcoding how it will be deployed and distributed, and then later just configure your actor system against a certain topology with all of the application’s semantics, including actor supervision, retained. )</p>
-        </article>
     </slide>
 
     <slide>
+        <aside class="note">
+            <ul>
+            <li>Scale up, scale out, fault-tolerance / HA</li>
+            <li>Service REST, SOAP, Cometd, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance / HA</li>
+            <li>Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</li>
+            <li>Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</li>
+            </ul>
+        </aside>
         <hgroup>
             <h2>Where should you use Akka</h2>
         </hgroup>
@@ -102,15 +108,6 @@ URL: https://code.google.com/p/io-2012-slides
                 <li>Batch processing</li>
                 <li>Concurrency/parallelism</li>
             </ul>
-        </article>
-        <hgroup>
-            <h2>Where should you use Akka - Speaker notes</h2>
-        </hgroup>
-        <article>
-            <p>Scale up, scale out, fault-tolerance / HA</p>
-            <p>Service REST, SOAP, Cometd, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance / HA</p>
-            <p>Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</p>
-            <p>Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</p>
         </article>
     </slide>
 
@@ -162,6 +159,12 @@ class GreetingActor extends Actor {
                <li>Edit ComputeActor.scala until those tests are green</li>
             </ul>
         </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Part 1 - Walkthrough</h2>
+        </hgroup>
     </slide>
 
     <slide>
