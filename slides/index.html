@@ -115,6 +115,39 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <hgroup>Actor</hgroup>
+        <article>
+            <img src="images/actor_illustration1.png" style="max-height: 500px; max-width: 500px;" />
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>Actor</hgroup>
+        <article>
+            <img src="images/actor_illustration2.png" style="max-height: 500px; max-width: 500px;" />
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Creating an Actor</h2>
+        </hgroup>
+        <article>
+<pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+
+class GreetingActor extends Actor {
+  def receive = {
+    case message : String ⇒ println("Hello " + message)
+  }
+
+  val system = ActorSystem("MySystem")
+  val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+  greeter ! "Charlie Parker"
+}</pre>
+        </article>
+    </slide>
+
+    <slide>
         <h2 class="flexbox vleft auto-fadein">Fault Tolerance with Supervision and Death Watch</h2>
     </slide>
 
