@@ -5,6 +5,7 @@ import akka.actor._
 import workshop.helpers.ComputeTestActor
 import akka.actor.Terminated
 import work._
+import workshop.companion.{ClientActor, ComputeSupervisor}
 
 
 class ClientActorTest extends AkkaSpec {
@@ -34,30 +35,30 @@ class ClientActorTest extends AkkaSpec {
     expectMsgClass(classOf[Terminated])
   }
 
-  it should "complete heavy work when work has no failures" in {
-    val work = List(HeavyAddition(2, 3), HeavyAddition(3, 3))
+  it should "complete risky work when work has no failures" in {
+    val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
 
     val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
     val resultProbe = TestProbe()
     system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
 
-    resultProbe.expectMsg(HeavyAdditionResult(5))
-    resultProbe.expectMsg(HeavyAdditionResult(6))
+    resultProbe.expectMsg(RiskyAdditionResult(5))
+    resultProbe.expectMsg(RiskyAdditionResult(6))
   }
 
-  it should "complete remaining heavy work when work throws heavy work exceptions" in {
-    class WorkWithFailure extends HeavyWork {
-      override def perform() = throw new HeavyWorkException("test exception")
+  it should "complete remaining risky work when work throws risky work exceptions" in {
+    class WorkWithFailure extends RiskyWork {
+      override def perform() = throw new RiskyWorkException("test exception")
     }
 
-    val work = List(HeavyAddition(2, 3), new WorkWithFailure(), HeavyAddition(3, 3))
+    val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
 
     val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
     val resultProbe = TestProbe()
     system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
 
-    resultProbe.expectMsg(HeavyAdditionResult(5))
-    resultProbe.expectMsg(HeavyAdditionResult(6))
+    resultProbe.expectMsg(RiskyAdditionResult(5))
+    resultProbe.expectMsg(RiskyAdditionResult(6))
   }
 
 }

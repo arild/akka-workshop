@@ -1,16 +1,11 @@
 package workshop
 
-import akka.actor.{Props, Terminated, ActorRef, Actor}
+import akka.actor.{Terminated, ActorRef, Actor}
 import akka.event.Logging
-import workshop.work.{HeavyWorkResult, HeavyWork}
+import workshop.work.{RiskyWorkResult, RiskyWork}
 
-object ClientActor {
-  def props(computeSupervisor: ActorRef, resultActor: ActorRef, work: List[HeavyWork]) = {
-    Props(new ClientActor(computeSupervisor, resultActor, work))
-  }
-}
 
-class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List[HeavyWork]) extends Actor {
+class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List[RiskyWork]) extends Actor {
   val log = Logging(context.system, this)
 
   override def preStart() = {
@@ -22,7 +17,7 @@ class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List
       context.watch(computeActor)
       work.foreach(w => computeActor ! w)
     }
-    case result: HeavyWorkResult => {
+    case result: RiskyWorkResult => {
       resultActor ! result
     }
     case Terminated => {

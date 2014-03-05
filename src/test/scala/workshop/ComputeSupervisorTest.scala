@@ -6,7 +6,8 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import scala.concurrent.duration._
 import workshop.helpers._
-import workshop.work.HeavyWorkException
+import workshop.work.RiskyWorkException
+import workshop.companion.ComputeSupervisor
 
 
 class ComputeSupervisorTest extends AkkaSpec {
@@ -38,20 +39,20 @@ class ComputeSupervisorTest extends AkkaSpec {
     expectMsg(false)
   }
 
-  it should "restart compute actor on heavy work exception" in {
+  it should "restart compute actor on risky work exception" in {
 
     val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeTestActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
     val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
 
-    computeTestActor ! HeavyWorkException("test exception")
+    computeTestActor ! RiskyWorkException("test exception")
 
     computeTestActor ! IsRestarted
     expectMsg(true)
   }
 
-  it should "stop compute actor on any exception other than arithmetic and heavy work exception" in {
+  it should "stop compute actor on any exception other than arithmetic and risky work exception" in {
 
     val computeSupervisor = TestActorRef(ComputeSupervisor.props(new ComputeTestActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")

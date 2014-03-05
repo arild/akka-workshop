@@ -1,9 +1,9 @@
 package workshop
 
-import akka.actor.{Props, Actor}
+import akka.actor.Actor
 import akka.event.Logging
 import scala.concurrent.duration._
-import workshop.work.HeavyWork
+import workshop.work.RiskyWork
 
 
 case class Addition(a: Int, b: Int)
@@ -11,10 +11,6 @@ case class Division(dividend: Int, divisor: Int)
 case class GetNumCompletedTasks()
 case class NumCompletedTasks(numCompleted: Int)
 case class Tick()
-
-object ComputeActor {
-  def props(logCompletedTasksInterval: FiniteDuration): Props = Props(new ComputeActor(logCompletedTasksInterval))
-}
 
 class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
@@ -35,7 +31,7 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
       incrementNumCompletedTasks()
       sender ! result
     }
-    case work: HeavyWork => {
+    case work: RiskyWork => {
       val result = work.perform()
       incrementNumCompletedTasks()
       sender ! result
