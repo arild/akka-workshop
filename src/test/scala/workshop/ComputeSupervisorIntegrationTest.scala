@@ -3,6 +3,7 @@ package workshop
 import scala.concurrent.duration._
 import akka.actor.{Terminated, ActorRef}
 import workshop.work.{HeavyWorkException, HeavyWork}
+import workshop.companion.ComputeSupervisor
 
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {

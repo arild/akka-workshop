@@ -5,6 +5,7 @@ import akka.actor._
 import workshop.helpers.ComputeTestActor
 import akka.actor.Terminated
 import work._
+import workshop.companion.{ClientActor, ComputeSupervisor}
 
 
 class ClientActorTest extends AkkaSpec {

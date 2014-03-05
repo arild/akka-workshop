@@ -4,6 +4,7 @@ import workshop.work._
 import akka.actor._
 import akka.testkit.{EventFilter, TestActorRef}
 import scala.concurrent.duration._
+import workshop.companion.ComputeActor
 
 
 class ComputeActorTest extends AkkaSpec {

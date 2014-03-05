@@ -1,17 +1,13 @@
 package workshop
 
 import akka.actor.SupervisorStrategy.{Restart, Resume, Stop}
-import akka.actor.{Props, OneForOneStrategy, ActorRef, Actor}
+import akka.actor.{OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
 import workshop.work.HeavyWorkException
 
 
 case class StartComputeActor(actorName: String)
-
-object ComputeSupervisor {
-  def props(computeActorFactory: ComputeActorFactory): Props = Props(new ComputeSupervisor(computeActorFactory))
-}
 
 class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
   val log = Logging(context.system, this)

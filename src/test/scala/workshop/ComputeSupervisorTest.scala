@@ -7,6 +7,7 @@ import org.mockito.Mockito._
 import scala.concurrent.duration._
 import workshop.helpers._
 import workshop.work.HeavyWorkException
+import workshop.companion.ComputeSupervisor
 
 
 class ComputeSupervisorTest extends AkkaSpec {
