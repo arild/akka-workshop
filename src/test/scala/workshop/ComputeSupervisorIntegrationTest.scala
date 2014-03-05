@@ -2,7 +2,7 @@ package workshop
 
 import scala.concurrent.duration._
 import akka.actor.{Terminated, ActorRef}
-import workshop.work.{HeavyWorkException, HeavyWork}
+import workshop.work.{RiskyWorkException, RiskyWork}
 import workshop.companion.ComputeSupervisor
 
 
@@ -25,9 +25,9 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
     expectNoMsg(1 second)
   }
 
-  it should "restart compute actor on heavy work exception" in {
-    class TestWork extends HeavyWork {
-      override def perform() = throw new HeavyWorkException("test exception")
+  it should "restart compute actor on risky work exception" in {
+    class TestWork extends RiskyWork {
+      override def perform() = throw new RiskyWorkException("test exception")
     }
 
     val computeActor: ActorRef = createAndWatchComputeActor()
@@ -45,8 +45,8 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
     expectNoMsg(1 second)
   }
 
-  it should "stop compute actor on any exception other than arithmetic and heavy work exception" in {
-    class TestWork extends HeavyWork {
+  it should "stop compute actor on any exception other than arithmetic and risky work exception" in {
+    class TestWork extends RiskyWork {
       override def perform() = throw new NumberFormatException("test exception")
     }
 

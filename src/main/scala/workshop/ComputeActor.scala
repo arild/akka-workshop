@@ -3,7 +3,7 @@ package workshop
 import akka.actor.Actor
 import akka.event.Logging
 import scala.concurrent.duration._
-import workshop.work.HeavyWork
+import workshop.work.RiskyWork
 
 
 case class Addition(a: Int, b: Int)
@@ -31,7 +31,7 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
       incrementNumCompletedTasks()
       sender ! result
     }
-    case work: HeavyWork => {
+    case work: RiskyWork => {
       val result = work.perform()
       incrementNumCompletedTasks()
       sender ! result

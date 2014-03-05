@@ -23,9 +23,9 @@ class ComputeActorTest extends AkkaSpec {
     expectMsg(3)
   }
 
-  it should "perform heavy work" in new Actor {
-    computeActor ! new HeavyAddition(3, 2)
-    expectMsg(HeavyAdditionResult(5))
+  it should "perform risky work" in new Actor {
+    computeActor ! new RiskyAddition(3, 2)
+    expectMsg(RiskyAdditionResult(5))
   }
 
   it should "initially have zero completed tasks" in new Actor {
@@ -46,8 +46,8 @@ class ComputeActorTest extends AkkaSpec {
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(2))
 
-    computeActor ! new HeavyAddition(3, 5)
-    expectMsgClass(classOf[HeavyAdditionResult]) // Result from heavy addition
+    computeActor ! new RiskyAddition(3, 5)
+    expectMsgClass(classOf[RiskyAdditionResult]) // Result from risky addition
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(3))
