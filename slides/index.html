@@ -58,7 +58,7 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
             <ul class="build">
-                <li>Data needs are expanding in terms of size</li>
+                <li>Concurrency is hard</li>
                 <li>Users expect low latency</li>
                 <li>Users expect availability</li>
                 <li>Applications need to scale</li>
@@ -69,7 +69,8 @@ URL: https://code.google.com/p/io-2012-slides
     <slide>
         <aside class="note">
             <ul>
-            <li>Asynchronous and concurrency through high-level absgtranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</li>>
+            <li>Build concurrent & distributed applications more easily</li>
+            <li>Asynchronous and concurrency through high-level abstranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</li>>
             <li>Self-healing with supervisor hierarchys<li>
             <li>Small memory footprint, a node capable of thousands of Threads can handle millions of actors. Msg throughput as high as 60 million msg/sec</li>
             <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
@@ -80,7 +81,8 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
             <ul class="build">
-                <li>Toolkit + JVM runtime</li>
+                <li>"Toolkit" for the JVM</li>
+                <li>Extensive documentation (~350 pages)</li>
                 <li>Concurrency & Distribution</li>
                 <li>Resilient</li>
                 <li>High performance</li>
@@ -103,7 +105,7 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
             <ul class="build">
-                <li>Transaction processing (banking, gaming, stats)</li>
+                <li>Transaction processing (banking, gaming, statistics)</li>
                 <li>Service backend (SOAP, REST, WebSockets)</li>
                 <li>Batch processing</li>
                 <li>Concurrency/parallelism</li>
@@ -112,14 +114,26 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
-        <hgroup>Actor</hgroup>
+        <aside class="note">
+            <ul>
+                <li>Actors er hovedabstraksjonen i Akka</li>
+                <li>Hver Actor prosesserer sekvensielt, noe som gir en håndterbar kompleksitet isolert sett</li>
+            </ul>
+        </aside>
+        <hgroup><h2>Actor</h2></hgroup>
         <article>
             <img src="images/actor_illustration1.png" style="max-height: 500px; max-width: 500px;" />
+            <br />
+            <br />
+            <ul>
+                <li>Actors are the central component in Akka</li>
+                <li>Each Actor process messages <b>sequencially</b></li>
+            </ul>
         </article>
     </slide>
 
     <slide>
-        <hgroup>Actor</hgroup>
+        <hgroup><h2>Actor</h2></hgroup>
         <article>
             <img src="images/actor_illustration2.png" style="max-height: 500px; max-width: 500px;" />
         </article>
@@ -127,26 +141,47 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <hgroup>
-            <h2>Creating an Actor</h2>
+            <h2>Creating an Actor I</h2>
         </hgroup>
         <article>
 <pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+
+class GreetingActor extends Actor {
+  def receive = {
+    case message : String => println("Hello " + message)
+  }
+}
+
+object GreetingActor extends App {
+  val system = ActorSystem("MySystem")
+  val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+  greeter ! "Charlie Parker"
+}</pre>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Creating an Actor II</h2>
+        </hgroup>
+        <article>
+    <pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
 
 case class MyCommand()
 
 class GreetingActor extends Actor {
   def receive = {
-    case message : String => println("Hello " + message)
-    case command : MyCommand => println("Got a command!")
+    case MyCommand => sender ! "a reply"
   }
+}
 
+object GreetingActor extends App {
   val system = ActorSystem("MySystem")
   val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
-  greeter ! "Charlie Parker"
   greeter ! MyCommand
 }</pre>
-        </article>
-    </slide>
+            </article>
+        </slide>
 
     <slide>
         <hgroup>
@@ -222,6 +257,49 @@ class GreetingActor extends Actor {
         </article>
     </slide>
 
+    <slide>
+            <hgroup>
+                <h2>Supervising Actors</h2>
+            </hgroup>
+            <article>
+        <pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+
+class GreetingActor extends Actor {
+  def receive = {
+    case _ => {}
+  }
+  override def preStart() {
+    println("preStart() - called by FIRST actor-instance during startup")
+  }
+  override def postStop() {
+    println("postStop() - called by ANY actor-instance during shutdown")
+  }
+  override def preRestart(reason: Throwable, message: Option[Any]) {
+    println("preRestart() - called on ANY running actor about to be restarted")
+  }
+  override def postRestart(reason: Throwable) {
+    println("postRestart() - called on a NEW INSTANCE of this actor after restart")
+  }
+}</pre>
+                </article>
+            </slide>
+
+        <slide class="restartslide">
+                <hgroup>
+                    <h2>What happens on an actor restart</h2>
+                </hgroup>
+                <article>
+        <ol>
+            <li>Suspend the actor and recursively suspend all children</li>
+            <li>Call the old instance’s preRestart hook</li>
+            <li>Wait for all children which were requested to terminate (non-blocking)</li>
+            <li>Create new actor instance by invoking the originally provided factory again</li>
+            <li>Invoke postRestart on the new instance</li>
+            <li>Send restart request to all children which were not killed in step 3; restarted children will follow the same process recursively, from step 2</li>
+            <li>Resume the actor</li>
+        </ol>
+        </article>
+        </slide>
 
     <slide>
         <hgroup>

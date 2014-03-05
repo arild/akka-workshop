@@ -28,6 +28,12 @@ slides slide.thank-you-slide {
     background: #797979 !important;
 }
 
+slides slide.restartslide ol li {
+    margin: 0;
+    padding: 0.4em 0;
+    list-style-type: decimal;
+}
+
 /*.outlineHighlight {*/
     /*font-weight: bold;*/
     /*font-size: 120%;*/
