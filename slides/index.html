@@ -351,11 +351,9 @@ class DeathWatchActor extends Actor {
                 <h2>Life-cycle of Actors</h2>
             </hgroup>
             <article>
-        <pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
-
-class GreetingActor extends Actor {
+        <pre class="prettyprint">class LifeCycleActor extends Actor {
   def receive = {
-    case _ => {}
+    case e: Exception => throw e
   }
   override def preStart() {
     println("preStart() - called by FIRST actor-instance during startup")
@@ -371,6 +369,7 @@ class GreetingActor extends Actor {
   }
 }</pre>
                 </article>
+        <span class="example">LifeCycleActor.scala</span>
             </slide>
 
 
