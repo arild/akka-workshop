@@ -43,10 +43,10 @@ span.example {
     color: black;
 }
 
-/*.outlineHighlight {*/
-    /*font-weight: bold;*/
-    /*font-size: 120%;*/
-/*}*/
+.outlineHighlight {
+    font-weight: bold;
+    font-size: 120%;
+}
 
 /*.quoteLink {*/
     /*padding-left: 0px;*/
