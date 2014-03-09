@@ -158,7 +158,7 @@ URL: https://code.google.com/p/io-2012-slides
             <h2>Actor Hello World</h2>
         </hgroup>
         <article>
-<pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+<pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
 
 class GreetingActor extends Actor {
   def receive = {
@@ -172,7 +172,7 @@ object GreetingActor extends App {
   greeter ! "Charlie Parker"
 }</pre>
         </article>
-        <span class="example">Example-1.scala</span>
+        <span class="example">GreetingActor_1.scala</span>
     </slide>
 
     <slide>
@@ -180,7 +180,7 @@ object GreetingActor extends App {
             <h2>Message command</h2>
         </hgroup>
         <article>
-    <pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+    <pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
 
 case class MyCommand()
 
@@ -196,14 +196,17 @@ object GreetingActor extends App {
   greeter ! MyCommand
 }</pre>
             </article>
-        </slide>
+        <span class="example">GreetingActor_2.scala</span>
+
+
+    </slide>
 
     <slide>
         <hgroup>
             <h2>Creating an Actor II</h2>
         </hgroup>
         <article>
-    <pre class="prettyprint" data-lang="scala">class GreetingActor extends Actor {
+    <pre class="prettyprint">class GreetingActor extends Actor {
   def receive = {
     _ => {}
   }
@@ -298,7 +301,7 @@ object GreetingActor extends App {
             <h2>Creating a supervisor</h2>
         </hgroup>
         <article>
-<pre class="prettyprint" data-lang="scala">class Supervisor extends Actor {
+<pre class="prettyprint">class Supervisor extends Actor {
     import akka.actor.OneForOneStrategy
     import akka.actor.SupervisorStrategy._
     import scala.concurrent.duration._
@@ -323,7 +326,7 @@ object GreetingActor extends App {
                 <h2>Supervising Actors</h2>
             </hgroup>
             <article>
-        <pre class="prettyprint" data-lang="scala">import akka.actor.{Props, ActorSystem, Actor}
+        <pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
 
 class GreetingActor extends Actor {
   def receive = {
