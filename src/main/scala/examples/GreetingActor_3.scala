@@ -1,4 +1,4 @@
-package examples.example3
+package examples
 
 import akka.actor._
 import scala.concurrent.duration._
