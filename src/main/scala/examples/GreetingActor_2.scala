@@ -4,16 +4,19 @@ import akka.actor._
 
 case class SayHello(name: String)
 
-class GreetingActor extends Actor {
+class GreetingActor_2 extends Actor {
 
   def receive = {
-    case SayHello => sender ! " a reply"
+    case hello : SayHello => {
+      println("Hello " + hello.name)
+      sender ! " a reply"
+    }
   }
 
 }
 
-object GreetingActor extends App {
+object GreetingActor_2 extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props[GreetingActor])
+  val actorRef = system.actorOf(Props[GreetingActor_2])
   actorRef ! SayHello("Pope Benedict")
 }
