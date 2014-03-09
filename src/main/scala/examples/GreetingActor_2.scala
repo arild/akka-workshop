@@ -17,6 +17,6 @@ class GreetingActor_2 extends Actor {
 
 object GreetingActor_2 extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props[GreetingActor_2])
+  val actorRef = system.actorOf(Props(new GreetingActor_2))
   actorRef ! SayHello("Pope Benedict")
 }

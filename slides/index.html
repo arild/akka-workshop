@@ -160,18 +160,18 @@ URL: https://code.google.com/p/io-2012-slides
             <h2>Actor Hello World</h2>
         </hgroup>
         <article>
-<pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
+<pre class="prettyprint">import akka.actor._
 
-class GreetingActor extends Actor {
+class GreetingActor_1 extends Actor {
   def receive = {
     case message : String => println("Hello " + message)
   }
 }
 
-object GreetingActor extends App {
+object GreetingActor_1 extends App {
   val system = ActorSystem("MySystem")
-  val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
-  greeter ! "Charlie Parker"
+  val actorRef = system.actorOf(Props(new GreetingActor_1))
+  actorRef ! "Hulk Hogan"
 }</pre>
         </article>
         <span class="example">GreetingActor_1.scala</span>
@@ -183,20 +183,22 @@ object GreetingActor extends App {
             <h2>Message command</h2>
         </hgroup>
         <article>
-    <pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
+    <pre class="prettyprint">import akka.actor._
 
-case class MyCommand()
+case class SayHello(name: String)
 
-class GreetingActor extends Actor {
+class GreetingActor_2 extends Actor {
   def receive = {
-    case MyCommand => sender ! "a reply"
+    case hello : SayHello => {
+      println("Hello " + hello.name)
+      sender ! " a reply"
+    }
   }
 }
 
-object GreetingActor extends App {
-  val system = ActorSystem("MySystem")
-  val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
-  greeter ! MyCommand
+object GreetingActor_2 extends App {
+  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor_2))
+  actorRef ! SayHello("Pope Benedict")
 }</pre>
             </article>
         <span class="example">GreetingActor_2.scala</span>
@@ -207,48 +209,35 @@ object GreetingActor extends App {
 
     <slide>
         <hgroup>
-            <h2>Creating an Actor II</h2>
+            <h2>Scheduling work</h2>
         </hgroup>
-        <article>
-    <pre class="prettyprint">class GreetingActor extends Actor {
+        <article class="smaller">
+    <pre class="prettyprint">import akka.actor._
+import scala.concurrent.duration._
+
+case class DoGreeting()
+
+class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
+
+  override def preStart() = {
+    scheduleNextGreeting()
+  }
+
   def receive = {
-    _ => {}
-  }
-  override def preStart() {
-    println("preStart() - called by FIRST actor-instance during startup")
-  }
-  override def postStop() {
-    println("postStop() - called by ANY actor-instance during shutdown")
-  }
-}
-
-class ComputeSupervisor extends Actor {
-
-  override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
-      case _ => Restart
+    case DoGreeting => {
+      println("Hello!")
+      scheduleNextGreeting()
     }
+  }
 
-    def receive = {
-      case CreateGreetingActor => {
-        val actorRef: ActorRef = context.actorOf(Props[GreetingActor])
-        sender ! actorRef
-      }
-      case _ => {}
-    }
-}
+  def scheduleNextGreeting() {
+    import context.dispatcher
+    context.system.scheduler.scheduleOnce(myInterval, self, DoGreeting)
+  }
 
-
-object GreetingActor extends App {
-  val system = ActorSystem("MySystem")
-  val supervisor = system.actorOf(Props[ComputeSupervisor])
-  implicit val timeout = Timeout(5 seconds)
-  private val futureActorRef = supervisor ? CreateGreetingActor
-  private val actorRef: ActorRef = Await.result(futureActorRef, Duration.Inf).asInstanceOf[ActorRef]
-  //actorRef ! new RuntimeException
-  actorRef ! PoisonPill
 }</pre>
         </article>
+        <span class="example">GreetingActor_3.scala</span>
     </slide>
 
 
