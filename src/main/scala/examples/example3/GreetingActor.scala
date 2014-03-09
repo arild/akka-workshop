@@ -1,28 +1,31 @@
 package examples.example3
 
 import akka.actor._
+import scala.concurrent.duration._
 
-case class Tick()
+case class SayHello()
 
-class GreetingActor extends Actor {
+class GreetingActor(myInterval: FiniteDuration) extends Actor {
 
   override def preStart() = {
-    scheduleTick()
-  }
-
-  def scheduleTick() {
-    import context.dispatcher
-    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, Tick)
+    scheduleNextGreeting()
   }
 
   def receive = {
-    case SayHello => sender ! " a reply"
+    case SayHello => {
+      println("Hello!")
+      scheduleNextGreeting()
+    }
+  }
+
+  def scheduleNextGreeting() {
+    import context.dispatcher
+    context.system.scheduler.scheduleOnce(myInterval, self, SayHello)
   }
 
 }
 
 object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props[GreetingActor])
-  actorRef ! SayHello("Pope Benedict")
+  val actorRef = system.actorOf(Props(new GreetingActor(1 second)))
 }
