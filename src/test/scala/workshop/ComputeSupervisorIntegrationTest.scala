@@ -12,8 +12,8 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
     val computeActor: ActorRef = createAndWatchComputeActor()
 
-    computeActor ! Addition(1, 2)
-    expectMsg(3) // Result from addition
+    computeActor ! "abc"
+    expectMsg(3) // Result from length of string
 
     computeActor ! Division(1, 0)
 
@@ -32,8 +32,8 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
     val computeActor: ActorRef = createAndWatchComputeActor()
 
-    computeActor ! Addition(1, 2)
-    expectMsg(3) // Result from addition
+    computeActor ! "abc"
+    expectMsg(3) // Result from length of string
 
     computeActor ! new TestWork
 

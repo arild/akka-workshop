@@ -6,7 +6,6 @@ import scala.concurrent.duration._
 import workshop.work.RiskyWork
 
 
-case class Addition(a: Int, b: Int)
 case class Division(dividend: Int, divisor: Int)
 case class GetNumCompletedTasks()
 case class NumCompletedTasks(numCompleted: Int)
@@ -21,10 +20,9 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   }
 
   def receive = {
-    case addition: Addition => {
-      val result = addition.a + addition.b
+    case s: String => {
       incrementNumCompletedTasks()
-      sender ! result
+      sender ! s.length
     }
     case division: Division => {
       val result: Int = division.dividend / division.divisor

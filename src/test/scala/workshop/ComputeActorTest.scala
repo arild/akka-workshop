@@ -13,9 +13,9 @@ class ComputeActorTest extends AkkaSpec {
     val computeActor = TestActorRef(ComputeActor.props(1 second))
   }
 
-  it should "compute addition" in new Actor {
-    computeActor ! Addition(9, 3)
-    expectMsg(12)
+  it should "compute length of string" in new Actor {
+    computeActor ! "abc"
+    expectMsg(3)
   }
 
   it should "compute division" in new Actor {
@@ -34,8 +34,8 @@ class ComputeActorTest extends AkkaSpec {
   }
 
   it should "increment number of completed tasks" in new Actor {
-    computeActor ! Addition(1, 1)
-    expectMsgClass(classOf[Int]) // Result from addition
+    computeActor ! "abc"
+    expectMsgClass(classOf[Int]) // Result from length of string
 
     computeActor ! GetNumCompletedTasks
     expectMsg(NumCompletedTasks(1))
