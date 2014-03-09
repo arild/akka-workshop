@@ -135,15 +135,15 @@ URL: https://code.google.com/p/io-2012-slides
                 <li>Hver Actor prosesserer sekvensielt, noe som gir en håndterbar kompleksitet isolert sett</li>
             </ul>
         </aside>
-        <hgroup><h2>Actor</h2></hgroup>
+        <hgroup><h2>The Actor Model</h2></hgroup>
         <article>
-            <img src="images/ACTORS.png" style="max-height: 500px; max-width: 500px;" />
-            <br />
-            <br />
             <ul>
-                <li>Actors are the central component in Akka</li>
-                <li>Each Actor process messages <b>sequencially</b></li>
+                <li>Actors sends messages <b>asynchronously</b></li>
+                <li>Actors process messages <b>sequentially</b></li>
             </ul>
+            <br />
+            <br />
+            <img src="images/ACTORS.png" style="max-height: 500px; max-width: 500px;" />
         </article>
     </slide>
 
@@ -157,7 +157,7 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <hgroup>
-            <h2>Actor Hello World</h2>
+            <h2>Hello Actor</h2>
         </hgroup>
         <article>
 <pre class="prettyprint">import akka.actor._
@@ -180,7 +180,7 @@ object GreetingActor_1 extends App {
 
     <slide>
         <hgroup>
-            <h2>Message command</h2>
+            <h2>Sending Messages</h2>
         </hgroup>
         <article>
     <pre class="prettyprint">import akka.actor._
@@ -209,7 +209,7 @@ object GreetingActor_2 extends App {
 
     <slide>
         <hgroup>
-            <h2>Scheduling work</h2>
+            <h2>Scheduling Work</h2>
         </hgroup>
         <article class="smaller">
     <pre class="prettyprint">import akka.actor._
