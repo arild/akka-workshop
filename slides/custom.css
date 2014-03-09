@@ -34,10 +34,19 @@ slides slide.restartslide ol li {
     list-style-type: decimal;
 }
 
-/*.outlineHighlight {*/
-    /*font-weight: bold;*/
-    /*font-size: 120%;*/
-/*}*/
+span.example {
+    float: right;
+    font-size: 70%;
+    position: relative;
+    top: -2.5em;
+    padding-right: 0.5em;
+    color: black;
+}
+
+.outlineHighlight {
+    font-weight: bold;
+    font-size: 120%;
+}
 
 /*.quoteLink {*/
     /*padding-left: 0px;*/
@@ -64,6 +73,16 @@ slides slide.restartslide ol li {
 /*slide article pre.plain span.kwd,*/
 /*slide article pre.plain span.typ {*/
     /*color: #515151 !important;*/
+/*}*/
+
+
+/*slide article pre[data-lang].plain:after{*/
+/*content: 'OUTPUT'*/
+/*}*/
+
+/*slide article pre.plain span.kwd,*/
+/*slide article pre.plain span.typ {*/
+/*color: #515151 !important;*/
 /*}*/
 
 
