@@ -322,8 +322,33 @@ class Supervisor extends Actor {
 
 
     <slide>
+        <hgroup>
+            <h2>DeathWatch</h2>
+        </hgroup>
+        <article>
+<pre class="prettyprint">import akka.actor.{Props, Actor, Terminated, ActorRef, ActorSystem}
+
+class DeathWatchActor extends Actor {
+
+  override def preStart() {
+    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
+    context.watch(actorRef)
+    actorRef ! "print this message, please!"
+  }
+
+  def receive = {
+    case Terminated(_) => println("looks like an actor has died :(")
+  }
+}</pre>
+        </article>
+        <span class="example">DeathWatchActor.scala</span>
+    </slide>
+
+
+
+    <slide>
             <hgroup>
-                <h2>Supervising Actors</h2>
+                <h2>Life-cycle of Actors</h2>
             </hgroup>
             <article>
         <pre class="prettyprint">import akka.actor.{Props, ActorSystem, Actor}
