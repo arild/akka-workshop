@@ -114,6 +114,19 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <hgroup>
+            <h2>Outline</h2>
+        </hgroup>
+        <article class="large">
+            <ul>
+                <li style=><b>Part 1 - Creating actors and sending messages</b></li>
+                <li>Part 2 - Actor supervision and death watch</li>
+                <li>Part 3 - Scalability</li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
         <aside class="note">
             <ul>
                 <li>Actors er hovedabstraksjonen i Akka</li>
@@ -131,6 +144,7 @@ URL: https://code.google.com/p/io-2012-slides
             </ul>
         </article>
     </slide>
+
 
     <slide>
         <hgroup><h2>Actor</h2></hgroup>
@@ -158,6 +172,7 @@ object GreetingActor extends App {
   greeter ! "Charlie Parker"
 }</pre>
         </article>
+        <span class="example">Example-1.scala</span>
     </slide>
 
     <slide>
