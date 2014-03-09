@@ -48,6 +48,10 @@ span.example {
     font-size: 120%;
 }
 
+slides slide h3 {
+    font-weight: bold;
+}
+
 /*.quoteLink {*/
     /*padding-left: 0px;*/
     /*padding-top: 20px;*/
