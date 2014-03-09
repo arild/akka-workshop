@@ -1,4 +1,4 @@
-package examples.example5
+package examples
 
 import akka.actor._
 import akka.actor.SupervisorStrategy.Restart
@@ -7,14 +7,11 @@ import akka.pattern.ask
 import scala.concurrent.Await
 import akka.util.Timeout
 
-case class MyCommand()
+case class CreateGreetingActor4()
 
-case class CreateGreetingActor()
-
-class GreetingActor extends Actor {
+class GreetingActor_4 extends Actor {
     def receive = {
       case message : String => println("Hello " + message)
-      case MyCommand => println("Got a command!")
       case e: Exception => throw e
     }
 
@@ -26,16 +23,9 @@ class GreetingActor extends Actor {
       println("postStop() - called by ANY actor-instance during shutdown")
     }
 
-    override def preRestart(reason: Throwable, message: Option[Any]) {
-      println("preRestart() - called on ANY running actor about to be restarted")
-    }
+}
 
-    override def postRestart(reason: Throwable) {
-      println("postRestart() - called on a NEW INSTANCE of this actor after restart")
-    }
-  }
-
-class ComputeSupervisor extends Actor {
+class GreetingActor_4Supervisor extends Actor {
 
     override val supervisorStrategy =
       OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
@@ -43,8 +33,8 @@ class ComputeSupervisor extends Actor {
       }
 
       def receive = {
-        case CreateGreetingActor => {
-          val actorRef: ActorRef = context.actorOf(Props[GreetingActor])
+        case CreateGreetingActor4 => {
+          val actorRef: ActorRef = context.actorOf(Props[GreetingActor_4])
           sender ! actorRef
         }
         case _ => {}
@@ -52,12 +42,11 @@ class ComputeSupervisor extends Actor {
   }
 
 
-object GreetingActor extends App {
+object GreetingActor_4 extends App {
     val system = ActorSystem("MySystem")
-    val supervisor = system.actorOf(Props[ComputeSupervisor])
+    val supervisor = system.actorOf(Props[GreetingActor_4Supervisor])
     implicit val timeout = Timeout(5 seconds)
-    private val futureActorRef = supervisor ? CreateGreetingActor
+    private val futureActorRef = supervisor ? CreateGreetingActor4
     private val actorRef: ActorRef = Await.result(futureActorRef, Duration.Inf).asInstanceOf[ActorRef]
-    actorRef ! new RuntimeException
     actorRef ! PoisonPill
   }
