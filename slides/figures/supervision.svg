@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1000.9204"
-   height="536.06354"
+   width="1107.0837"
+   height="548.07703"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
@@ -171,6 +171,34 @@
          transform="scale(-0.8,-0.8)"
          inkscape:connector-curvature="0" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInL-02-5-0"
+       style="overflow:visible">
+      <path
+         id="path6015-9-39-2"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(-0.8,-0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInL-02-5-6"
+       style="overflow:visible">
+      <path
+         id="path6015-9-39-5"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(-0.8,-0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -179,11 +207,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="311.06705"
-     inkscape:cy="258.92355"
+     inkscape:zoom="2.8"
+     inkscape:cx="307.13925"
+     inkscape:cy="416.51447"
      inkscape:document-units="px"
-     inkscape:current-layer="g7751"
+     inkscape:current-layer="g7360"
      showgrid="false"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -219,8 +247,8 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       originx="-164.02077px"
-       originy="-535.23386px" />
+       originx="-129.36428px"
+       originy="-535.23504px" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -238,7 +266,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-164.02077,18.93521)">
+     transform="translate(-129.36428,30.949858)">
     <flowRoot
        xml:space="preserve"
        id="flowRoot7386"
@@ -249,7 +277,7 @@
            height="86.428574"
            x="204.46428"
            y="99.505035" /></flowRegion><flowPara
-         id="flowPara7392"></flowPara></flowRoot>    <flowRoot
+         id="flowPara7392" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot7402"
        style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
@@ -260,7 +288,7 @@
            x="199.00005"
            y="13.925367"
            style="font-size:12px" /></flowRegion><flowPara
-         id="flowPara7408"></flowPara></flowRoot>    <g
+         id="flowPara7408" /></flowRoot>    <g
        id="g7709">
       <g
          id="g7751"
@@ -451,12 +479,24 @@
              id="path5736-6-7-8-0-2-1-79-8"
              d="m 228.2002,246.65171 37.55882,-45.63286"
              style="color:#000000;fill:#008000;stroke:#585858;stroke-width:0.80247545;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+          <path
+             sodipodi:nodetypes="cc"
+             inkscape:connector-curvature="0"
+             id="path5736-6-7-8-0-2-1-79-7-0-9-3"
+             d="m 249.21478,184.70046 c -23.90077,0.0282 -58.88547,3.65792 -66.85141,-17.80098"
+             style="opacity:0.4;color:#000000;fill:none;stroke:#595959;stroke-width:0.80192149000000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.81152904999999986, 1.60384302000000001;stroke-dashoffset:0;marker:none;marker-start:url(#TriangleInL-02-5);visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+          <path
+             sodipodi:nodetypes="cc"
+             inkscape:connector-curvature="0"
+             id="path5736-6-7-8-0-2-1-79-7-0-9-3-3"
+             d="m 372.76485,98.967502 c 25.05396,-1.073121 67.46853,-5.897818 75.43447,15.561078"
+             style="opacity:0.4;color:#000000;fill:none;stroke:#595959;stroke-width:0.80192149000000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.81152904999999986, 1.60384302000000001;stroke-dashoffset:0;marker:none;marker-start:url(#TriangleInL-02-5);visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
         </g>
         <flowRoot
            xml:space="preserve"
            id="flowRoot7410"
            style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-           transform="translate(-18.033044,221.70727)"><flowRegion
+           transform="translate(-32.069299,187.24376)"><flowRegion
              id="flowRegion7412"><rect
                id="rect7414"
                width="189.10715"
@@ -488,7 +528,7 @@
            xml:space="preserve"
            id="flowRoot7410-6"
            style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-           transform="translate(218.30126,199.05363)"><flowRegion
+           transform="translate(245.64226,225.1908)"><flowRegion
              id="flowRegion7412-3"><rect
                id="rect7414-1"
                width="189.10715"
