@@ -298,10 +298,11 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
             <h2>Creating a supervisor</h2>
         </hgroup>
         <article>
-<pre class="prettyprint">class Supervisor extends Actor {
-    import akka.actor.OneForOneStrategy
-    import akka.actor.SupervisorStrategy._
-    import scala.concurrent.duration._
+<pre class="prettyprint">import akka.actor.OneForOneStrategy
+import akka.actor.SupervisorStrategy._
+import scala.concurrent.duration._
+
+class Supervisor extends Actor {
 
     override val supervisorStrategy =
       OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
@@ -314,8 +315,9 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
     def receive = {
       case p: Props => sender() ! context.actorOf(p)
     }
-  }</pre>
+}</pre>
         </article>
+        <span class="example">SupervisorActor.scala</span>
     </slide>
 
 
