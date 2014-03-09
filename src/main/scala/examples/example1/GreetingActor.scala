@@ -2,9 +2,8 @@ package examples.example1
 
 import akka.actor._
 
-case class CreateGreetingActor()
-
 class GreetingActor extends Actor {
+
   def receive = {
     case message : String => println("Hello " + message)
   }
