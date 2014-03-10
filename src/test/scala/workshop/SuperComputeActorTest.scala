@@ -4,7 +4,7 @@ import akka.actor._
 import work._
 import scala.concurrent.duration._
 
-class ComputeSuperActorTest extends AkkaSpec {
+class SuperComputeActorTest extends AkkaSpec {
 
   val timeout: FiniteDuration = 150 millis
 
