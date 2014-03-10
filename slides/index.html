@@ -142,18 +142,10 @@ URL: https://code.google.com/p/io-2012-slides
                 <li>Actors process messages <b>sequentially</b></li>
             </ul>
             <br />
-            <br />
-            <img src="images/ACTORS.png" style="max-height: 500px; max-width: 500px;" />
+            <img src="figures/actor-model.png" style="max-height: 400px;" />
         </article>
     </slide>
 
-
-    <slide>
-        <hgroup><h2>Actor</h2></hgroup>
-        <article>
-            <img src="images/actor_illustration2.png" style="max-height: 500px; max-width: 500px;" />
-        </article>
-    </slide>
 
     <slide>
         <hgroup>
@@ -162,15 +154,15 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
 <pre class="prettyprint">import akka.actor._
 
-class GreetingActor_1 extends Actor {
+class GreetingActor extends Actor {
   def receive = {
     case message : String => println("Hello " + message)
   }
 }
 
-object GreetingActor_1 extends App {
+object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(new GreetingActor_1))
+  val actorRef = system.actorOf(Props(new GreetingActor))
   actorRef ! "Hulk Hogan"
 }</pre>
         </article>
@@ -187,7 +179,7 @@ object GreetingActor_1 extends App {
 
 case class SayHello(name: String)
 
-class GreetingActor_2 extends Actor {
+class GreetingActor extends Actor {
   def receive = {
     case hello : SayHello => {
       println("Hello " + hello.name)
@@ -196,8 +188,8 @@ class GreetingActor_2 extends Actor {
   }
 }
 
-object GreetingActor_2 extends App {
-  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor_2))
+object GreetingActor extends App {
+  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor))
   actorRef ! SayHello("Pope Benedict")
 }</pre>
             </article>
@@ -217,7 +209,7 @@ import scala.concurrent.duration._
 
 case class DoGreeting()
 
-class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
+class GreetingActor(delay: FiniteDuration) extends Actor {
 
   override def preStart() = {
     scheduleNextGreeting()
@@ -232,7 +224,7 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
 
   def scheduleNextGreeting() {
     import context.dispatcher
-    context.system.scheduler.scheduleOnce(myInterval, self, DoGreeting)
+    context.system.scheduler.scheduleOnce(delay, self, DoGreeting)
   }
 
 }</pre>
@@ -247,8 +239,19 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
         </hgroup>
         <article class="large">
             <ul>
+               <li>git clone <a href="https://github.com/arild/akka-workshop.git">https://github.com/arild/akka-workshop.git</a></li>
                <li>Implement ComputeActor.scala</li>
                <li>Make tests in ComputeActorTest.scala green</li>
+               <li>Have a look in the package called "work"</li>
+            </ul>
+            <br>
+            <ul>
+                <li>Useful resources:
+                    <ul>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#creating-actors">http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#creating-actors</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/scheduler.html">http://doc.akka.io/docs/akka/2.3.0/scala/scheduler.html</a> </li>
+                    </ul>
+                </li>
             </ul>
         </article>
     </slide>
@@ -270,24 +273,15 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
 
     <slide>
         <hgroup>
-            <h2>What</h2>
+            <h2>Supervision through hierarchies</h2>
         </hgroup>
         <article>
-            <ul>
-                <li>Hierarchy</li>
-                <li>Image?</li>
-            </ul>
-        </article>
-    </slide>
+            <p class="flexbox vcenter">
+                <img src="figures/supervision.png" style="max-height: 450px" />
+            </p>
 
-
-    <slide>
-        <hgroup>
-            <h2>Why</h2>
-        </hgroup>
-        <article>
             <ul>
-                <li>Hierarchies work</li>
+                <li>Actor supervision is recursive, enabling delegation of failure handling</li>
             </ul>
         </article>
     </slide>
@@ -313,7 +307,7 @@ class Supervisor extends Actor {
       }
 
     def receive = {
-      case p: Props => sender() ! context.actorOf(p)
+      case p: Props => sender ! context.actorOf(p)
     }
 }</pre>
         </article>
@@ -323,7 +317,7 @@ class Supervisor extends Actor {
 
     <slide>
         <hgroup>
-            <h2>DeathWatch</h2>
+            <h2>Using Death Watch</h2>
         </hgroup>
         <article>
 <pre class="prettyprint">import akka.actor.{Props, Actor, Terminated, ActorRef, ActorSystem}
@@ -331,7 +325,7 @@ class Supervisor extends Actor {
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
+    val actorRef: ActorRef = context.actorOf(Props(new VolatileGreetingActor())
     context.watch(actorRef)
     actorRef ! "print this message, please!"
   }
@@ -378,17 +372,23 @@ class DeathWatchActor extends Actor {
                     <h2>What happens on an actor restart</h2>
                 </hgroup>
                 <article>
-        <ol>
-            <li>Suspend the actor and recursively suspend all children</li>
-            <li>Call the old instance’s preRestart hook</li>
-            <li>Wait for all children which were requested to terminate (non-blocking)</li>
-            <li>Create new actor instance by invoking the originally provided factory again</li>
-            <li>Invoke postRestart on the new instance</li>
-            <li>Send restart request to all children which were not killed in step 3; restarted children will follow the same process recursively, from step 2</li>
-            <li>Resume the actor</li>
-        </ol>
+        <p><a href="http://doc.akka.io/docs/akka/2.3.0/general/supervision.html#what-restarting-means">What restarting means</a></p>
         </article>
         </slide>
+
+
+
+    <slide>
+        <hgroup>
+            <h2>Part 2 - Architecture</h2>
+        </hgroup>
+        <article>
+            <br>
+            <p class="flexbox vcenter">
+                <img src="figures/workshop-architecture.png" style="max-height: 430px" />
+            </p>
+        </article>
+    </slide>
 
 
     <slide>
@@ -407,11 +407,20 @@ class DeathWatchActor extends Actor {
                 <li>
                     <h3>Death Watch</h3>
                     <ul>
-                        <li>Start implementing ClientActor.scala</li>
-                        <li>Make <b>4 first</b> tests in ClientActorTest.scala green</li>
+                        <li>Implement ClientActor.scala</li>
+                        <li>Make tests in ClientActorTest.scala green</li>
                     </ul>
                 </li>
+            </ul>
 
+            <br>
+            <ul>
+                <li>Useful resources:
+                    <ul>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/fault-tolerance.html#Creating_a_Supervisor_Strategy">Creating a Supervisor Strategy</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#Lifecycle_Monitoring_aka_DeathWatch">Lifecycle Monitoring aka DeathWatch</a> </li>
+                    </ul>
+                </li>
             </ul>
         </article>
     </slide>
@@ -436,8 +445,19 @@ class DeathWatchActor extends Actor {
         </hgroup>
         <article class="large">
             <ul>
-                <li>Finish implementing ClientActor.scala</li>
-                <li>Make remaining tests in ClientActorTest.scala green</li>
+                <li>Implement SuperComputeActor.scala</li>
+                <li>Make tests in SuperComputerActorTest.scala green</li>
+            </ul>
+
+            <br>
+            <ul>
+                <li>Play around with:
+                    <ul>
+                        <li>Create multiple actors (one for each unit of work)</li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/routing.html">Use a router</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/futures.html">Use futures</a> </li>
+                    </ul>
+                </li>
             </ul>
         </article>
     </slide>
@@ -450,7 +470,7 @@ class DeathWatchActor extends Actor {
             <h2>Questions?</h2>
             <br>
             <p>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></p>
-            <p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>
+            <!--<p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>-->
         </article>
         <p class="auto-fadein" data-config-contact>
             <!-- populated from slide_config.json -->
