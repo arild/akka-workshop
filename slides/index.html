@@ -314,7 +314,7 @@ class Supervisor extends Actor {
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
+    val actorRef: ActorRef = context.actorOf(Props(new VolatileGreetingActor())
     context.watch(actorRef)
     actorRef ! "print this message, please!"
   }
@@ -361,15 +361,7 @@ class DeathWatchActor extends Actor {
                     <h2>What happens on an actor restart</h2>
                 </hgroup>
                 <article>
-        <ol>
-            <li>Suspend the actor and recursively suspend all children</li>
-            <li>Call the old instance’s preRestart hook</li>
-            <li>Wait for all children which were requested to terminate (non-blocking)</li>
-            <li>Create new actor instance by invoking the originally provided factory again</li>
-            <li>Invoke postRestart on the new instance</li>
-            <li>Send restart request to all children which were not killed in step 3; restarted children will follow the same process recursively, from step 2</li>
-            <li>Resume the actor</li>
-        </ol>
+        <p><a href="http://doc.akka.io/docs/akka/2.3.0/general/supervision.html#what-restarting-means">What restarting means</a></p>
         </article>
         </slide>
 
