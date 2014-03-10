@@ -209,7 +209,7 @@ import scala.concurrent.duration._
 
 case class DoGreeting()
 
-class GreetingActor(myInterval: FiniteDuration) extends Actor {
+class GreetingActor(delay: FiniteDuration) extends Actor {
 
   override def preStart() = {
     scheduleNextGreeting()
@@ -224,7 +224,7 @@ class GreetingActor(myInterval: FiniteDuration) extends Actor {
 
   def scheduleNextGreeting() {
     import context.dispatcher
-    context.system.scheduler.scheduleOnce(myInterval, self, DoGreeting)
+    context.system.scheduler.scheduleOnce(delay, self, DoGreeting)
   }
 
 }</pre>
@@ -242,6 +242,7 @@ class GreetingActor(myInterval: FiniteDuration) extends Actor {
                <li>git clone <a href="https://github.com/arild/akka-workshop.git">https://github.com/arild/akka-workshop.git</a></li>
                <li>Implement ComputeActor.scala</li>
                <li>Make tests in ComputeActorTest.scala green</li>
+               <li>Have a look in the package called "work"</li>
             </ul>
             <br>
             <ul>
@@ -306,7 +307,7 @@ class Supervisor extends Actor {
       }
 
     def receive = {
-      case p: Props => sender() ! context.actorOf(p)
+      case p: Props => sender ! context.actorOf(p)
     }
 }</pre>
         </article>
@@ -445,15 +446,16 @@ class DeathWatchActor extends Actor {
         <article class="large">
             <ul>
                 <li>Implement SuperComputeActor.scala</li>
-                <li>Make tests in SuperComputerActor.scala green</li>
+                <li>Make tests in SuperComputerActorTest.scala green</li>
             </ul>
 
             <br>
             <ul>
-                <li>Useful resources:
+                <li>Play around with:
                     <ul>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/routing.html">http://doc.akka.io/docs/akka/2.3.0/scala/routing.html</a> </li>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/futures.html">http://doc.akka.io/docs/akka/2.3.0/scala/futures.html</a> </li>
+                        <li>Create multiple actors (one for each unit of work)</li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/routing.html">Use a router</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/futures.html">Use futures</a> </li>
                     </ul>
                 </li>
             </ul>
@@ -468,7 +470,7 @@ class DeathWatchActor extends Actor {
             <h2>Questions?</h2>
             <br>
             <p>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></p>
-            <p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>
+            <!--<p>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></p>-->
         </article>
         <p class="auto-fadein" data-config-contact>
             <!-- populated from slide_config.json -->
