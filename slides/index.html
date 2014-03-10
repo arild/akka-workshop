@@ -154,15 +154,15 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
 <pre class="prettyprint">import akka.actor._
 
-class GreetingActor_1 extends Actor {
+class GreetingActor extends Actor {
   def receive = {
     case message : String => println("Hello " + message)
   }
 }
 
-object GreetingActor_1 extends App {
+object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(new GreetingActor_1))
+  val actorRef = system.actorOf(Props(new GreetingActor))
   actorRef ! "Hulk Hogan"
 }</pre>
         </article>
@@ -179,7 +179,7 @@ object GreetingActor_1 extends App {
 
 case class SayHello(name: String)
 
-class GreetingActor_2 extends Actor {
+class GreetingActor extends Actor {
   def receive = {
     case hello : SayHello => {
       println("Hello " + hello.name)
@@ -188,8 +188,8 @@ class GreetingActor_2 extends Actor {
   }
 }
 
-object GreetingActor_2 extends App {
-  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor_2))
+object GreetingActor extends App {
+  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor))
   actorRef ! SayHello("Pope Benedict")
 }</pre>
             </article>
@@ -209,7 +209,7 @@ import scala.concurrent.duration._
 
 case class DoGreeting()
 
-class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
+class GreetingActor(myInterval: FiniteDuration) extends Actor {
 
   override def preStart() = {
     scheduleNextGreeting()
@@ -239,6 +239,7 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
         </hgroup>
         <article class="large">
             <ul>
+               <li>git clone <a href="https://github.com/arild/akka-workshop.git">https://github.com/arild/akka-workshop.git</a></li>
                <li>Implement ComputeActor.scala</li>
                <li>Make tests in ComputeActorTest.scala green</li>
             </ul>
