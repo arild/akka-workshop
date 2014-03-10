@@ -8,21 +8,23 @@ import workshop.companion.ComputeSupervisor
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
+  val timeout: FiniteDuration = 50 millis
+
   it should "resume compute actor on arithmetic exception" in {
 
     val computeActor: ActorRef = createAndWatchComputeActor()
 
     computeActor ! "abc"
-    expectMsg(3) // Result from length of string
+    expectMsg(timeout, 3) // Result from length of string
 
     computeActor ! Division(1, 0)
 
     // Should maintain state when being resumed
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(1))
+    expectMsg(timeout, NumCompletedTasks(1))
 
     // Should not receive Terminated message due to watch()
-    expectNoMsg(1 second)
+    expectNoMsg(timeout)
   }
 
   it should "restart compute actor on risky work exception" in {
@@ -33,16 +35,16 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
     val computeActor: ActorRef = createAndWatchComputeActor()
 
     computeActor ! "abc"
-    expectMsg(3) // Result from length of string
+    expectMsg(timeout, 3) // Result from length of string
 
     computeActor ! new TestWork
 
     // Should NOT maintain state when being restarted
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(0))
+    expectMsg(timeout, NumCompletedTasks(0))
 
     // Should not receive Terminated message due to watch()
-    expectNoMsg(1 second)
+    expectNoMsg(timeout)
   }
 
   it should "stop compute actor on any exception other than arithmetic and risky work exception" in {
@@ -54,14 +56,14 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
     computeActor ! new TestWork
 
-    expectMsgClass(500 millisecond, classOf[Terminated])
+    expectMsgClass(timeout, classOf[Terminated])
   }
 
   def createAndWatchComputeActor() = {
     val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
     computeSupervisor ! StartComputeActor("computeActor-1")
 
-    val computeActor: ActorRef = expectMsgClass(classOf[ActorRef])
+    val computeActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
     watch(computeActor)
 
     computeActor

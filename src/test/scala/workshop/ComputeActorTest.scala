@@ -9,48 +9,50 @@ import workshop.companion.ComputeActor
 
 class ComputeActorTest extends AkkaSpec {
 
+  val timeout: FiniteDuration = 50 millis
+
   trait Actor {
     val computeActor = TestActorRef(ComputeActor.props(1 second))
   }
 
   it should "compute length of string" in new Actor {
     computeActor ! "abc"
-    expectMsg(3)
+    expectMsg(timeout, 3)
   }
 
   it should "compute division" in new Actor {
     computeActor ! Division(9, 3)
-    expectMsg(3)
+    expectMsg(timeout, 3)
   }
 
   it should "perform risky work" in new Actor {
     computeActor ! new RiskyAddition(3, 2)
-    expectMsg(RiskyAdditionResult(5))
+    expectMsg(timeout, RiskyAdditionResult(5))
   }
 
   it should "initially have zero completed tasks" in new Actor {
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(0))
+    expectMsg(timeout, NumCompletedTasks(0))
   }
 
   it should "increment number of completed tasks" in new Actor {
     computeActor ! "abc"
-    expectMsgClass(classOf[Int]) // Result from length of string
+    expectMsgClass(timeout, classOf[Int]) // Result from length of string
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(1))
+    expectMsg(timeout, NumCompletedTasks(1))
 
     computeActor ! Division(1, 1)
-    expectMsgClass(classOf[Int]) // Result from division
+    expectMsgClass(timeout, classOf[Int]) // Result from division
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(2))
+    expectMsg(timeout, NumCompletedTasks(2))
 
     computeActor ! new RiskyAddition(3, 5)
-    expectMsgClass(classOf[RiskyAdditionResult]) // Result from risky addition
+    expectMsgClass(timeout, classOf[RiskyAdditionResult]) // Result from risky addition
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(3))
+    expectMsg(timeout, NumCompletedTasks(3))
   }
 
   it should "not increment number of completed tasks when division fails with arithmetic exception" in new Actor {
@@ -60,7 +62,7 @@ class ComputeActorTest extends AkkaSpec {
     }
 
     computeActor ! GetNumCompletedTasks
-    expectMsg(NumCompletedTasks(0))
+    expectMsg(timeout, NumCompletedTasks(0))
   }
 
   it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
