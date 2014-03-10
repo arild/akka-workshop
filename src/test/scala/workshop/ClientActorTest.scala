@@ -6,9 +6,11 @@ import workshop.helpers.ComputeTestActor
 import akka.actor.Terminated
 import work._
 import workshop.companion.{ClientActor, ComputeSupervisor}
-
+import scala.concurrent.duration._
 
 class ClientActorTest extends AkkaSpec {
+
+  val timeout: FiniteDuration = 50 millis
 
   trait Actors {
     val resultProbe = TestProbe()
@@ -19,7 +21,7 @@ class ClientActorTest extends AkkaSpec {
   it should "start compute actor at startup" in new Actors {
     val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
 
-    computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
+    computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
   }
 
   it should "stop if compute actor terminates" in {
@@ -27,12 +29,12 @@ class ClientActorTest extends AkkaSpec {
     val computeSupervisorProbe = TestProbe()
     val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, mock[ActorRef], List()))
 
-    computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
+    computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
     computeSupervisorProbe.reply(computeTestActor)
 
     watch(clientActor)
     computeTestActor ! PoisonPill // Poison pill makes actor terminate
-    expectMsgClass(classOf[Terminated])
+    expectMsgClass(timeout, classOf[Terminated])
   }
 
   it should "complete risky work when work has no failures" in {
@@ -42,8 +44,8 @@ class ClientActorTest extends AkkaSpec {
     val resultProbe = TestProbe()
     system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
 
-    resultProbe.expectMsg(RiskyAdditionResult(5))
-    resultProbe.expectMsg(RiskyAdditionResult(6))
+    resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+    resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
   }
 
   it should "complete remaining risky work when work throws risky work exceptions" in {
@@ -57,8 +59,8 @@ class ClientActorTest extends AkkaSpec {
     val resultProbe = TestProbe()
     system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
 
-    resultProbe.expectMsg(RiskyAdditionResult(5))
-    resultProbe.expectMsg(RiskyAdditionResult(6))
+    resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+    resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
   }
 
 }
