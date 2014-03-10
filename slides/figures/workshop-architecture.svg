@@ -14,7 +14,10 @@
    id="svg8743"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="workshop-architecture.png">
+   sodipodi:docname="workshop-architecture.svg"
+   inkscape:export-filename="/home/arild/workspace/akka-workshop/slides/figures/workshop-architecture.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs8745">
     <marker
@@ -195,7 +198,7 @@
       </g>
       <path
          transform="matrix(0.97457163,0,0,1.0862413,-66.005449,-102.46362)"
-         d="m 355.71428,219.50504 a 76.428574,68.571426 0 1 1 -152.85715,0 76.428574,68.571426 0 1 1 152.85715,0 z"
+         d="m 355.71428,219.50504 c 0,37.87095 -34.21824,68.57142 -76.42857,68.57142 -42.21034,0 -76.42858,-30.70047 -76.42858,-68.57142 0,-37.87096 34.21824,-68.57143 76.42858,-68.57143 42.21033,0 76.42857,30.70047 76.42857,68.57143 z"
          sodipodi:ry="68.571426"
          sodipodi:rx="76.428574"
          sodipodi:cy="219.50504"
@@ -211,7 +214,7 @@
          style="color:#000000;fill:none;stroke:#000000;stroke-width:2.87389612;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;marker-start:url(#TriangleInL-02-5);visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          transform="matrix(0.97457163,0,0,1.0862413,-368.80217,-247.48578)"
-         d="m 355.71428,219.50504 a 76.428574,68.571426 0 1 1 -152.85715,0 76.428574,68.571426 0 1 1 152.85715,0 z"
+         d="m 355.71428,219.50504 c 0,37.87095 -34.21824,68.57142 -76.42857,68.57142 -42.21034,0 -76.42858,-30.70047 -76.42858,-68.57142 0,-37.87096 34.21824,-68.57143 76.42858,-68.57143 42.21033,0 76.42857,30.70047 76.42857,68.57143 z"
          sodipodi:ry="68.571426"
          sodipodi:rx="76.428574"
          sodipodi:cy="219.50504"
@@ -221,7 +224,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(0.97457163,0,0,1.0862413,-368.80217,39.187177)"
-         d="m 355.71428,219.50504 a 76.428574,68.571426 0 1 1 -152.85715,0 76.428574,68.571426 0 1 1 152.85715,0 z"
+         d="m 355.71428,219.50504 c 0,37.87095 -34.21824,68.57142 -76.42857,68.57142 -42.21034,0 -76.42858,-30.70047 -76.42858,-68.57142 0,-37.87096 34.21824,-68.57143 76.42858,-68.57143 42.21033,0 76.42857,30.70047 76.42857,68.57143 z"
          sodipodi:ry="68.571426"
          sodipodi:rx="76.428574"
          sodipodi:cy="219.50504"
@@ -249,7 +252,7 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Monospace;-inkscape-font-specification:Monospace;font-size:21.6900802px">Tick</tspan></text>
       <path
          transform="matrix(0.97457163,0,0,1.0862413,200.09934,-247.59569)"
-         d="m 355.71428,219.50504 a 76.428574,68.571426 0 1 1 -152.85715,0 76.428574,68.571426 0 1 1 152.85715,0 z"
+         d="m 355.71428,219.50504 c 0,37.87095 -34.21824,68.57142 -76.42857,68.57142 -42.21034,0 -76.42858,-30.70047 -76.42858,-68.57142 0,-37.87096 34.21824,-68.57143 76.42858,-68.57143 42.21033,0 76.42857,30.70047 76.42857,68.57143 z"
          sodipodi:ry="68.571426"
          sodipodi:rx="76.428574"
          sodipodi:cy="219.50504"
