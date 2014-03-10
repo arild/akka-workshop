@@ -13,14 +13,9 @@ case class Tick()
 
 class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
-  var numCompletedTasks: Int = 0
 
   def receive = {
     //TODO
     case _ => {}
-  }
-
-  def incrementNumCompletedTasks() {
-    numCompletedTasks += 1
   }
 }
