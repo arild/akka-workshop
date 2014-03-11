@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 
 class SuperComputeActorTest extends AkkaSpec {
 
-  val timeout: FiniteDuration = 150 millis
+  val timeout: FiniteDuration = 110 millis
 
   it should "compute one risky work in which has no failures" in  {
     val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
