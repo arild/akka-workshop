@@ -7,9 +7,9 @@ import workshop.work.RiskyWork
 
 
 case class Division(dividend: Int, divisor: Int)
-case class GetNumCompletedTasks()
+object GetNumCompletedTasks
 case class NumCompletedTasks(numCompleted: Int)
-case class Tick()
+object Tick
 
 class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
