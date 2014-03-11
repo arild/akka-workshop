@@ -3,6 +3,7 @@ package workshop
 import akka.actor._
 import work._
 import scala.concurrent.duration._
+import scala.collection.immutable.Seq
 
 class SuperComputeActorTest extends AkkaSpec {
 
@@ -26,13 +27,9 @@ class SuperComputeActorTest extends AkkaSpec {
       w => superComputeActor ! w
     )
 
-    val result1: RiskyAdditionResult = expectMsgClass(timeout, classOf[RiskyAdditionResult])
-    val result2: RiskyAdditionResult = expectMsgClass(timeout, classOf[RiskyAdditionResult])
-    val result3: RiskyAdditionResult = expectMsgClass(timeout, classOf[RiskyAdditionResult])
+    val sequenceResult: Seq[RiskyAdditionResult] = expectMsgAllClassOf(timeout, classOf[RiskyAdditionResult])
 
-    workListResults should contain (result1.result)
-    workListResults should contain (result2.result)
-    workListResults should contain (result3.result)
+    sequenceResult.seq.foreach(workListResults should contain (_))
   }
 
   it should "compute risky work in parallell when one has failuree" in  {
@@ -48,11 +45,9 @@ class SuperComputeActorTest extends AkkaSpec {
       w => superComputeActor ! w
     )
 
-    val result1: RiskyAdditionResult = expectMsgClass(timeout, classOf[RiskyAdditionResult])
-    val result2: RiskyAdditionResult = expectMsgClass(timeout, classOf[RiskyAdditionResult])
+    val sequenceResult: Seq[RiskyAdditionResult] = expectMsgAllClassOf(timeout, classOf[RiskyAdditionResult])
 
-    workListResults should contain (result1.result)
-    workListResults should contain (result2.result)
+    sequenceResult.seq.foreach(workListResults should contain (_))
   }
 
 }
