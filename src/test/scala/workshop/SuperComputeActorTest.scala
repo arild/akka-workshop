@@ -21,7 +21,7 @@ class SuperComputeActorTest extends AkkaSpec {
     val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
     val workList = List(RiskyAddition(1, 3, 100), RiskyAddition(2,3,100),  RiskyAddition(4,2,100))
-    val workListResults = List(4,5,6)
+    val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(5),RiskyAdditionResult(6))
 
     workList.foreach(
       w => superComputeActor ! w
@@ -39,7 +39,7 @@ class SuperComputeActorTest extends AkkaSpec {
     val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
     val workList = List(RiskyAddition(1, 3, 100), new WorkWithFailure(),  RiskyAddition(4,2,100))
-    val workListResults = List(4,6)
+    val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(6))
 
     workList.foreach(
       w => superComputeActor ! w
