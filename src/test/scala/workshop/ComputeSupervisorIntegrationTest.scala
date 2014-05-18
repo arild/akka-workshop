@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import scala.concurrent.duration._
 import akka.actor.{Terminated, ActorRef}
 import workshop.work.{RiskyWorkException, RiskyWork}

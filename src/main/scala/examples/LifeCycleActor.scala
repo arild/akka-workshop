@@ -1,5 +1,6 @@
 package examples
 
+import scala.language.postfixOps
 import akka.actor._
 import akka.actor.SupervisorStrategy.Restart
 import scala.concurrent.duration._

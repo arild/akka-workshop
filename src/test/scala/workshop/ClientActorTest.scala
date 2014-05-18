@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import akka.testkit.TestProbe
 import akka.actor._
 import workshop.helpers.ComputeTestActor
@@ -7,6 +8,7 @@ import akka.actor.Terminated
 import work._
 import workshop.companion.{ClientActor, ComputeSupervisor}
 import scala.concurrent.duration._
+
 
 class ClientActorTest extends AkkaSpec {
 

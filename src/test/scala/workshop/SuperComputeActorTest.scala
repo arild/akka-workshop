@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import akka.actor._
 import work._
 import scala.concurrent.duration._

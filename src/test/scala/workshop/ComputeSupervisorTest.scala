@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import akka.actor._
 import akka.testkit.TestActorRef
 import org.mockito.Matchers._

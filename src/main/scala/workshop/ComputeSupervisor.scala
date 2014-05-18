@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import akka.actor.SupervisorStrategy.{Restart, Resume, Stop}
 import akka.actor.{OneForOneStrategy, ActorRef, Actor}
 import akka.event.Logging

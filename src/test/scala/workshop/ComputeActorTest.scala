@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import workshop.work._
 import akka.actor._
 import akka.testkit.{EventFilter, TestActorRef}
