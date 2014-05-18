@@ -8,6 +8,7 @@ import akka.actor.Terminated
 import work._
 import workshop.companion.{ClientActor, ComputeSupervisor}
 import scala.concurrent.duration._
+import workshop.helpers.AkkaSpecHelper.supressStackTraceNoise
 
 
 class ClientActorTest extends AkkaSpec {
@@ -21,48 +22,55 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "start compute actor at startup" in new Actors {
-    val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
-
-    computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
+    supressStackTraceNoise{
+      val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
+      computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
+    }
   }
 
   it should "stop if compute actor terminates" in {
-    val computeTestActor = system.actorOf(Props(classOf[ComputeTestActor]))
-    val computeSupervisorProbe = TestProbe()
-    val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, mock[ActorRef], List()))
+    supressStackTraceNoise{
+      val computeTestActor = system.actorOf(Props(classOf[ComputeTestActor]))
+      val computeSupervisorProbe = TestProbe()
+      val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, mock[ActorRef], List()))
 
-    computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
-    computeSupervisorProbe.reply(computeTestActor)
+      computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
+      computeSupervisorProbe.reply(computeTestActor)
 
-    watch(clientActor)
-    computeTestActor ! PoisonPill // Poison pill makes actor terminate
-    expectMsgClass(timeout, classOf[Terminated])
+      watch(clientActor)
+      computeTestActor ! PoisonPill // Poison pill makes actor terminate
+      expectMsgClass(timeout, classOf[Terminated])
+    }
   }
 
   it should "complete risky work when work has no failures" in {
-    val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
+    supressStackTraceNoise{
+      val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
 
-    val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
-    val resultProbe = TestProbe()
-    system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
+      val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
+      val resultProbe = TestProbe()
+      system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
 
-    resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
-    resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
+    }
   }
 
   it should "complete remaining risky work when work throws risky work exceptions" in {
-    class WorkWithFailure extends RiskyWork {
-      override def perform() = throw new RiskyWorkException("test exception")
+    supressStackTraceNoise{
+      class WorkWithFailure extends RiskyWork {
+        override def perform() = throw new RiskyWorkException("test exception")
+      }
+
+      val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
+
+      val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
+      val resultProbe = TestProbe()
+      system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
+
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
     }
-
-    val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
-
-    val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
-    val resultProbe = TestProbe()
-    system.actorOf(ClientActor.props(computeSupervisor, resultProbe.ref, work))
-
-    resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
-    resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
   }
 
 }

@@ -6,7 +6,7 @@ import akka.actor._
 import akka.testkit.{EventFilter, TestActorRef}
 import scala.concurrent.duration._
 import workshop.companion.ComputeActor
-
+import workshop.helpers.AkkaSpecHelper.supressStackTraceNoise
 
 class ComputeActorTest extends AkkaSpec {
 
@@ -17,62 +17,75 @@ class ComputeActorTest extends AkkaSpec {
   }
 
   it should "compute length of string" in new Actor {
-    computeActor ! "abc"
-    expectMsg(timeout, 3)
+    supressStackTraceNoise{
+      computeActor ! "abc"
+      expectMsg(timeout, 3)
+    }
   }
 
   it should "compute division" in new Actor {
-    computeActor ! Division(9, 3)
-    expectMsg(timeout, 3)
+    supressStackTraceNoise{
+      computeActor ! Division(9, 3)
+      expectMsg(timeout, 3)
+    }
   }
 
   it should "perform risky work" in new Actor {
-    computeActor ! new RiskyAddition(3, 2)
-    expectMsg(timeout, RiskyAdditionResult(5))
+    supressStackTraceNoise{
+      computeActor ! new RiskyAddition(3, 2)
+      expectMsg(timeout, RiskyAdditionResult(5))
+    }
   }
 
   it should "initially have zero completed tasks" in new Actor {
-    computeActor ! GetNumCompletedTasks
-    expectMsg(timeout, NumCompletedTasks(0))
+    supressStackTraceNoise{
+      computeActor ! GetNumCompletedTasks
+      expectMsg(timeout, NumCompletedTasks(0))
+    }
   }
 
   it should "increment number of completed tasks" in new Actor {
-    computeActor ! "abc"
-    expectMsgClass(timeout, classOf[Int]) // Result from length of string
+    supressStackTraceNoise{
+      computeActor ! "abc"
+      expectMsgClass(timeout, classOf[Int]) // Result from length of string
 
-    computeActor ! GetNumCompletedTasks
-    expectMsg(timeout, NumCompletedTasks(1))
+      computeActor ! GetNumCompletedTasks
+      expectMsg(timeout, NumCompletedTasks(1))
 
-    computeActor ! Division(1, 1)
-    expectMsgClass(timeout, classOf[Int]) // Result from division
+      computeActor ! Division(1, 1)
+      expectMsgClass(timeout, classOf[Int]) // Result from division
 
-    computeActor ! GetNumCompletedTasks
-    expectMsg(timeout, NumCompletedTasks(2))
+      computeActor ! GetNumCompletedTasks
+      expectMsg(timeout, NumCompletedTasks(2))
 
-    computeActor ! new RiskyAddition(3, 5)
-    expectMsgClass(timeout, classOf[RiskyAdditionResult]) // Result from risky addition
+      computeActor ! new RiskyAddition(3, 5)
+      expectMsgClass(timeout, classOf[RiskyAdditionResult]) // Result from risky addition
 
-    computeActor ! GetNumCompletedTasks
-    expectMsg(timeout, NumCompletedTasks(3))
+      computeActor ! GetNumCompletedTasks
+      expectMsg(timeout, NumCompletedTasks(3))
+    }
   }
 
   it should "not increment number of completed tasks when division fails with arithmetic exception" in new Actor {
-    // Prevents stack trace from displaying when running tests
-    intercept[ArithmeticException] {
-      computeActor.receive(Division(1, 0))
-    }
+    supressStackTraceNoise{
+      // Prevents stack trace from displaying when running tests
+      intercept[ArithmeticException] {
+        computeActor.receive(Division(1, 0))
+      }
 
-    computeActor ! GetNumCompletedTasks
-    expectMsg(timeout, NumCompletedTasks(0))
+      computeActor ! GetNumCompletedTasks
+      expectMsg(timeout, NumCompletedTasks(0))
+    }
   }
 
   it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
+    supressStackTraceNoise{
+      TestActorRef(Props(new ComputeActor(100 millis)))
 
-    TestActorRef(Props(new ComputeActor(100 millis)))
+      // Throws timeout exception after 3 seconds if filter does not match
+      EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
 
-    // Throws timeout exception after 3 seconds if filter does not match
-    EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
-
-    })
+      })
+    }
   }
 }
