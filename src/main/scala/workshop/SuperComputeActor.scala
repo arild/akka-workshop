@@ -1,5 +1,6 @@
 package workshop
 
+import scala.language.postfixOps
 import akka.actor.{OneForOneStrategy, ActorRef, Props, Actor}
 import workshop.work.RiskyWork
 import akka.actor.SupervisorStrategy.{Stop}
