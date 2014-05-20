@@ -14,7 +14,7 @@
    id="svg8743"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="workshop-architecture.svg"
+   sodipodi:docname="workshop-architecture.png"
    inkscape:export-filename="/home/arild/workspace/akka-workshop/slides/figures/workshop-architecture.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -127,8 +127,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="625.19837"
-     inkscape:cy="172.81422"
+     inkscape:cx="625.20181"
+     inkscape:cy="172.79678"
      inkscape:document-units="px"
      inkscape:current-layer="g10198"
      showgrid="false"
@@ -145,9 +145,9 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1031"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-height="1138"
+     inkscape:window-x="1592"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -177,23 +177,23 @@
          transform="matrix(1.4513207,0,0,1.4513207,-258.61061,-323.65802)"
          id="g9861">
         <rect
-           style="fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.80199999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           style="fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.76113021;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
            id="rect9166"
-           width="108.5914"
-           height="52.527931"
-           x="309.63358"
-           y="228.7569" />
+           width="101.01759"
+           height="50.857841"
+           x="309.61313"
+           y="230.44742" />
         <text
            xml:space="preserve"
            style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Sans"
-           x="363.48785"
-           y="259.43494"
+           x="360.02094"
+           y="258.84418"
            id="text9060-4-3-1"
            sodipodi:linespacing="125%"><tspan
              sodipodi:role="line"
-             x="363.48785"
-             y="259.43494"
-             style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#483e37;font-family:Monospace;-inkscape-font-specification:Monospace"
+             x="360.02094"
+             y="258.84418"
+             style="font-size:13.34380722px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#483e37;font-family:Monospace;-inkscape-font-specification:Monospace"
              id="tspan9140-1">Risky Work</tspan></text>
       </g>
       <path
@@ -388,39 +388,21 @@
       <text
          transform="matrix(0.88574484,-0.46417247,0.46417247,0.88574484,0,0)"
          sodipodi:linespacing="125%"
-         id="text3371-1-9"
-         y="-6.073698"
-         x="-274.0477"
-         style="font-size:25.23574829px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           style="font-size:20.14078873px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
-           y="-6.073698"
-           x="-274.0477"
-           id="tspan3373-4-6"
-           sodipodi:role="line">RiskyWork</tspan><tspan
-           style="font-size:20.14078873px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
-           id="tspan10149"
-           y="19.324413"
-           x="-274.0477"
-           sodipodi:role="line">Exception</tspan></text>
-      <text
-         transform="matrix(0.88574484,-0.46417247,0.46417247,0.88574484,0,0)"
-         sodipodi:linespacing="125%"
          id="text3371-1-9-5"
-         y="70.749763"
-         x="-279.24399"
+         y="45.407799"
+         x="-279.58157"
          style="font-size:25.23574829px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
-           style="font-size:20.14078873px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
-           y="70.749763"
-           x="-279.24399"
+           style="font-size:20.14078903px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
+           y="45.407799"
+           x="-279.58157"
            id="tspan3373-4-6-5"
-           sodipodi:role="line">Arithmetic</tspan><tspan
-           style="font-size:20.14078873px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
+           sodipodi:role="line" /><tspan
+           style="font-size:20.14078903px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:Monospace;-inkscape-font-specification:Monospace"
            id="tspan10147"
-           y="96.147881"
-           x="-279.24399"
-           sodipodi:role="line">Exception</tspan></text>
+           y="70.583786"
+           x="-279.58157"
+           sodipodi:role="line">Exceptions</tspan></text>
     </g>
   </g>
 </svg>
