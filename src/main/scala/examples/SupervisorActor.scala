@@ -2,6 +2,7 @@ package examples
 
 import akka.actor._
 
+import scala.language.postfixOps
 import akka.actor.SupervisorStrategy._
 import scala.concurrent.duration._
 import akka.actor.OneForOneStrategy
