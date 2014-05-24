@@ -11,7 +11,7 @@ class SuperComputeActorTest extends AkkaSpec {
 
   val timeout: FiniteDuration = 150 millis
 
-  it should "compute one risky work in which has no failures" in  {
+  it should "compute risky work without failures" in  {
     supressStackTraceNoise{
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
@@ -21,7 +21,7 @@ class SuperComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "compute risky work in parallell when work has no failures" in  {
+  it should "compute risky work without failures in parallel" in  {
     supressStackTraceNoise{
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
@@ -38,7 +38,7 @@ class SuperComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "compute risky work in parallell when one has failuree" in  {
+  it should "compute risky work with failures in parallel" in  {
     supressStackTraceNoise{
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
