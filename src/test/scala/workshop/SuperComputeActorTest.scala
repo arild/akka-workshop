@@ -19,14 +19,14 @@ class SuperComputeActorTest extends AkkaSpec {
     suppressStackTraceNoise{
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 100), RiskyAddition(2,3,100),  RiskyAddition(4,2,100))
+      val workList = List(RiskyAddition(1, 3, 500), RiskyAddition(2,3,500),  RiskyAddition(4,2,500))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(5),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel {
+      expectParallel(950) {
         val result1 = expectMsgClass(classOf[RiskyAdditionResult])
         val result2 = expectMsgClass(classOf[RiskyAdditionResult])
         val result3 = expectMsgClass(classOf[RiskyAdditionResult])
@@ -42,14 +42,14 @@ class SuperComputeActorTest extends AkkaSpec {
       }
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 100), new WorkWithFailure(),  RiskyAddition(4,2,100))
+      val workList = List(RiskyAddition(1, 3, 500), new WorkWithFailure(),  RiskyAddition(4,2,500))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel {
+      expectParallel(950) {
         val result1 = expectMsgClass(classOf[RiskyAdditionResult])
         val result2 = expectMsgClass(classOf[RiskyAdditionResult])
         List(result1, result2).foreach(workListResults should contain (_))

@@ -4,8 +4,6 @@ import org.scalatest.FlatSpecLike
 
 trait FlatSpecLikeHelper extends FlatSpecLike {
 
-  val PARALLEL_EXECUTION_LIMIT = 190
-
   def suppressStackTraceNoise[R](block: => R): R = {
     try {
       block
@@ -18,11 +16,11 @@ trait FlatSpecLikeHelper extends FlatSpecLike {
     }
   }
 
-  def expectParallel[R](block: => R): R = {
+  def expectParallel[R](limit: Long)(block: => R): R = {
     val t0 = System.currentTimeMillis()
     val result = block
     val t1 = System.currentTimeMillis()
-    if (t1 - t0 > PARALLEL_EXECUTION_LIMIT)
+    if (t1 - t0 > limit)
       fail("Did not compute work in parallel!")
     result
   }
