@@ -8,7 +8,6 @@ import org.mockito.Mockito._
 import scala.concurrent.duration._
 import workshop.helpers._
 import workshop.work.RiskyWorkException
-import workshop.helpers.AkkaSpecHelper.supressStackTraceNoise
 
 
 class ComputeSupervisorTest extends AkkaSpec {
@@ -16,7 +15,7 @@ class ComputeSupervisorTest extends AkkaSpec {
   val timeout: FiniteDuration = 50 millis
 
   it should "start compute actor and return its reference" in {
-    supressStackTraceNoise{
+    suppressStackTraceNoise{
 
       val computeActorFactory = mock[ComputeActorFactory]
       val computeActor: ActorRef = mock[ActorRef]
@@ -32,7 +31,7 @@ class ComputeSupervisorTest extends AkkaSpec {
   }
 
   it should "resume compute actor on arithmetic exception" in {
-    supressStackTraceNoise{
+    suppressStackTraceNoise{
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
@@ -46,7 +45,7 @@ class ComputeSupervisorTest extends AkkaSpec {
   }
 
   it should "restart compute actor on risky work exception" in {
-    supressStackTraceNoise{
+    suppressStackTraceNoise{
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
@@ -60,7 +59,7 @@ class ComputeSupervisorTest extends AkkaSpec {
   }
 
   it should "stop compute actor on any exception other than arithmetic and risky work exception" in {
-    supressStackTraceNoise{
+    suppressStackTraceNoise{
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 

@@ -3,8 +3,9 @@ package workshop
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestKit}
 import org.scalatest.mock.MockitoSugar
-import org.scalatest.{Matchers, BeforeAndAfterAll, FlatSpecLike}
+import org.scalatest.{Matchers, BeforeAndAfterAll}
 import com.typesafe.config.ConfigFactory
+import workshop.helpers.FlatSpecLikeHelper
 
 
 object AkkaSpec {
@@ -18,7 +19,7 @@ object AkkaSpec {
 }
 
 abstract class AkkaSpec extends TestKit(AkkaSpec.getTestSystem())
-with FlatSpecLike
+with FlatSpecLikeHelper
 with ImplicitSender
 with BeforeAndAfterAll
 with MockitoSugar
