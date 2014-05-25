@@ -16,35 +16,35 @@ class ComputeActorTest extends AkkaSpec {
   }
 
   it should "compute length of string" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       computeActor ! "abc"
       expectMsg(timeout, 3)
     }
   }
 
   it should "compute division" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       computeActor ! Division(9, 3)
       expectMsg(timeout, 3)
     }
   }
 
   it should "perform risky work" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       computeActor ! new RiskyAddition(3, 2)
       expectMsg(timeout, RiskyAdditionResult(5))
     }
   }
 
   it should "initially have zero completed tasks" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       computeActor ! GetNumCompletedTasks
       expectMsg(timeout, NumCompletedTasks(0))
     }
   }
 
   it should "increment number of completed tasks" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       computeActor ! "abc"
       expectMsgClass(timeout, classOf[Int]) // Result from length of string
 
@@ -66,7 +66,7 @@ class ComputeActorTest extends AkkaSpec {
   }
 
   it should "not increment number of completed tasks when division fails with arithmetic exception" in new Actor {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       // Prevents stack trace from displaying when running tests
       intercept[ArithmeticException] {
         computeActor.receive(Division(1, 0))
@@ -78,7 +78,7 @@ class ComputeActorTest extends AkkaSpec {
   }
 
   it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       TestActorRef(Props(new ComputeActor(100 millis)))
 
       // Throws timeout exception after 3 seconds if filter does not match
