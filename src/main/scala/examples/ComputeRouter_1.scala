@@ -9,7 +9,7 @@ import akka.routing.Router
 import workshop.work.RiskyAddition
 import akka.routing.ActorRefRoutee
 
-class ComputeRouter() extends Actor {
+class ComputeRouter_1() extends Actor {
   val log = Logging(context.system, this)
 
   // Create 5 routers and set RoundRobinRoutingLogic on them
@@ -46,7 +46,7 @@ class Routee extends Actor {
 
 object ComputeRouterExample extends App {
   val system = ActorSystem("MySystem")
-  val router: ActorRef = system.actorOf(Props[ComputeRouter])
+  val router: ActorRef = system.actorOf(Props[ComputeRouter_1])
   router ! RiskyAddition(1,1,100)
 }
 

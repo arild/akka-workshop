@@ -36,7 +36,7 @@ class ComputeRouterTest extends AkkaSpec {
         }
       )
 
-      expectParallel(700) {
+      expectParallel(300) {
         var i = 0
         while(i < nrOfWork){
           expectMsgClass(timeout, classOf[RiskyAdditionResult])
