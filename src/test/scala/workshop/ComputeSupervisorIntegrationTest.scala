@@ -7,11 +7,10 @@ import workshop.work.{RiskyWorkException, RiskyWork}
 
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {
-
   val timeout: FiniteDuration = 50 millis
 
   it should "resume compute actor on arithmetic exception" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val computeActor: ActorRef = createAndWatchComputeActor()
 
       computeActor ! "abc"
@@ -29,7 +28,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
   }
 
   it should "restart compute actor on risky work exception" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       class TestWork extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
       }
@@ -51,7 +50,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
   }
 
   it should "stop compute actor on any exception other than arithmetic and risky work exception" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       class TestWork extends RiskyWork {
         override def perform() = throw new NumberFormatException("test exception")
       }
@@ -65,7 +64,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
   }
 
   def createAndWatchComputeActor() = {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val computeSupervisor = system.actorOf(workshop.companion.ComputeSupervisor.props(new ComputeActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
@@ -75,5 +74,4 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       computeActor
     }
   }
-
 }

@@ -21,14 +21,14 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "start compute actor at startup" in new Actors {
-    suppressStackTraceNoise{
-      val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
+    suppressStackTraceNoise {
+      system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
       computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
     }
   }
 
   it should "stop if compute actor terminates" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val computeTestActor = system.actorOf(Props(classOf[ComputeTestActor]))
       val computeSupervisorProbe = TestProbe()
       val clientActor = system.actorOf(ClientActor.props(computeSupervisorProbe.ref, mock[ActorRef], List()))
@@ -43,7 +43,7 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "complete risky work when work has no failures" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
 
       val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
@@ -56,7 +56,7 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "complete remaining risky work when work throws risky work exceptions" in {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
       }
@@ -71,5 +71,4 @@ class ClientActorTest extends AkkaSpec {
       resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
     }
   }
-
 }

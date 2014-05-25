@@ -7,7 +7,7 @@ import work._
 class SuperComputeActorTest extends AkkaSpec {
 
   it should "compute risky work without failures" in  {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
       superComputeActor ! RiskyAddition(1,3,0)
@@ -16,7 +16,7 @@ class SuperComputeActorTest extends AkkaSpec {
   }
 
   it should "compute risky work without failures in parallel" in  {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
       val workList = List(RiskyAddition(1, 3, 500), RiskyAddition(2,3,500),  RiskyAddition(4,2,500))
@@ -36,7 +36,7 @@ class SuperComputeActorTest extends AkkaSpec {
   }
 
   it should "compute risky work with failures in parallel" in  {
-    suppressStackTraceNoise{
+    suppressStackTraceNoise {
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
       }
