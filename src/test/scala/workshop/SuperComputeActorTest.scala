@@ -3,8 +3,11 @@ package workshop
 import scala.language.postfixOps
 import akka.actor._
 import work._
+import scala.concurrent.duration._
+
 
 class SuperComputeActorTest extends AkkaSpec {
+  val timeout: FiniteDuration = 200 millis
 
   it should "compute risky work without failures" in  {
     suppressStackTraceNoise {
@@ -19,17 +22,17 @@ class SuperComputeActorTest extends AkkaSpec {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 500), RiskyAddition(2,3,500),  RiskyAddition(4,2,500))
+      val workList = List(RiskyAddition(1,3,100), RiskyAddition(2,3,100),  RiskyAddition(4,2,100))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(5),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel(950) {
-        val result1 = expectMsgClass(classOf[RiskyAdditionResult])
-        val result2 = expectMsgClass(classOf[RiskyAdditionResult])
-        val result3 = expectMsgClass(classOf[RiskyAdditionResult])
+      expectParallel(200) {
+        val result1 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
+        val result2 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
+        val result3 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         List(result1, result2, result3).foreach(workListResults should contain (_))
       }
     }
@@ -42,16 +45,16 @@ class SuperComputeActorTest extends AkkaSpec {
       }
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 500), new WorkWithFailure(),  RiskyAddition(4,2,500))
+      val workList = List(RiskyAddition(1, 3, 100), new WorkWithFailure(),  RiskyAddition(4,2,100))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel(950) {
-        val result1 = expectMsgClass(classOf[RiskyAdditionResult])
-        val result2 = expectMsgClass(classOf[RiskyAdditionResult])
+      expectParallel(180) {
+        val result1 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
+        val result2 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         List(result1, result2).foreach(workListResults should contain (_))
       }
     }
