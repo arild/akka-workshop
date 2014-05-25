@@ -1,10 +1,13 @@
 package examples
 
 import scala.language.postfixOps
-import akka.actor.{ActorRef, ActorSystem, Props, Actor}
+import akka.actor._
 import akka.event.Logging
 import workshop.work.{RiskyAddition, RiskyWork}
 import akka.routing.{RoundRobinRoutingLogic, Router, ActorRefRoutee}
+import akka.routing.Router
+import workshop.work.RiskyAddition
+import akka.routing.ActorRefRoutee
 
 class ComputeRouter() extends Actor {
   val log = Logging(context.system, this)
@@ -23,6 +26,12 @@ class ComputeRouter() extends Actor {
     case w : RiskyWork =>
       println("Routing this to one of my routee's ..")
       router.route(w, sender())
+    case Terminated(a) =>
+      println("One of my Routees have died..")
+      router = router.removeRoutee(a)
+      val r = context.actorOf(Props[Routee])
+      context watch r
+      router = router.addRoutee(r)
   }
 }
 
