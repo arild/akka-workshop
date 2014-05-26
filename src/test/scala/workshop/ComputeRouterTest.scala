@@ -8,26 +8,14 @@ import scala.util.Random
 
 class ComputeRouterTest extends AkkaSpec {
 
-  val timeout: FiniteDuration = 20 millis
+  val timeout: FiniteDuration = 200 millis
 
   it should "compute 100 risky additions where noone failes with work distributed on 5 routers" in  {
     suppressStackTraceNoise {
       val computeRouter = system.actorOf(Props(classOf[ComputeRouter]))
 
-      val nrOfWork: Int = 100
-      
-      val workList = Vector.fill(nrOfWork) {
-        val rnd: Float = Random.nextFloat()
-        if (rnd < 0.2)
-          RiskyAddition(1,1,1)
-        else if (rnd < 0.4)
-          RiskyAddition(1,1,2)
-        else if (rnd < 0.6)
-          RiskyAddition(1,1,3)
-        else if (rnd < 0.8)
-          RiskyAddition(1,1,4)
-        else
-          RiskyAddition(1,1,5)
+      val workList = Vector.fill(5) {
+          RiskyAddition(1,1,50)
       }
 
       workList.foreach(
@@ -36,9 +24,9 @@ class ComputeRouterTest extends AkkaSpec {
         }
       )
 
-      expectParallel(300) {
+      expectParallel(200) {
         var i = 0
-        while(i < nrOfWork){
+        while(i < 5){
           expectMsgClass(timeout, classOf[RiskyAdditionResult])
           i = i + 1
         }

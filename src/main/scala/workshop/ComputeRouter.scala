@@ -1,27 +1,22 @@
 package workshop
 
 import scala.language.postfixOps
-import akka.actor.{Props, Actor}
+import akka.actor.{Props, Actor, ActorRef}
 import akka.event.Logging
 import workshop.work.RiskyWork
-import akka.routing.{RoundRobinRoutingLogic, Router, ActorRefRoutee}
+import akka.routing._
 
 class ComputeRouter() extends Actor {
   val log = Logging(context.system, this)
 
-  var router = {
-    val routees = Vector.fill(5) {
-      val r = context.actorOf(Props[Routee])
-      context watch r
-      ActorRefRoutee(r)
-    }
-    Router(RoundRobinRoutingLogic(), routees)
-  }
+  val resizer = DefaultResizer(lowerBound = 5, upperBound = 10, messagesPerResize = 1)
+  val router: ActorRef =
+    context.actorOf(RoundRobinPool(50, Some(resizer)).props(Props[Routee]), "router1")
 
   def receive = {
     case s: String => sender ! "i'm alive.."
     case w : RiskyWork =>
-      router.route(w, sender())
+      router.tell(w, sender())
   }
 }
 
