@@ -6,21 +6,21 @@ import scala.concurrent.duration._
 import workshop.work.{RiskyAdditionResult, RiskyAddition}
 import scala.util.Random
 
-class ComputeRouterTest extends AkkaSpec {
+class SuperComputeRouterTest extends AkkaSpec {
 
-  val timeout: FiniteDuration = 200 millis
+  val timeout: FiniteDuration = 1000 millis
 
   it should "compute 5 risky additions where noone failes with work distributed on 5 routers" in  {
     suppressStackTraceNoise {
-      val computeRouter = system.actorOf(Props(classOf[ComputeRouter]))
+      val computeRouter = system.actorOf(Props(classOf[SuperComputeRouter]))
 
       val workList = Vector.fill(5) {
-          RiskyAddition(1,1,50)
+          RiskyAddition(1,1,150)
       }
 
       workList.foreach(computeRouter ! _)
 
-      expectParallel(200) {
+      expectParallel(700) {
         var i = 0
         while(i < 5){
           expectMsgClass(timeout, classOf[RiskyAdditionResult])

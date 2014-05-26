@@ -8,7 +8,7 @@ import workshop.work.RiskyWork
 import akka.routing._
 import akka.actor.SupervisorStrategy.Resume
 
-class ComputeRouter() extends Actor {
+class SuperComputeRouter extends Actor {
   val log = Logging(context.system, this)
 
   val resizer = DefaultResizer(lowerBound = 5, upperBound = 10, messagesPerResize = 1)
