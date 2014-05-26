@@ -10,7 +10,7 @@ class ComputeRouterTest extends AkkaSpec {
 
   val timeout: FiniteDuration = 200 millis
 
-  it should "compute 100 risky additions where noone failes with work distributed on 5 routers" in  {
+  it should "compute 5 risky additions where noone failes with work distributed on 5 routers" in  {
     suppressStackTraceNoise {
       val computeRouter = system.actorOf(Props(classOf[ComputeRouter]))
 
@@ -18,11 +18,7 @@ class ComputeRouterTest extends AkkaSpec {
           RiskyAddition(1,1,50)
       }
 
-      workList.foreach(
-        w => {
-          computeRouter ! w
-        }
-      )
+      workList.foreach(computeRouter ! _)
 
       expectParallel(200) {
         var i = 0
