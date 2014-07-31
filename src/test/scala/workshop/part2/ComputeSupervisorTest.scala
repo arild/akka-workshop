@@ -13,8 +13,6 @@ import workshop.AkkaSpec
 
 class ComputeSupervisorTest extends AkkaSpec {
 
-  val timeout: FiniteDuration = 50 millis
-
   it should "start compute actor and return its reference" in {
     suppressStackTraceNoise {
       val computeActorFactory = mock[ComputeActorFactory]
@@ -25,7 +23,7 @@ class ComputeSupervisorTest extends AkkaSpec {
 
       computeSupervisor ! StartComputeActor("computeActor-1")
 
-      val actor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
+      val actor: ActorRef = expectMsgClass(classOf[ActorRef])
       actor shouldBe computeActor
     }
   }
@@ -35,12 +33,12 @@ class ComputeSupervisorTest extends AkkaSpec {
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
-      val computeTestActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
+      val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
       val exception: ArithmeticException = new ArithmeticException
       computeTestActor ! exception
 
       computeTestActor ! IsRestarted
-      expectMsg(timeout,false)
+      expectMsg(false)
     }
   }
 
@@ -49,12 +47,12 @@ class ComputeSupervisorTest extends AkkaSpec {
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
-      val computeTestActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
+      val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
 
       computeTestActor ! RiskyWorkException("test exception")
 
       computeTestActor ! IsRestarted
-      expectMsg(timeout,true)
+      expectMsg(true)
     }
   }
 
@@ -63,7 +61,7 @@ class ComputeSupervisorTest extends AkkaSpec {
       val computeSupervisor = TestActorRef(workshop.companion.ComputeSupervisor.props(new ComputeTestActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
-      val computeTestActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
+      val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
       watch(computeTestActor)
 
       computeTestActor ! new NumberFormatException("test exception")
