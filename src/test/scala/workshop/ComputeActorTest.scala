@@ -15,21 +15,21 @@ class ComputeActorTest extends AkkaSpec {
     val computeActor = TestActorRef(ComputeActor.props(1 second))
   }
 
-  it should "compute length of string" in new Actor {
+  it should "compute length of a string and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
       expectMsg(timeout, 3)
     }
   }
 
-  it should "compute division" in new Actor {
+  it should "compute division and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! Division(9, 3)
       expectMsg(timeout, 3)
     }
   }
 
-  it should "perform risky work" in new Actor {
+  it should "perform risky work and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! new RiskyAddition(3, 2)
       expectMsg(timeout, RiskyAdditionResult(5))
@@ -43,7 +43,7 @@ class ComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "increment number of completed tasks" in new Actor {
+  it should "increment number of completed tasks for each task sent" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
       expectMsgClass(timeout, classOf[Int]) // Result from length of string

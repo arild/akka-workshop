@@ -42,7 +42,7 @@ class ClientActorTest extends AkkaSpec {
     }
   }
 
-  it should "complete risky work when work has no failures" in {
+  it should "complete risky work when work throws no exceptions" in {
     suppressStackTraceNoise {
       val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
 
@@ -55,7 +55,7 @@ class ClientActorTest extends AkkaSpec {
     }
   }
 
-  it should "complete remaining risky work when work throws risky work exceptions" in {
+  it should "complete remaining risky work when work throws risky work exception" in {
     suppressStackTraceNoise {
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
