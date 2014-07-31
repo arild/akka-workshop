@@ -1,20 +1,20 @@
-### Introduksjon Akka
+### Introduction to Akka
 
-Denne workshopen vil gi en introduksjon til Akka via slides og hands-on oppgaver. Workshopen benytter Scala.
+This workshop gives an introduction to Akka via slides and hands-on exercises
 
-Før workshop er det noen ting som bør være installert og satt opp:
+Setup that should be done before the workshop:
 
-1. Installer Scala-plugin i sitt IDE
+1. Install Scala-plugin for IDE
        * Eclipse:
-              http://scala-ide.org/download/current.html  
-              Update sites er litt nede på siden. Velg site for Scala 2.10, og for den versjonen av Eclipse du bruker.  
-              Alternativ: Last ned bundle-versjon med Eclipse og Scala plugin: http://scala-ide.org/download/sdk.html
+              Plugin for Eclipse: http://scala-ide.org/download/current.html
+              Bundle containing Eclipse and plugin: http://scala-ide.org/download/sdk.html
        * IDEA IntelliJ:
               http://confluence.jetbrains.com/display/SCA/Scala+Plugin+for+IntelliJ+IDEA
-2. Installer git (http://git-scm.com/)
-3. Hent ned prosjektet : `git clone https://github.com/arild/akka-workshop.git`
-4. Eksekver `sbt` eller `sbt.bat` fra mappen 'scala-workshop', og skriv enten `eclipse` eller `gen-idea` (avhengig av IDE)
-5. Åpne, ikke importer, prosjektet i Eclipse eller IntelliJ
-6. Se at tester kjører: eksekver `sbt test` eller `sbt.bat test` fra mappen 'scala-workshop', eventuelt kjør tester via IDE.
+              (search for 'scala' in plugin manager)
+2. Install Git (http://git-scm.com/)
+3. Fetch the project: `git clone https://github.com/arild/akka-workshop.git`
+4. Run `sbt` or `sbt.bat` from project root, and type `eclipse` or `gen-idea` (depending on your IDE)
+5. Open (not importing) the project in Eclipse or IntelliJ
+6. Verify that tests run: run `sbt test` or `sbt.bat test` from project root, or run tests via your IDE.
 
-Ved problemer med oppsettet, send en mail til arild.nilsen (at) bekk.no eller sjur.millidahl (at) bekk.no
+If you experience any problems during setup, feel free to send email to arild.nilsen (at) bekk.no and sjur.millidahl (at) bekk.no
