@@ -38,6 +38,29 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
     </slide>
 
+    <slide class="thank-you-slide">
+        <article class="flexbox vleft">
+            <ul>
+                <li>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></li>
+                <li>
+                    <ul>
+                        <li>'master' is starting point for exercises</li>
+                        <li>'git checkout solution' for solution</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul>
+                <li>Slides: <a href="http://arild.github.com/akka-workshop">http://arild.github.com/akka-workshop</a></span></li>
+                <li>
+                    <ul>
+                        <li>Or /slides/index.html in repo</li>
+                    </ul>
+                </li>
+
+            </ul>
+        </article>
+    </slide>
 
     <slide>
         <hgroup>
@@ -60,6 +83,7 @@ URL: https://code.google.com/p/io-2012-slides
             <img src="images/philosoraptor.jpg"/>
         </article>
     </slide>
+
 
     <slide>
         <hgroup>
@@ -171,7 +195,7 @@ class GreetingActor extends Actor {
 
 object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(new GreetingActor))
+  val actorRef = system.actorOf(Props[GreetingActor])
   actorRef ! "Hulk Hogan"
 }</pre>
         </article>
@@ -198,7 +222,7 @@ class GreetingActor extends Actor {
 }
 
 object GreetingActor extends App {
-  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor))
+  val actorRef = ActorSystem("MySystem").actorOf(Props[GreetingActor])
   actorRef ! SayHello("Pope Benedict")
 }</pre>
             </article>
@@ -257,8 +281,8 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
             <ul>
                 <li>Useful resources:
                     <ul>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#creating-actors">http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#creating-actors</a> </li>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/scheduler.html">http://doc.akka.io/docs/akka/2.3.0/scala/scheduler.html</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/actors.html#creating-actors">http://doc.akka.io/docs/akka/2.3.4/scala/actors.html#creating-actors</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/scheduler.html">http://doc.akka.io/docs/akka/2.3.4/scala/scheduler.html</a> </li>
                     </ul>
                 </li>
             </ul>
@@ -334,7 +358,7 @@ class Supervisor extends Actor {
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props(new VolatileGreetingActor())
+    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
     context.watch(actorRef)
     actorRef ! "print this message, please!"
   }
@@ -381,7 +405,7 @@ class DeathWatchActor extends Actor {
                     <h2>What happens on an actor restart</h2>
                 </hgroup>
                 <article>
-        <p><a href="http://doc.akka.io/docs/akka/2.3.0/general/supervision.html#what-restarting-means">What restarting means</a></p>
+        <p><a href="http://doc.akka.io/docs/akka/2.3.4/general/supervision.html#what-restarting-means">What restarting means</a></p>
         </article>
         </slide>
 
@@ -426,8 +450,8 @@ class DeathWatchActor extends Actor {
             <ul>
                 <li>Useful resources:
                     <ul>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/fault-tolerance.html#Creating_a_Supervisor_Strategy">Creating a Supervisor Strategy</a> </li>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/actors.html#Lifecycle_Monitoring_aka_DeathWatch">Lifecycle Monitoring aka DeathWatch</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/fault-tolerance.html#Creating_a_Supervisor_Strategy">Creating a Supervisor Strategy</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/actors.html#Lifecycle_Monitoring_aka_DeathWatch">Lifecycle Monitoring aka DeathWatch</a> </li>
                     </ul>
                 </li>
             </ul>
@@ -447,6 +471,33 @@ class DeathWatchActor extends Actor {
         </article>
     </slide>
 
+    <slide>
+        <hgroup>
+            <h2>Router example</h2>
+        </hgroup>
+        <article>
+        <pre class="prettyprint">class ComputeRouter_1 extends Actor {
+    val router: ActorRef =
+        context.actorOf(RoundRobinPool(50).props(Props[Routee]), "router1")
+
+    def receive = {
+        case s : String => router.tell(s, sender())
+    }
+}
+
+class Routee extends Actor {
+    def receive = { case s: String => sender ! s.length() }
+}
+
+object ComputeRouterExample extends App {
+    val router: ActorRef = ActorSystem("MySystem").actorOf(Props[ComputeRouter_1])
+    router ! "how long is this string?"
+}</pre>
+        </article>
+        <span class="example">ComputeRouter_1.scala</span>
+
+
+    </slide>
 
     <slide>
         <hgroup>
@@ -463,8 +514,8 @@ class DeathWatchActor extends Actor {
                 <li>Play around with:
                     <ul>
                         <li>Create multiple actors (one for each unit of work)</li>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/routing.html">Use a router</a> </li>
-                        <li><a href="http://doc.akka.io/docs/akka/2.3.0/scala/futures.html">Use futures</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/routing.html">Use a router</a> </li>
+                        <li><a href="http://doc.akka.io/docs/akka/2.3.4/scala/futures.html">Use futures</a> </li>
                     </ul>
                 </li>
             </ul>
