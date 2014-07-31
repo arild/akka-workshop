@@ -1,4 +1,4 @@
-package workshop
+package workshop.part1
 
 import akka.actor.Actor
 import akka.event.Logging

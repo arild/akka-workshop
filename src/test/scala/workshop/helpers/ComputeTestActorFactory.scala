@@ -1,7 +1,7 @@
 package workshop.helpers;
 
 import akka.actor.{Props, ActorContext, ActorRef}
-import workshop.ComputeActorFactory;
+import workshop.part2.ComputeActorFactory
 
 
 class ComputeTestActorFactory extends ComputeActorFactory {

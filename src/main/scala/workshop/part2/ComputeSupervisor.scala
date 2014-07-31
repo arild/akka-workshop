@@ -1,4 +1,4 @@
-package workshop
+package workshop.part2
 
 import scala.language.postfixOps
 import akka.actor.SupervisorStrategy.{Restart, Resume, Stop}

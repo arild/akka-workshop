@@ -1,9 +1,11 @@
-package workshop
+package workshop.part2
 
 import scala.language.postfixOps
 import scala.concurrent.duration._
 import akka.actor.{Terminated, ActorRef}
 import workshop.work.{RiskyWorkException, RiskyWork}
+import workshop.part1.{NumCompletedTasks, GetNumCompletedTasks, Division}
+import workshop.AkkaSpec
 
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {

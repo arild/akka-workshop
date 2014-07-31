@@ -1,4 +1,4 @@
-package workshop
+package workshop.part2
 
 import scala.language.postfixOps
 import akka.actor._
@@ -8,6 +8,7 @@ import org.mockito.Mockito._
 import scala.concurrent.duration._
 import workshop.helpers._
 import workshop.work.RiskyWorkException
+import workshop.AkkaSpec
 
 
 class ComputeSupervisorTest extends AkkaSpec {
