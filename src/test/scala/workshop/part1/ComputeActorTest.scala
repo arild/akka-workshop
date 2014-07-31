@@ -19,7 +19,7 @@ class ComputeActorTest extends AkkaSpec {
   it should "compute length of a string and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
-      expectMsg(timeout, 3)
+      expectMsg(3)
     }
   }
 
@@ -80,7 +80,7 @@ class ComputeActorTest extends AkkaSpec {
 
   it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
     suppressStackTraceNoise {
-      TestActorRef(Props(new ComputeActor(100 millis)))
+      TestActorRef(Props(classOf[ComputeActor], 100 millis))
 
       // Throws timeout exception after 3 seconds if filter does not match
       EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
