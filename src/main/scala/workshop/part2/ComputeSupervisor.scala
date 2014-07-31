@@ -20,7 +20,7 @@ class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor 
         Resume
       }
       case e: RiskyWorkException => {
-        log.error("Restarting compute actor due to risky work exception. Reason: {}", e.getMessage)
+        log.error("Restarting compute actor due to risky work exception. Reason: {}", e.msg)
         Restart
       }
       case e: Exception => {
