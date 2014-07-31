@@ -1,10 +1,10 @@
-package workshop
+package workshop.part3
 
 import scala.language.postfixOps
 import akka.actor._
 import scala.concurrent.duration._
 import workshop.work.{RiskyAdditionResult, RiskyAddition}
-import scala.util.Random
+import workshop.AkkaSpec
 
 class SuperComputeRouterTest extends AkkaSpec {
 

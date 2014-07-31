@@ -1,13 +1,14 @@
-package workshop
+package workshop.part2
 
 import scala.language.postfixOps
 import akka.testkit.TestProbe
 import akka.actor._
 import workshop.helpers.ComputeTestActor
 import akka.actor.Terminated
-import work._
 import workshop.companion.{ClientActor, ComputeSupervisor}
 import scala.concurrent.duration._
+import workshop.AkkaSpec
+import workshop.work.{RiskyWorkException, RiskyWork, RiskyAdditionResult, RiskyAddition}
 
 
 class ClientActorTest extends AkkaSpec {
