@@ -1,9 +1,10 @@
-package workshop
+package workshop.part3
 
 import scala.language.postfixOps
 import akka.actor._
-import work._
 import scala.concurrent.duration._
+import workshop.AkkaSpec
+import workshop.work.{RiskyWorkException, RiskyWork, RiskyAdditionResult, RiskyAddition}
 
 
 class SuperComputeActorTest extends AkkaSpec {

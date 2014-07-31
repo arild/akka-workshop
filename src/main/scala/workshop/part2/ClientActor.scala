@@ -1,4 +1,4 @@
-package workshop
+package workshop.part2
 
 import akka.actor.{Terminated, ActorRef, Actor}
 import akka.event.Logging

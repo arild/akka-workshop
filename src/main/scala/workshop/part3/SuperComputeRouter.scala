@@ -1,4 +1,4 @@
-package workshop
+package workshop.part3
 
 import scala.language.postfixOps
 import scala.concurrent.duration._
