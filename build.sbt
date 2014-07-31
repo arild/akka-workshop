@@ -1,12 +1,14 @@
 name := "Akka workshop"
 
-libraryDependencies += "org.scala-lang" % "scala-library" % "2.10.3"
+scalaVersion := "2.11.2"
 
-libraryDependencies += "com.typesafe.akka" % "akka-actor_2.10" % "2.3.2"
+libraryDependencies += "org.scala-lang" % "scala-library" % "2.11.2"
 
-libraryDependencies += "com.typesafe.akka" % "akka-testkit_2.10" % "2.3.2"
+libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.3.4"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.2.0-M1"
+libraryDependencies += "com.typesafe.akka" % "akka-testkit_2.11" % "2.3.4"
+
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.0" % "test"
 
 libraryDependencies += "org.mockito" % "mockito-core" % "1.9.5"
 

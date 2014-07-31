@@ -8,9 +8,9 @@ import workshop.work.{RiskyWorkException, RiskyWork, RiskyAdditionResult, RiskyA
 
 
 class SuperComputeActorTest extends AkkaSpec {
-  val timeout: FiniteDuration = 200 millis
+  val timeout: FiniteDuration = 300 millis
 
-  it should "compute risky work without failures" in  {
+  it should "compute risky work when work have no failures" in  {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
@@ -19,18 +19,18 @@ class SuperComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "compute risky work without failures in parallel" in  {
+  it should "compute risky work in parallel when work has no failures" in  {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1,3,100), RiskyAddition(2,3,100),  RiskyAddition(4,2,100))
+      val workList = List(RiskyAddition(1,3,150), RiskyAddition(2,3,150),  RiskyAddition(4,2,150))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(5),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel(200) {
+      expectParallel(400) {
         val result1 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         val result2 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         val result3 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
@@ -39,21 +39,21 @@ class SuperComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "compute risky work with failures in parallel" in  {
+  it should "compute risky work in parallel when work has failures" in  {
     suppressStackTraceNoise {
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
       }
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 100), new WorkWithFailure(),  RiskyAddition(4,2,100))
+      val workList = List(RiskyAddition(1, 3, 150), new WorkWithFailure(),  RiskyAddition(4,2,150))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(6))
 
       workList.foreach(
         w => superComputeActor ! w
       )
 
-      expectParallel(180) {
+      expectParallel(290) {
         val result1 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         val result2 = expectMsgClass(timeout, classOf[RiskyAdditionResult])
         List(result1, result2).foreach(workListResults should contain (_))
