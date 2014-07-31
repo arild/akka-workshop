@@ -11,9 +11,9 @@ import akka.actor.SupervisorStrategy.Resume
 class SuperComputeRouter extends Actor {
   val log = Logging(context.system, this)
 
-  val resizer = DefaultResizer(lowerBound = 5, upperBound = 10, messagesPerResize = 1)
+  val resizer = DefaultResizer(lowerBound = 5, upperBound = 20, messagesPerResize = 1)
   val router: ActorRef =
-    context.actorOf(RoundRobinPool(50, Some(resizer)).props(Props[Routee]), "router1")
+    context.actorOf(RoundRobinPool(10, Some(resizer)).props(Props[Routee]), "router1")
 
   override val supervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
