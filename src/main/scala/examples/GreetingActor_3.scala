@@ -28,5 +28,5 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
 
 object GreetingActor_3 extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(new GreetingActor_3(1 second)))
+  val actorRef = system.actorOf(Props(classOf[GreetingActor_3], 1 second))
 }

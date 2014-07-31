@@ -20,7 +20,7 @@ class SuperComputeActor() extends Actor {
 
   def receive = {
     case riskyWork : RiskyWork => {
-      val worker: ActorRef = context.actorOf(Props(new Worker))
+      val worker: ActorRef = context.actorOf(Props[Worker])
       worker.tell(riskyWork, sender())
     }
   }
