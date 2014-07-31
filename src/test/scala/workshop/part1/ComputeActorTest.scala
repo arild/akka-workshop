@@ -10,8 +10,6 @@ import workshop.AkkaSpec
 
 class ComputeActorTest extends AkkaSpec {
 
-  val timeout: FiniteDuration = 50 millis
-
   trait Actor {
     val computeActor = TestActorRef(ComputeActor.props(1 second))
   }
@@ -19,50 +17,50 @@ class ComputeActorTest extends AkkaSpec {
   it should "compute length of a string and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
-      expectMsg(timeout, 3)
+      expectMsg(3)
     }
   }
 
   it should "compute division and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! Division(9, 3)
-      expectMsg(timeout, 3)
+      expectMsg(3)
     }
   }
 
   it should "perform risky work and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! new RiskyAddition(3, 2)
-      expectMsg(timeout, RiskyAdditionResult(5))
+      expectMsg(RiskyAdditionResult(5))
     }
   }
 
   it should "initially have zero completed tasks" in new Actor {
     suppressStackTraceNoise {
       computeActor ! GetNumCompletedTasks
-      expectMsg(timeout, NumCompletedTasks(0))
+      expectMsg(NumCompletedTasks(0))
     }
   }
 
   it should "increment number of completed tasks for each task sent" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
-      expectMsgClass(timeout, classOf[Int]) // Result from length of string
+      expectMsgClass(classOf[Int]) // Result from length of string
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(timeout, NumCompletedTasks(1))
+      expectMsg(NumCompletedTasks(1))
 
       computeActor ! Division(1, 1)
-      expectMsgClass(timeout, classOf[Int]) // Result from division
+      expectMsgClass(classOf[Int]) // Result from division
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(timeout, NumCompletedTasks(2))
+      expectMsg(NumCompletedTasks(2))
 
       computeActor ! new RiskyAddition(3, 5)
-      expectMsgClass(timeout, classOf[RiskyAdditionResult]) // Result from risky addition
+      expectMsgClass(classOf[RiskyAdditionResult]) // Result from risky addition
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(timeout, NumCompletedTasks(3))
+      expectMsg(NumCompletedTasks(3))
     }
   }
 
@@ -74,7 +72,7 @@ class ComputeActorTest extends AkkaSpec {
       }
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(timeout, NumCompletedTasks(0))
+      expectMsg(NumCompletedTasks(0))
     }
   }
 
