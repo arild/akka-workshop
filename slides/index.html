@@ -195,7 +195,7 @@ class GreetingActor extends Actor {
 
 object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(new GreetingActor))
+  val actorRef = system.actorOf(Props[GreetingActor])
   actorRef ! "Hulk Hogan"
 }</pre>
         </article>
@@ -222,7 +222,7 @@ class GreetingActor extends Actor {
 }
 
 object GreetingActor extends App {
-  val actorRef = ActorSystem("MySystem").actorOf(Props(new GreetingActor))
+  val actorRef = ActorSystem("MySystem").actorOf(Props[GreetingActor])
   actorRef ! SayHello("Pope Benedict")
 }</pre>
             </article>
@@ -358,7 +358,7 @@ class Supervisor extends Actor {
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props(new VolatileGreetingActor())
+    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
     context.watch(actorRef)
     actorRef ! "print this message, please!"
   }
