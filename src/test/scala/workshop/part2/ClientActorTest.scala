@@ -15,14 +15,10 @@ class ClientActorTest extends AkkaSpec {
 
   val timeout: FiniteDuration = 50 millis
 
-  trait Actors {
-    val resultProbe = TestProbe()
-    val computeSupervisor = system.actorOf(ComputeSupervisor.props(new ComputeActorFactory))
-    val computeSupervisorProbe = TestProbe()
-  }
-
-  it should "start compute actor at startup" in new Actors {
+  it should "start compute actor at startup" in {
     suppressStackTraceNoise {
+      val resultProbe = TestProbe()
+      val computeSupervisorProbe = TestProbe()
       system.actorOf(ClientActor.props(computeSupervisorProbe.ref, resultProbe.ref, List()))
       computeSupervisorProbe.expectMsgClass(timeout, classOf[StartComputeActor])
     }
