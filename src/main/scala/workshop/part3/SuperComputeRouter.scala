@@ -16,7 +16,7 @@ class SuperComputeRouter extends Actor {
     context.actorOf(RoundRobinPool(10, Some(resizer)).props(Props[Routee]), "router1")
 
   override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
       case _: Exception                => Resume
     }
 
