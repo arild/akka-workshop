@@ -5,13 +5,12 @@ import workshop.work._
 import akka.actor._
 import akka.testkit.{EventFilter, TestActorRef}
 import scala.concurrent.duration._
-import workshop.companion.ComputeActor
 import workshop.AkkaSpec
 
 class ComputeActorTest extends AkkaSpec {
 
   trait Actor {
-    val computeActor = TestActorRef(ComputeActor.props(1 second))
+    val computeActor = TestActorRef(Props(classOf[ComputeActor], 1 second))
   }
 
   it should "compute length of a string and return the result" in new Actor {

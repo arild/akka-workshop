@@ -2,7 +2,7 @@ package workshop.part2
 
 import scala.language.postfixOps
 import scala.concurrent.duration._
-import akka.actor.{Terminated, ActorRef}
+import akka.actor.{Props, Terminated, ActorRef}
 import workshop.work.{RiskyWorkException, RiskyWork}
 import workshop.part1.{NumCompletedTasks, GetNumCompletedTasks, Division}
 import workshop.AkkaSpec
@@ -62,7 +62,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
   def createAndWatchComputeActor() = {
     suppressStackTraceNoise {
-      val computeSupervisor = system.actorOf(workshop.companion.ComputeSupervisor.props(new ComputeActorFactory))
+      val computeSupervisor = system.actorOf(Props(classOf[ComputeSupervisor], new ComputeActorFactory))
       computeSupervisor ! StartComputeActor("computeActor-1")
 
       val computeActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
