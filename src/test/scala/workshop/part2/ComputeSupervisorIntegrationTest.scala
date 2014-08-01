@@ -9,7 +9,7 @@ import workshop.AkkaSpec
 
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {
-  val timeout: FiniteDuration = 50 millis
+  val timeout: FiniteDuration = 100 millis
 
   it should "resume compute actor on arithmetic exception" in {
     suppressStackTraceNoise {
@@ -23,9 +23,6 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       // Should maintain state when being resumed
       computeActor ! GetNumCompletedTasks
       expectMsg(timeout, NumCompletedTasks(1))
-
-      // Should not receive Terminated message due to watch()
-      expectNoMsg(timeout)
     }
   }
 
@@ -45,9 +42,6 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       // Should NOT maintain state when being restarted
       computeActor ! GetNumCompletedTasks
       expectMsg(timeout, NumCompletedTasks(0))
-
-      // Should not receive Terminated message due to watch()
-      expectNoMsg(timeout)
     }
   }
 
@@ -59,6 +53,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
       val computeActor: ActorRef = createAndWatchComputeActor()
 
+      watch(computeActor)
       computeActor ! new TestWork
 
       expectMsgClass(timeout, classOf[Terminated])
@@ -71,7 +66,6 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       computeSupervisor ! StartComputeActor("computeActor-1")
 
       val computeActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
-      watch(computeActor)
 
       computeActor
     }
