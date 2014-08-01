@@ -10,7 +10,7 @@ import akka.actor.OneForOneStrategy
 class SupervisorActor extends Actor {
 
   override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
       case _: ArithmeticException      => Resume
       case _: NullPointerException     => Restart
       case _: IllegalArgumentException => Stop
