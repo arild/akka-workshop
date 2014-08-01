@@ -292,6 +292,26 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
     <slide>
         <hgroup>
+            <h2>Part 1 - Exercises - Running tests in sbt</h2>
+        </hgroup>
+        <article class="large">
+            <ul>
+                <li>The testOnly task accepts a whitespace separated list of test names to run<br /><br />
+                <pre class="prettyprint">$ ./sbt
+> test-only workshop.part1.BestEverTest workshop.part1.ImaginaryTest</pre>
+                </li>
+                <li>The testOnly task supports wildcards and ~ (autorun) as well<br /><br />
+                    <pre class="prettyprint">$ ./sbt
+> ~test-only workshop.part*Test</pre></li>
+                <li>Continuously run the part1 tests<br /><br />
+                    <pre class="prettyprint">$ ./sbt
+> ~test-only workshop.part1.ComputeActorTest</pre></li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
             <h2>Outline</h2>
         </hgroup>
         <article class="large">
