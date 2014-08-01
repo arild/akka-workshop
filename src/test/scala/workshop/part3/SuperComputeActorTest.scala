@@ -10,7 +10,7 @@ import workshop.work.{RiskyWorkException, RiskyWork, RiskyAdditionResult, RiskyA
 class SuperComputeActorTest extends AkkaSpec {
   val timeout: FiniteDuration = 300 millis
 
-  it should "compute risky work when work have no failures" in  {
+  it should "compute risky work when work has no failures" in  {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
