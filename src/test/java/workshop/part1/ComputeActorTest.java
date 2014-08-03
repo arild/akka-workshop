@@ -110,7 +110,7 @@ public class ComputeActorTest {
     }
 
     @Test
-    public void shouldSendNumCompletedTasksToCompletedTasksActorEveryConfiguredIntervall() {
+    public void shouldSendNumCompletedTasksToCompletedTasksActorEveryConfiguredInterval() {
         TestProbe numCompletedTasksActor = TestProbe.apply(system);
         TestActorRef<ComputeActor> computeActor = createComputeActor(numCompletedTasksActor.ref(), Duration.create(100, MILLISECONDS));
 
@@ -131,14 +131,4 @@ public class ComputeActorTest {
     private TestActorRef<ComputeActor> createComputeActor(ActorRef numCompletedTasksActor, FiniteDuration logCompletedTasksInterval) {
         return TestActorRef.create(system, Props.create(ComputeActor.class, numCompletedTasksActor, logCompletedTasksInterval));
     }
-//  it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
-//    suppressStackTraceNoise {
-//      TestActorRef(Props(classOf[ComputeActor], 100 millis))
-//
-//      // Throws timeout exception after 3 seconds if filter does not match
-//      EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
-//
-//      })
-//    }
-//  }
 }

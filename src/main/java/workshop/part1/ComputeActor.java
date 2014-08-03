@@ -48,7 +48,7 @@ public class ComputeActor extends AbstractActor {
                 match(GetNumCompletedTasks.class, m -> {
                     sender().tell(new NumCompletedTasks(numCompletedTasks), self());
                 }).
-                match(DoLogging.class, m -> {
+                match(SendNumCompletedTasks.class, m -> {
                     numCompletedTaskActor.tell(new NumCompletedTasks(numCompletedTasks), self());
                     scheduleLogging();
                 }).build();
@@ -56,7 +56,7 @@ public class ComputeActor extends AbstractActor {
 
     private void scheduleLogging() {
         context().system().scheduler().scheduleOnce(logCompletedTasksInterval, self(),
-                new DoLogging(), context().system().dispatcher(), self());
+                new SendNumCompletedTasks(), context().system().dispatcher(), self());
     }
 
     public static class GetNumCompletedTasks {}
@@ -80,5 +80,5 @@ public class ComputeActor extends AbstractActor {
             this.divisor = divisor;
         }
     }
-    private class DoLogging {}
+    private class SendNumCompletedTasks {}
 }
