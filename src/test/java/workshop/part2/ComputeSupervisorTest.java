@@ -48,16 +48,7 @@ public class ComputeSupervisorTest {
     }
 
     public void shouldResumeComputeActorOnArithmeticException() {
-        TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
-        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
-        ArithmeticException arithmeticException = new ArithmeticException();
-        computeTestActor.tell(arithmeticException, probe.ref());
-        //venter på computetestfactory og computetestactor her.. for å kune sjeke at restart er kjørt
-    }
-
-
-    //    it should "resume compute actor on arithmetic exception" in {
+//    it should "resume compute actor on arithmetic exception" in {
 //        suppressStackTraceNoise {
 //            val computeSupervisor = TestActorRef(Props(classOf[ComputeSupervisor], new ComputeTestActorFactory))
 //            computeSupervisor ! StartComputeActor("computeActor-1")
@@ -70,6 +61,10 @@ public class ComputeSupervisorTest {
 //            expectMsg(false)
 //        }
 //    }
+
+    }
+
+
 
     private TestActorRef<ComputeSupervisor> createComputeActor(ComputeActorFactory fact) {
         return TestActorRef.create(system, Props.create(ComputeSupervisor.class, fact));

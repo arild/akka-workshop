@@ -39,7 +39,7 @@ public class ComputeSupervisor extends AbstractActor {
                         } else {
                             return escalate();
                         }
-                    });
+                    }, false);
 
     @Override
     public SupervisorStrategy supervisorStrategy() {
