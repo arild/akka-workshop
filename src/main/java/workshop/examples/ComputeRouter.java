@@ -2,10 +2,7 @@ package workshop.examples;
 
 import akka.actor.*;
 import akka.japi.pf.ReceiveBuilder;
-import akka.routing.ActorRefRoutee;
-import akka.routing.RoundRobinRoutingLogic;
-import akka.routing.Routee;
-import akka.routing.Router;
+import akka.routing.*;
 import scala.PartialFunction;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
