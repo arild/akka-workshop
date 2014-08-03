@@ -1,15 +1,13 @@
 package workshop.part1;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
-import scala.concurrent.duration.Duration;
+import scala.concurrent.duration.FiniteDuration;
 import scala.runtime.BoxedUnit;
-import work.Work;
-
-import java.util.concurrent.TimeUnit;
 
 import static work.Work.RiskyWork;
 import static work.Work.RiskyWorkResult;
@@ -17,9 +15,11 @@ import static work.Work.RiskyWorkResult;
 public class ComputeActor extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);
     private int numCompletedTasks = 0;
-    private Duration logCompletedTasksInterval;
+    private ActorRef numCompletedTaskActor;
+    private FiniteDuration logCompletedTasksInterval;
 
-    public ComputeActor(Duration logCompletedTasksInterval) {
+    public ComputeActor(ActorRef numCompletedTaskActor, FiniteDuration logCompletedTasksInterval) {
+        this.numCompletedTaskActor = numCompletedTaskActor;
         this.logCompletedTasksInterval = logCompletedTasksInterval;
     }
 
@@ -47,14 +47,15 @@ public class ComputeActor extends AbstractActor {
                 }).
                 match(GetNumCompletedTasks.class, m -> {
                     sender().tell(new NumCompletedTasks(numCompletedTasks), self());
-                }).match(DoLogging.class, m -> {
-                    log.info("Num completed tasks: " + numCompletedTasks);
+                }).
+                match(DoLogging.class, m -> {
+                    numCompletedTaskActor.tell(new NumCompletedTasks(numCompletedTasks), self());
                     scheduleLogging();
                 }).build();
     }
 
     private void scheduleLogging() {
-        context().system().scheduler().scheduleOnce(Duration.create(1, TimeUnit.SECONDS), self(),
+        context().system().scheduler().scheduleOnce(logCompletedTasksInterval, self(),
                 new DoLogging(), context().system().dispatcher(), self());
     }
 

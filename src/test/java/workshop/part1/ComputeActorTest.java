@@ -1,6 +1,7 @@
 package workshop.part1;
 
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
@@ -11,13 +12,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import scala.concurrent.duration.Duration;
+import scala.concurrent.duration.FiniteDuration;
 
-import javax.xml.stream.EventFilter;
+import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static work.Work.RiskyAddition;
 import static work.Work.RiskyAdditionResult;
 import static workshop.part1.ComputeActor.*;
@@ -107,16 +110,27 @@ public class ComputeActorTest {
     }
 
     @Test
-    public void shouldLogNumCompletedTasksEveryConfiguredIntervalOnSpecififFormat() {
-        TestActorRef<ComputeActor> computeActor = createComputeActor();
+    public void shouldSendNumCompletedTasksToCompletedTasksActorEveryConfiguredIntervall() {
+        TestProbe numCompletedTasksActor = TestProbe.apply(system);
+        TestActorRef<ComputeActor> computeActor = createComputeActor(numCompletedTasksActor.ref(), Duration.create(100, MILLISECONDS));
 
-        akka.testkit.EventFilter.info("Num completed tasks", "", "", "", 2);
+        NumCompletedTasks numCompletedTasks = numCompletedTasksActor.expectMsgClass(Duration.create(200, MILLISECONDS), NumCompletedTasks.class);
+        assertEquals(0, numCompletedTasks.getNumCompletedTasks());
+
+        computeActor.tell(new Division(1, 1), probe.ref());
+        probe.expectMsgClass(Integer.class); // Result from division
+
+        numCompletedTasks = numCompletedTasksActor.expectMsgClass(Duration.create(200, MILLISECONDS), NumCompletedTasks.class);
+        assertEquals(1, numCompletedTasks.getNumCompletedTasks());
     }
 
     private TestActorRef<ComputeActor> createComputeActor() {
-        return TestActorRef.create(system, Props.create(ComputeActor.class));
+        return createComputeActor(TestProbe.apply(system).ref(), Duration.create(1, TimeUnit.SECONDS));
     }
 
+    private TestActorRef<ComputeActor> createComputeActor(ActorRef numCompletedTasksActor, FiniteDuration logCompletedTasksInterval) {
+        return TestActorRef.create(system, Props.create(ComputeActor.class, numCompletedTasksActor, logCompletedTasksInterval));
+    }
 //  it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
 //    suppressStackTraceNoise {
 //      TestActorRef(Props(classOf[ComputeActor], 100 millis))
