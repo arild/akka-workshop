@@ -33,8 +33,10 @@ public class ClientActor extends AbstractActor {
     @Override
     public PartialFunction<Object, BoxedUnit> receive() {
         return ReceiveBuilder
-                .match(ActorRef.class, computeActor ->
-                        riskyWork.stream().forEach(w -> computeActor.tell(w, self())))
+                .match(ActorRef.class, computeActor -> {
+                        context().watch(computeActor);
+                        riskyWork.stream().forEach(w -> computeActor.tell(w, self()));
+                        })
                 .match(Work.RiskyWorkResult.class, res -> resultActor.tell(res, self()))
                 .match(Terminated.class, x -> {
                     log.error("Compute actor terminated, terminating self");
