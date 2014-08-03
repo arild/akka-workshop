@@ -64,7 +64,7 @@ public class ClientActorTest {
     public void shouldComputeAndSendRiskyWorkResultToResultActorWhenWorkThrowsNoExceptions() {
         List<RiskyAddition> work = Arrays.asList(new RiskyAddition(2, 3), new RiskyAddition(3, 3));
 
-        TestActorRef<Actor> computeSupervisor = createComputeSupervisor(new ComputeActorFactory());
+        TestActorRef<Actor> computeSupervisor = createComputeSupervisor();
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
@@ -76,7 +76,7 @@ public class ClientActorTest {
     public void shouldComputeAndSendRemainingRiskyWorkToResultActorWhenWorkThrowsRiskyWorkException() {
         List<RiskyWork> work = Arrays.asList(new RiskyAddition(2, 3), new WorkWithFailure(), new RiskyAddition(3, 3));
 
-        TestActorRef<Actor> computeSupervisor = createComputeSupervisor(new ComputeActorFactory());
+        TestActorRef<Actor> computeSupervisor = createComputeSupervisor();
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
@@ -91,7 +91,8 @@ public class ClientActorTest {
         }
     }
 
-    private TestActorRef<Actor> createComputeSupervisor(ComputeActorFactory computeActorFactory) {
+    private TestActorRef<Actor> createComputeSupervisor() {
+        ComputeActorFactory computeActorFactory = new ComputeActorFactory(TestProbe.apply(system).ref());
         return TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
     }
 
