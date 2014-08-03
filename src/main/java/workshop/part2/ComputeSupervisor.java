@@ -15,9 +15,7 @@ import static akka.actor.SupervisorStrategy.stop;
 import static akka.actor.SupervisorStrategy.escalate;
 
 public class ComputeSupervisor extends AbstractActor {
-
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);
-
     ComputeActorFactory computeActorFactory;
 
     public ComputeSupervisor(ComputeActorFactory computeActorFactory) {
@@ -46,20 +44,20 @@ public class ComputeSupervisor extends AbstractActor {
         return strategy;
     }
 
-    static class StartComputeActor{
-        String name;
-        StartComputeActor(String name){
-            this.name = name;
-        }
-    }
-
     @Override
     public PartialFunction<Object, BoxedUnit> receive() {
-        return ReceiveBuilder.match(StartComputeActor.class, s -> {
-            ActorRef computeActor = computeActorFactory.create(context(), s.name);
-            sender().tell(computeActor, self());
-            log.info("Started compute actor with name {}", s.name);
-        }).build();
+        return ReceiveBuilder.
+                match(StartComputeActor.class, s -> {
+                    ActorRef computeActor = computeActorFactory.create(context(), s.actorName);
+                    sender().tell(computeActor, self());
+                    log.info("Started compute actor with name {}", s.actorName);
+                }).build();
     }
 
+    static class StartComputeActor{
+        String actorName;
+        StartComputeActor(String actorName){
+            this.actorName = actorName;
+        }
+    }
 }

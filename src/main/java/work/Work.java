@@ -2,7 +2,7 @@ package work;
 
 public class Work {
     public static abstract class RiskyWork {
-        public abstract RiskyWorkResult perform();
+        public abstract RiskyWorkResult perform() throws RiskyWorkException;
     }
 
     public static abstract class RiskyWorkResult {}
