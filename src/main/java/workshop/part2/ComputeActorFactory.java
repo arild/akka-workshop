@@ -13,7 +13,7 @@ public class ComputeActorFactory {
 
     static FiniteDuration logCompletedTasksInterval = Duration.create(1, TimeUnit.SECONDS);
 
-    public static ActorRef create(ActorContext context, String actorName) {
+    public ActorRef create(ActorContext context, String actorName) {
         return context.actorOf(Props.create((ComputeActor.class), logCompletedTasksInterval), actorName);
     }
 }
