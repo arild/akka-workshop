@@ -7,14 +7,11 @@ import akka.testkit.TestProbe;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import scala.concurrent.duration.FiniteDuration;
-import workshop.part1.ComputeActor;
+import work.RiskyWorkException;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +32,7 @@ public class ComputeSupervisorTest {
     }
 
     @Test
-    public void shouldStartComputActorAndReturnItsReference() {
+    public void shouldStartComputeActorAndReturnItsReference() {
         ComputeActorFactory computeActorFactory = mock(ComputeActorFactory.class);
         ActorRef computeActor = mock(ActorRef.class);
         when(computeActorFactory.create(any(ActorContext.class), any(String.class))).thenReturn(computeActor);
@@ -47,34 +44,39 @@ public class ComputeSupervisorTest {
         assertTrue("Should reference same mocked object", computeActor == actorRef);
     }
 
+    @Test
     public void shouldResumeComputeActorOnArithmeticException() {
-        TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
+        TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
         computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
         ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
-        ArithmeticException arithmeticException = new ArithmeticException();
-        computeTestActor.tell(arithmeticException, probe.ref());
-        //venter på computetestfactory og computetestactor her.. for å kune sjeke at restart er kjørt
+
+        computeTestActor.tell(new ArithmeticException(), probe.ref());
+
+        probe.send(computeTestActor, new ComputeTestActor.IsRestarted());
+        assertFalse(probe.expectMsgClass(Boolean.class));
     }
 
+    @Test
+    public void shouldRestartComputeActorOnRiskyWorkException() {
+        TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
+        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
 
-    //    it should "resume compute actor on arithmetic exception" in {
-//        suppressStackTraceNoise {
-//            val computeSupervisor = TestActorRef(Props(classOf[ComputeSupervisor], new ComputeTestActorFactory))
-//            computeSupervisor ! StartComputeActor("computeActor-1")
-//
-//            val computeTestActor: ActorRef = expectMsgClass(classOf[ActorRef])
-//            val exception: ArithmeticException = new ArithmeticException
-//            computeTestActor ! exception
-//
-//            computeTestActor ! IsRestarted
-//            expectMsg(false)
-//        }
-//    }
+        computeTestActor.tell(new RiskyWorkException("test exception"), probe.ref());
 
-    private TestActorRef<ComputeSupervisor> createComputeActor(ComputeActorFactory fact) {
-        return TestActorRef.create(system, Props.create(ComputeSupervisor.class, fact));
+        probe.send(computeTestActor, new ComputeTestActor.IsRestarted());
+        assertTrue(probe.expectMsgClass(Boolean.class));
     }
 
+    @Test
+    public void shouldStopComputeActorOnAnyExceptionOtherThanArithmeticAndRiskyWorkException() {
+        TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
+        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
 
+        probe.watch(computeTestActor);
+        computeTestActor.tell(new NumberFormatException("test exception"), probe.ref());
 
+        probe.expectMsgClass(Terminated.class);
+    }
 }

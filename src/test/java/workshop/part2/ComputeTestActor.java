@@ -18,6 +18,11 @@ public class ComputeTestActor extends AbstractActor {
         return ReceiveBuilder.
                 match(Exception.class, e -> {
                     throw e;
+                }).
+                match(IsRestarted.class, m -> {
+                    sender().tell(restarted, self());
                 }).build();
     }
+
+    static class IsRestarted {}
 }
