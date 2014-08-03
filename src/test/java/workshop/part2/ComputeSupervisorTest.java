@@ -1,7 +1,8 @@
 package workshop.part2;
 
-import junit.framework.TestCase;
+import org.junit.Ignore;
 
-public class ComputeSupervisorTest extends TestCase {
+@Ignore
+public class ComputeSupervisorTest {
 
 }

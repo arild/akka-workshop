@@ -1,7 +1,8 @@
 package workshop.part2;
 
-import junit.framework.TestCase;
+import org.junit.Ignore;
 
-public class ClientActorTest extends TestCase {
+@Ignore
+public class ClientActorTest {
 
 }
