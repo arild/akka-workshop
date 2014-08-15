@@ -23,10 +23,6 @@ public class ComputeActor extends AbstractActor {
         this.logCompletedTasksInterval = logCompletedTasksInterval;
     }
 
-    public ComputeActor(FiniteDuration logCompletedTasksInterval) {
-        this.logCompletedTasksInterval = logCompletedTasksInterval;
-    }
-
     @Override
     public void preStart() throws Exception {
         scheduleLogging();

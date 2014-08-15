@@ -125,7 +125,9 @@ public class ComputeActorTest {
     }
 
     private TestActorRef<ComputeActor> createComputeActor() {
-        return createComputeActor(TestProbe.apply(system).ref(), Duration.create(1, TimeUnit.SECONDS));
+        ActorRef numCompletedTasksActor = TestProbe.apply(system).ref();
+        FiniteDuration logCompletedTasksInterval = Duration.create(1, TimeUnit.SECONDS);
+        return createComputeActor(numCompletedTasksActor, logCompletedTasksInterval);
     }
 
     private TestActorRef<ComputeActor> createComputeActor(ActorRef numCompletedTasksActor, FiniteDuration logCompletedTasksInterval) {
