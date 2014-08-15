@@ -12,11 +12,12 @@ import static akka.actor.SupervisorStrategy.resume;
 import static akka.actor.SupervisorStrategy.restart;
 import static akka.actor.SupervisorStrategy.stop;
 import static akka.actor.SupervisorStrategy.escalate;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class SupervisorActor extends AbstractActor {
 
     private static SupervisorStrategy strategy =
-            new OneForOneStrategy(10, Duration.create("1 minute"),
+            new OneForOneStrategy(10, Duration.create(1, MINUTES),
                     t -> {
                         if (t instanceof ArithmeticException) {
                             return resume();

@@ -10,13 +10,14 @@ import scala.runtime.BoxedUnit;
 import work.Work;
 
 import static akka.actor.SupervisorStrategy.stop;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class SuperComputeActor extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);
 
     private SupervisorStrategy strategy =
-            new OneForOneStrategy(10, Duration.create("1 minute"),
+            new OneForOneStrategy(10, Duration.create(1, MINUTES),
                     t -> {
                         log.info("Stopping problem actor!");
                         return stop();

@@ -9,6 +9,7 @@ import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 
 import static akka.actor.SupervisorStrategy.resume;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static work.Work.RiskyWork;
 
 public class SuperComputeRouter extends AbstractActor {
@@ -21,7 +22,7 @@ public class SuperComputeRouter extends AbstractActor {
                     "router-1");
 
     private SupervisorStrategy strategy =
-            new OneForOneStrategy(10, Duration.create("1 minute"),
+            new OneForOneStrategy(10, Duration.create(1, MINUTES),
                     t -> resume(), false);
 
     @Override

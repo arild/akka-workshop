@@ -9,6 +9,7 @@ import scala.runtime.BoxedUnit;
 import java.util.concurrent.TimeUnit;
 
 import static akka.actor.SupervisorStrategy.restart;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class LifecycleActorSupervisor extends AbstractActor {
 
@@ -16,7 +17,7 @@ public class LifecycleActorSupervisor extends AbstractActor {
     }
 
     private static SupervisorStrategy strategy =
-            new OneForOneStrategy(10, Duration.create("1 minute"),
+            new OneForOneStrategy(10, Duration.create(1, MINUTES),
                     t -> restart(), false);
 
     @Override
