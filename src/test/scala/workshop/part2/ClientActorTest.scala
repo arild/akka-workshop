@@ -18,7 +18,7 @@ class ClientActorTest extends AkkaSpec {
     suppressStackTraceNoise {
       val resultProbe = TestProbe()
       val computeSupervisorProbe = TestProbe()
-      createClientActor(computeSupervisorProbe.ref, resultProbe.ref)
+      createClientActor(computeSupervisorProbe.ref, resultProbe.ref, List())
       computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
     }
   }
@@ -72,7 +72,7 @@ class ClientActorTest extends AkkaSpec {
     TestActorRef(Props(classOf[ComputeSupervisor], computeActorFactory))
   }
 
-  def createClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, riskyWork: List[RiskyWork] = List()) = {
+  def createClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, riskyWork: List[RiskyWork]) = {
     TestActorRef(Props(classOf[ClientActor], computeSupervisor, resultActor, riskyWork))
   }
 }
