@@ -1,12 +1,13 @@
 package workshop.part3
 
-import scala.language.postfixOps
-import scala.concurrent.duration._
-import akka.actor.{OneForOneStrategy, Props, Actor, ActorRef}
-import akka.event.Logging
-import workshop.work.RiskyWork
-import akka.routing._
 import akka.actor.SupervisorStrategy.Resume
+import akka.actor.{Actor, ActorRef, OneForOneStrategy, Props}
+import akka.event.Logging
+import akka.routing._
+import workshop.work.RiskyWork
+
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class SuperComputeRouter extends Actor {
   val log = Logging(context.system, this)
@@ -17,7 +18,7 @@ class SuperComputeRouter extends Actor {
 
   override val supervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled = false) {
-      case _: Exception                => Resume
+      case _: Exception => Resume
     }
 
   def receive = {
