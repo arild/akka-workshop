@@ -41,7 +41,7 @@ public class ComputeRouter extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
+        ActorSystem system = ActorSystem.create("ActorExamples");
         ActorRef router = system.actorOf(Props.create(ComputeRouter.class), "r00ter");
         Inbox inbox = Inbox.create(system);
         inbox.send(router, "Yo");

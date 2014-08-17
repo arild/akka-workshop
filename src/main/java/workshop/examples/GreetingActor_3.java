@@ -28,7 +28,7 @@ public class GreetingActor_3 extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
+        ActorSystem system = ActorSystem.create("ActorExamples");
         ActorRef me = system.actorOf(Props.create(GreetingActor_3.class), "greeter");
         Inbox inbox = Inbox.create(system);
         inbox.send(me, new DoGreeting());

@@ -19,7 +19,7 @@ public class GreetingActor_1 extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
+        ActorSystem system = ActorSystem.create("ActorExamples");
         ActorRef me = system.actorOf(Props.create(GreetingActor_1.class), "greeter");
         Inbox inbox = Inbox.create(system);
         inbox.send(me, "Yo");

@@ -45,7 +45,7 @@ public class SupervisorActor extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
+        ActorSystem system = ActorSystem.create("ActorExamples");
         ActorRef supervisor = system.actorOf(Props.create(SupervisorActor.class), "greeter");
         Inbox inbox = Inbox.create(system);
         Props p = Props.create(TestActor.class);

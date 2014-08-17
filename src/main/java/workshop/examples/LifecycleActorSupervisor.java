@@ -38,14 +38,14 @@ public class LifecycleActorSupervisor extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
-        ActorRef me = system.actorOf(Props.create(LifecycleActorSupervisor.class), "lifecyclesupervisor");
+        ActorSystem system = ActorSystem.create("ActorExamples");
+        ActorRef me = system.actorOf(Props.create(LifecycleActorSupervisor.class), "lifecycleSupervisor");
         Inbox inbox = Inbox.create(system);
         inbox.send(me, new CreateLifeCycleActor());
         Object receive = inbox.receive(Duration.create(1, TimeUnit.MINUTES));
         if(receive instanceof ActorRef) {
             ActorRef child = (ActorRef) receive;
-            child.tell(new RuntimeException("aye, Caramba"), ActorRef.noSender());
+            child.tell(new RuntimeException("Ay, caramba!"), ActorRef.noSender());
             child.tell(PoisonPill.getInstance(), ActorRef.noSender());
         }
 

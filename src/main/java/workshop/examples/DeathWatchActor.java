@@ -28,7 +28,7 @@ public class DeathWatchActor extends AbstractActor {
     }
 
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExcamples");
+        ActorSystem system = ActorSystem.create("ActorExamples");
         ActorRef me = system.actorOf(Props.create(DeathWatchActor.class), "dwa");
         Inbox inbox = Inbox.create(system);
         inbox.send(me, "Yo");
