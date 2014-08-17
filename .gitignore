@@ -3,3 +3,5 @@
 .cache
 .idea*
 *.iml
+project/
+target/
