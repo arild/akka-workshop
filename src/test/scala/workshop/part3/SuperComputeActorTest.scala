@@ -8,14 +8,14 @@ import workshop.work.{RiskyWorkException, RiskyWork, RiskyAdditionResult, RiskyA
 
 
 class SuperComputeActorTest extends AkkaSpec {
-  val timeout: FiniteDuration = 300 millis
+  val timeout: FiniteDuration = 350 millis
 
   it should "compute risky work when work has no failures" in  {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      superComputeActor ! RiskyAddition(1,3,0)
-      expectMsg(RiskyAdditionResult(4))
+      superComputeActor ! RiskyAddition(1, 3, 0)
+      expectMsg(timeout, RiskyAdditionResult(4))
     }
   }
 
@@ -23,7 +23,7 @@ class SuperComputeActorTest extends AkkaSpec {
     suppressStackTraceNoise {
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1,3,150), RiskyAddition(2,3,150),  RiskyAddition(4,2,150))
+      val workList = List(RiskyAddition(1, 3, 150), RiskyAddition(2, 3, 150),  RiskyAddition(4, 2, 150))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(5),RiskyAdditionResult(6))
 
       workList.foreach(
@@ -46,7 +46,7 @@ class SuperComputeActorTest extends AkkaSpec {
       }
       val superComputeActor = system.actorOf(Props(classOf[SuperComputeActor]))
 
-      val workList = List(RiskyAddition(1, 3, 150), new WorkWithFailure(),  RiskyAddition(4,2,150))
+      val workList = List(RiskyAddition(1, 3, 150), new WorkWithFailure(),  RiskyAddition(4, 2, 150))
       val workListResults = List(RiskyAdditionResult(4),RiskyAdditionResult(6))
 
       workList.foreach(

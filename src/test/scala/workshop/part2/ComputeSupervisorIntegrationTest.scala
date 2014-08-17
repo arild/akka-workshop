@@ -9,7 +9,7 @@ import workshop.AkkaSpec
 
 
 class ComputeSupervisorIntegrationTest extends AkkaSpec {
-  val timeout: FiniteDuration = 100 millis
+  val timeout: FiniteDuration = 75 millis
 
   it should "resume compute actor on arithmetic exception" in {
     suppressStackTraceNoise {
