@@ -2,18 +2,15 @@ package workshop.part1;
 
 
 import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
 import akka.actor.Props;
-import akka.testkit.JavaTestKit;
 import akka.testkit.TestActorRef;
 import akka.testkit.TestProbe;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
+import workshop.AkkaTest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,21 +22,7 @@ import static work.Work.RiskyAddition;
 import static work.Work.RiskyAdditionResult;
 import static workshop.part1.ComputeActor.*;
 
-public class ComputeActorTest {
-
-    ActorSystem system;
-    TestProbe probe;
-
-    @Before
-    public void setup() {
-        system = ActorSystem.create();
-        probe = TestProbe.apply(system);
-    }
-
-    @After
-    public void teardown() {
-        JavaTestKit.shutdownActorSystem(system);
-    }
+public class ComputeActorTest extends AkkaTest {
 
     @Test
     public void shouldComputeLengthOfAStringAndReturnTheResult() {

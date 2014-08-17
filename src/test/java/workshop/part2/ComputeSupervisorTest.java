@@ -1,13 +1,13 @@
 package workshop.part2;
 
-import akka.actor.*;
-import akka.testkit.JavaTestKit;
+import akka.actor.ActorContext;
+import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.actor.Terminated;
 import akka.testkit.TestActorRef;
-import akka.testkit.TestProbe;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import work.RiskyWorkException;
+import workshop.AkkaTest;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,21 +15,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ComputeSupervisorTest {
-
-    ActorSystem system;
-    TestProbe probe;
-
-    @Before
-    public void setup() {
-        system = ActorSystem.create();
-        probe = TestProbe.apply(system);
-    }
-
-    @After
-    public void teardown() {
-        JavaTestKit.shutdownActorSystem(system);
-    }
+public class ComputeSupervisorTest extends AkkaTest {
 
     @Test
     public void shouldStartComputeActorAndReturnItsReference() {

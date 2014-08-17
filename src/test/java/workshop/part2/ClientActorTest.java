@@ -1,13 +1,11 @@
 package workshop.part2;
 
 import akka.actor.*;
-import akka.testkit.JavaTestKit;
 import akka.testkit.TestActorRef;
 import akka.testkit.TestProbe;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import work.RiskyWorkException;
+import workshop.AkkaTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,18 +16,7 @@ import static org.mockito.Mockito.mock;
 import static work.Work.*;
 import static workshop.part2.ComputeSupervisor.StartComputeActor;
 
-public class ClientActorTest {
-    ActorSystem system;
-
-    @Before
-    public void setup() {
-        system = ActorSystem.create();
-    }
-
-    @After
-    public void teardown() {
-        JavaTestKit.shutdownActorSystem(system);
-    }
+public class ClientActorTest extends AkkaTest {
 
     @Test
     public void shouldStartComputeActorAtStartup() {
