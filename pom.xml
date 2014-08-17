@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>akka-workshop</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/arild/akka-workshop</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
