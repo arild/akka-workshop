@@ -1,40 +1,40 @@
 package workshop.part2
 
-import scala.language.postfixOps
+import akka.actor.{Terminated, _}
 import akka.testkit.{TestActorRef, TestProbe}
-import akka.actor._
-import workshop.helpers.ComputeTestActor
 import workshop.AkkaSpec
-import workshop.work.RiskyWork
-import workshop.work.RiskyWorkException
-import workshop.work.RiskyAddition
-import akka.actor.Terminated
-import workshop.work.RiskyAdditionResult
+import workshop.helpers.ComputeTestActor
+import workshop.work.{RiskyAddition, RiskyAdditionResult, RiskyWork, RiskyWorkException}
 
+import scala.concurrent.duration.Duration.Zero
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class ClientActorTest extends AkkaSpec {
+
+  val timeout: FiniteDuration = 75 millis
 
   it should "start compute actor at startup" in {
     suppressStackTraceNoise {
       val resultProbe = TestProbe()
       val computeSupervisorProbe = TestProbe()
       createClientActor(computeSupervisorProbe.ref, resultProbe.ref, List())
-      computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
+      computeSupervisorProbe.expectMsgClass(Zero, classOf[StartComputeActor])
     }
   }
 
   it should "stop if compute actor terminates" in {
     suppressStackTraceNoise {
-      val computeTestActor = system.actorOf(Props(classOf[ComputeTestActor]))
+      val computeTestActor = TestActorRef(Props(classOf[ComputeTestActor]))
       val computeSupervisorProbe = TestProbe()
       val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], List())
 
-      computeSupervisorProbe.expectMsgClass(classOf[StartComputeActor])
+      computeSupervisorProbe.expectMsgClass(Zero, classOf[StartComputeActor])
       computeSupervisorProbe.reply(computeTestActor)
 
       watch(clientActor)
       computeTestActor ! PoisonPill // Poison pill makes actor terminate
-      expectMsgClass(classOf[Terminated])
+      expectMsgClass(timeout, classOf[Terminated])
     }
   }
 
@@ -46,8 +46,8 @@ class ClientActorTest extends AkkaSpec {
       val resultProbe = TestProbe()
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
-      resultProbe.expectMsg(RiskyAdditionResult(5))
-      resultProbe.expectMsg(RiskyAdditionResult(6))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
     }
   }
 
@@ -63,8 +63,8 @@ class ClientActorTest extends AkkaSpec {
       val resultProbe = TestProbe()
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
-      resultProbe.expectMsg(RiskyAdditionResult(5))
-      resultProbe.expectMsg(RiskyAdditionResult(6))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
+      resultProbe.expectMsg(timeout, RiskyAdditionResult(6))
     }
   }
 

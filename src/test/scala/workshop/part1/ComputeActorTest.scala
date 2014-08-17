@@ -1,5 +1,6 @@
 package workshop.part1
 
+import scala.concurrent.duration.Duration.Zero
 import scala.language.postfixOps
 import workshop.work._
 import akka.actor._
@@ -16,50 +17,50 @@ class ComputeActorTest extends AkkaSpec {
   it should "compute length of a string and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
-      expectMsg(3)
+      expectMsg(Zero, 3)
     }
   }
 
   it should "compute division and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! Division(9, 3)
-      expectMsg(3)
+      expectMsg(Zero, 3)
     }
   }
 
   it should "perform risky work and return the result" in new Actor {
     suppressStackTraceNoise {
       computeActor ! new RiskyAddition(3, 2)
-      expectMsg(RiskyAdditionResult(5))
+      expectMsg(Zero, RiskyAdditionResult(5))
     }
   }
 
   it should "initially have zero completed tasks" in new Actor {
     suppressStackTraceNoise {
       computeActor ! GetNumCompletedTasks
-      expectMsg(NumCompletedTasks(0))
+      expectMsg(Zero, NumCompletedTasks(0))
     }
   }
 
   it should "increment number of completed tasks for each task sent" in new Actor {
     suppressStackTraceNoise {
       computeActor ! "abc"
-      expectMsgClass(classOf[Int]) // Result from length of string
+      expectMsgClass(Zero, classOf[Int]) // Result from length of string
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(NumCompletedTasks(1))
+      expectMsg(Zero, NumCompletedTasks(1))
 
       computeActor ! Division(1, 1)
-      expectMsgClass(classOf[Int]) // Result from division
+      expectMsgClass(Zero, classOf[Int]) // Result from division
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(NumCompletedTasks(2))
+      expectMsg(Zero, NumCompletedTasks(2))
 
       computeActor ! new RiskyAddition(3, 5)
-      expectMsgClass(classOf[RiskyAdditionResult]) // Result from risky addition
+      expectMsgClass(Zero, classOf[RiskyAdditionResult]) // Result from risky addition
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(NumCompletedTasks(3))
+      expectMsg(Zero, NumCompletedTasks(3))
     }
   }
 
@@ -71,7 +72,7 @@ class ComputeActorTest extends AkkaSpec {
       }
 
       computeActor ! GetNumCompletedTasks
-      expectMsg(NumCompletedTasks(0))
+      expectMsg(Zero, NumCompletedTasks(0))
     }
   }
 
