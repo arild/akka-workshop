@@ -7,17 +7,15 @@ import org.junit.Test;
 import work.RiskyWorkException;
 import work.Work;
 import workshop.AkkaTest;
-import workshop.helpers.AkkaTestHelpers;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static work.Work.*;
+import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
 
 public class SuperComputeActorTest extends AkkaTest {
 
@@ -39,7 +37,7 @@ public class SuperComputeActorTest extends AkkaTest {
 
         workList.forEach(work -> superComputeActor.tell(work, probe.ref()));
 
-        List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(workListResults.size(), 200);
+        List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(probe, workListResults.size(), 200, RiskyAdditionResult.class);
         results.forEach(result -> assertThat(workListResults, hasItem(result)));
     }
 
@@ -61,16 +59,11 @@ public class SuperComputeActorTest extends AkkaTest {
 
         workList.forEach(work -> superComputeActor.tell(work, probe.ref()));
 
-        List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(workListResults.size(), 200);
+        List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(probe, workListResults.size(), 200, RiskyAdditionResult.class);
         results.forEach(result -> assertThat(workListResults, hasItem(result)));
     }
 
     private TestActorRef<Actor> createSuperComputeActor() {
         return TestActorRef.create(system, Props.create(SuperComputeActor.class));
     }
-
-    private  List<RiskyAdditionResult> getGivenNumberOfResultsWithin(final int numberOfResults, final long duration) {
-        return AkkaTestHelpers.expectParallel(duration, () -> IntStream.rangeClosed(1, numberOfResults).mapToObj(work -> probe.expectMsgClass(RiskyAdditionResult.class)).collect(Collectors.toList()));
-    }
-
 }
