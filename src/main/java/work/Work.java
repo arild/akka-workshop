@@ -61,5 +61,10 @@ public class Work {
         public int hashCode() {
             return result;
         }
-    }
+
+		@Override
+		public String toString() {
+			return Integer.toString(result);
+		}
+	}
 }

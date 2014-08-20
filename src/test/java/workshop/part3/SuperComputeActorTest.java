@@ -9,11 +9,12 @@ import work.Work;
 import workshop.AkkaTest;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static work.Work.*;
 import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
 
@@ -33,12 +34,14 @@ public class SuperComputeActorTest extends AkkaTest {
         TestActorRef<Actor> superComputeActor = createSuperComputeActor();
 
         List<RiskyWork> workList = Arrays.asList(new RiskyAddition(1, 3, 150), new RiskyAddition(2, 3, 150), new RiskyAddition(4, 2, 150));
-        List<RiskyAdditionResult> workListResults = Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(5), new RiskyAdditionResult(6));
+        List<RiskyAdditionResult> workListResults = new LinkedList<>(Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(5), new RiskyAdditionResult(6)));
 
         workList.forEach(work -> superComputeActor.tell(work, probe.ref()));
 
         List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(probe, workListResults.size(), 200, RiskyAdditionResult.class);
-        results.forEach(result -> assertThat(workListResults, hasItem(result)));
+        results.forEach(result -> assertResult(result, workListResults));
+
+		assertTrue(workListResults.isEmpty());
     }
 
     @Test
@@ -55,15 +58,19 @@ public class SuperComputeActorTest extends AkkaTest {
         TestActorRef<Actor> superComputeActor = createSuperComputeActor();
 
         List<RiskyWork> workList = Arrays.asList(new RiskyAddition(1, 3, 150), new WorkWithFailure(), new RiskyAddition(4, 2, 150));
-        List<RiskyAdditionResult> workListResults = Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(6));
+        List<RiskyAdditionResult> workListResults = new LinkedList<>(Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(6)));
 
         workList.forEach(work -> superComputeActor.tell(work, probe.ref()));
 
         List<RiskyAdditionResult> results = getGivenNumberOfResultsWithin(probe, workListResults.size(), 200, RiskyAdditionResult.class);
-        results.forEach(result -> assertThat(workListResults, hasItem(result)));
+		results.forEach(result -> assertResult(result, workListResults));
     }
 
     private TestActorRef<Actor> createSuperComputeActor() {
         return TestActorRef.create(system, Props.create(SuperComputeActor.class));
     }
+
+	private void assertResult(final RiskyAdditionResult result, List<RiskyAdditionResult> expectedResults) {
+		assertTrue("Unexpected result [" + result + "] expected one of " + expectedResults, expectedResults.remove(result));
+	}
 }
