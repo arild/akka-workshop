@@ -1,6 +1,6 @@
 package workshop.part4
 
-class Validator {
+class TrafficEventValidator {
   def isValid(event: TrafficEvent): Boolean = {
     true
   }
