@@ -1,8 +1,6 @@
-### Introduction to Akka
+### Akka hands-on
 
-This workshop gives an introduction to Akka via slides and hands-on exercises
-
-Setup that should be done before the workshop:
+Setup for Scala exercises that should be done before the workshop:
 
 1. Install Scala-plugin for IDE
        * Eclipse:
