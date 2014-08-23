@@ -10,7 +10,7 @@ import scala.util.Random
 case class TrafficEvent(speed: Option[Float], weight: Option[Int], lane: Option[Int])
 object FlushTrafficEvents
 
-class DataHandler(alarm: Alarm, stats: Stats, database: Database) extends Actor {
+class DataHandlerActor(alarm: Alarm, stats: Stats, database: Database) extends Actor {
 
   val bufferedEvents = new ListBuffer[TrafficEvent]
 
@@ -63,11 +63,12 @@ class DataHandler(alarm: Alarm, stats: Stats, database: Database) extends Actor 
   }
 }
 
-object DataHandler extends App {
+
+object DataHandlerActor extends App {
   val system = ActorSystem("MySystem")
 
   val timerActor = system.actorOf(Props(classOf[TimerActor]))
-  val dataHandler = system.actorOf(Props(classOf[DataHandler], new Alarm(timerActor), new Stats(timerActor), new Database(timerActor)))
+  val dataHandler = system.actorOf(Props(classOf[DataHandlerActor], new Alarm(timerActor), new Stats(timerActor), new Database(timerActor)))
 
   println("Data handler started")
 
