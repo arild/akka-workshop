@@ -17,4 +17,4 @@ Setup that should be done before the workshop:
 5. Open (not importing) the project in Eclipse or IntelliJ
 6. Verify that tests run: run `sbt test` or `sbt.bat test` from project root, or run tests via your IDE.
 
-If you experience any problems during setup, feel free to send email to arild.nilsen (at) bekk.no and sjur.millidahl (at) bekk.no
+If you experience any problems during setup, feel free to send email to arild.nilsen (at) bekk.no and oyvind.nerbraten (at) bekk.no
