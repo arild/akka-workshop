@@ -190,14 +190,14 @@ URL: https://code.google.com/p/io-2012-slides
 
 class GreetingActor extends Actor {
   def receive = {
-    case message : String => println("Hello " + message)
+    case message: String => println("Hello " + message)
   }
 }
 
 object GreetingActor extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props[GreetingActor])
-  actorRef ! "Hulk Hogan"
+  val greetingActor: ActorRef = system.actorOf(Props[GreetingActor])
+  greetingActor ! "Hulk Hogan"
 }</pre>
         </article>
         <span class="example">GreetingActor_1.java|scala</span>
@@ -215,16 +215,16 @@ case class SayHello(name: String)
 
 class GreetingActor extends Actor {
   def receive = {
-    case hello : SayHello => {
+    case hello: SayHello => {
       println("Hello " + hello.name)
-      sender ! " a reply"
+      sender ! hello.name
     }
   }
 }
 
 object GreetingActor extends App {
-  val actorRef = ActorSystem("MySystem").actorOf(Props[GreetingActor])
-  actorRef ! SayHello("Pope Benedict")
+  val greetingActor = ActorSystem("MySystem").actorOf(Props[GreetingActor])
+  greetingActor ! SayHello("Pope Benedict")
 }</pre>
             </article>
         <span class="example">GreetingActor_2.java|scala</span>
@@ -241,7 +241,7 @@ object GreetingActor extends App {
     <pre class="prettyprint">import akka.actor._
 import scala.concurrent.duration._
 
-case class DoGreeting()
+object DoGreeting
 
 class GreetingActor(delay: FiniteDuration) extends Actor {
 
@@ -260,7 +260,6 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
     import context.dispatcher
     context.system.scheduler.scheduleOnce(delay, self, DoGreeting)
   }
-
 }</pre>
         </article>
         <span class="example">GreetingActor_3.java|scala</span>
@@ -379,9 +378,9 @@ class Supervisor extends Actor {
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
-    context.watch(actorRef)
-    actorRef ! "print this message, please!"
+    val greetingActor = context.actorOf(Props[VolatileGreetingActor])
+    context.watch(greetingActor)
+    greetingActor ! "print this message, please!"
   }
 
   def receive = {
@@ -509,11 +508,10 @@ class DeathWatchActor extends Actor {
         </hgroup>
         <article>
         <pre class="prettyprint">class ComputeRouter_1 extends Actor {
-    val router: ActorRef =
-        context.actorOf(RoundRobinPool(50).props(Props[Routee]), "router1")
+    val router = context.actorOf(RoundRobinPool(50).props(Props[Routee]), "router1")
 
     def receive = {
-        case s : String => router.tell(s, sender())
+        case s: String => router.tell(s, sender())
     }
 }
 
