@@ -1,13 +1,13 @@
 package examples
 
-import akka.actor.{Props, Actor, Terminated, ActorRef, ActorSystem}
+import akka.actor.{Actor, ActorSystem, Props, Terminated}
 
 class DeathWatchActor extends Actor {
 
   override def preStart() {
-    val actorRef: ActorRef = context.actorOf(Props[VolatileGreetingActor])
-    context.watch(actorRef)
-    actorRef ! "print this message, please!"
+    val volatileGreetingActor = context.actorOf(Props[VolatileGreetingActor])
+    context.watch(volatileGreetingActor)
+    volatileGreetingActor ! "print this message, please!"
   }
 
   def receive = {
@@ -18,11 +18,16 @@ class DeathWatchActor extends Actor {
 class VolatileGreetingActor extends Actor {
 
   def receive = {
-    case s:String => println("stopping"); context.stop(self)
+    case s: String => {
+      println("stopping")
+      context.stop(self)
+    }
   }
 }
 
 object DeathWatchActor extends App {
   val system = ActorSystem("MySystem")
   system.actorOf(Props[DeathWatchActor])
+
+  system.shutdown()
 }

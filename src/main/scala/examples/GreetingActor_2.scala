@@ -7,16 +7,20 @@ case class SayHello(name: String)
 class GreetingActor_2 extends Actor {
 
   def receive = {
-    case hello : SayHello => {
+    case hello: SayHello => {
       println("Hello " + hello.name)
-      sender ! " a reply"
+      sender ! hello.name
     }
   }
-
 }
 
 object GreetingActor_2 extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props[GreetingActor_2])
-  actorRef ! SayHello("Pope Benedict")
+
+  val greetingActor = system.actorOf(Props[GreetingActor_2])
+  greetingActor ! SayHello("Pope Benedict")
+
+  // There are better ways to ensure message are received before termination
+  Thread.sleep(100)
+  system.shutdown()
 }

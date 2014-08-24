@@ -1,10 +1,11 @@
 package examples
 
-import scala.language.postfixOps
 import akka.actor._
-import scala.concurrent.duration._
 
-case class DoGreeting()
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
+object DoGreeting
 
 class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
 
@@ -28,5 +29,5 @@ class GreetingActor_3(myInterval: FiniteDuration) extends Actor {
 
 object GreetingActor_3 extends App {
   val system = ActorSystem("MySystem")
-  val actorRef = system.actorOf(Props(classOf[GreetingActor_3], 1 second))
+  system.actorOf(Props(classOf[GreetingActor_3], 1 second))
 }

@@ -1,12 +1,13 @@
 package examples
 
-import scala.language.postfixOps
-import akka.actor._
 import akka.actor.SupervisorStrategy.Restart
-import scala.concurrent.duration._
+import akka.actor._
 import akka.pattern.ask
-import scala.concurrent.Await
 import akka.util.Timeout
+
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 case class CreateLifeCycleActor()
 
@@ -50,11 +51,16 @@ class LifeCycleActorSupervisor extends Actor {
 
 
 object LifeCycleActor extends App {
-    val system = ActorSystem("MySystem")
-    val supervisor = system.actorOf(Props[LifeCycleActorSupervisor])
-    implicit val timeout = Timeout(5 seconds)
-    private val futureActorRef = supervisor ? CreateLifeCycleActor
-    private val actorRef: ActorRef = Await.result(futureActorRef, Duration.Inf).asInstanceOf[ActorRef]
-    actorRef ! new RuntimeException
-    actorRef ! PoisonPill
-  }
+  val system = ActorSystem("MySystem")
+    
+  val supervisor = system.actorOf(Props[LifeCycleActorSupervisor])
+  implicit val timeout = Timeout(5 seconds)
+  val childFuture = supervisor ? CreateLifeCycleActor
+  val child = Await.result(childFuture, Duration.Inf).asInstanceOf[ActorRef]
+  child ! new RuntimeException
+  child ! PoisonPill
+
+  // There are better ways to ensure message are received before termination
+  Thread.sleep(100)
+  system.shutdown()
+}

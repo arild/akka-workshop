@@ -1,11 +1,10 @@
 package examples
 
-import akka.actor._
-
-import scala.language.postfixOps
 import akka.actor.SupervisorStrategy._
+import akka.actor.{OneForOneStrategy, _}
+
 import scala.concurrent.duration._
-import akka.actor.OneForOneStrategy
+import scala.language.postfixOps
 
 class SupervisorActor extends Actor {
 
@@ -27,7 +26,7 @@ class SupervisorActor extends Actor {
 
 class TestActor extends Actor {
   override def preStart(){
-    println("created TestActor")
+    println("Created TestActor")
   }
   def receive = {
     case s: String => {println(s)}
@@ -37,6 +36,11 @@ class TestActor extends Actor {
 
 object SupervisorActor extends App {
   val system = ActorSystem("MySystem")
+
   val supervisor = system.actorOf(Props[SupervisorActor])
   supervisor ! Props[TestActor]
+
+  // There are better ways to ensure message are received before termination
+  Thread.sleep(100)
+  system.shutdown()
 }
