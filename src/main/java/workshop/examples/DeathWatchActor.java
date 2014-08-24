@@ -3,18 +3,15 @@ package workshop.examples;
 import akka.actor.*;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
-import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
-
-import java.util.concurrent.TimeUnit;
 
 public class DeathWatchActor extends AbstractActor {
 
     @Override
     public void preStart() throws Exception {
-        ActorRef actorRef = context().actorOf(Props.create(VolatileGreetingActor.class), "volatileActor");
-        context().watch(actorRef);
-        actorRef.tell("print this message, please!", self());
+        ActorRef greetingActor = context().actorOf(Props.create(VolatileGreetingActor.class), "volatileActor");
+        context().watch(greetingActor);
+        greetingActor.tell("print this message, please!", self());
     }
 
     @Override
@@ -27,19 +24,12 @@ public class DeathWatchActor extends AbstractActor {
         ).build();
     }
 
-    public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExamples");
-        ActorRef me = system.actorOf(Props.create(DeathWatchActor.class), "dwa");
-        Inbox inbox = Inbox.create(system);
-        inbox.send(me, "Yo");
-        shutdown(system, me, inbox);
-    }
+    public static void main(String[] args) throws InterruptedException {
+        ActorSystem system = ActorSystem.create("MySystem");
+        system.actorOf(Props.create(DeathWatchActor.class), "deathWatchActor");
 
-    private static void shutdown(ActorSystem system, ActorRef me, Inbox inbox) {
-        inbox.watch(me);
-        inbox.receive(Duration.create(3, TimeUnit.SECONDS));
+        // There are better ways to ensure message are received before termination
+        Thread.sleep(100);
         system.shutdown();
-        system.awaitTermination();
     }
-
 }

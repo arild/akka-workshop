@@ -18,8 +18,7 @@ public class SuperComputeRouter extends AbstractActor {
            .withResizer(new DefaultResizer(5, 20));
 
     ActorRef router =
-            getContext().actorOf(roundRobinPool.props(Props.create(Worker.class)),
-                    "router-1");
+            getContext().actorOf(roundRobinPool.props(Props.create(Worker.class)), "router-1");
 
     private SupervisorStrategy strategy =
             new OneForOneStrategy(10, Duration.create(1, MINUTES),
@@ -36,5 +35,4 @@ public class SuperComputeRouter extends AbstractActor {
                 .match(RiskyWork.class, w -> router.tell(w, sender()))
                 .build();
     }
-
 }

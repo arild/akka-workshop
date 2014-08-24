@@ -37,18 +37,20 @@ public class LifecycleActorSupervisor extends AbstractActor {
                 .build();
     }
 
-    public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ActorExamples");
-        ActorRef me = system.actorOf(Props.create(LifecycleActorSupervisor.class), "lifecycleSupervisor");
-        Inbox inbox = Inbox.create(system);
-        inbox.send(me, new CreateLifeCycleActor());
-        Object receive = inbox.receive(Duration.create(1, TimeUnit.MINUTES));
-        if(receive instanceof ActorRef) {
-            ActorRef child = (ActorRef) receive;
-            child.tell(new RuntimeException("Ay, caramba!"), ActorRef.noSender());
-            child.tell(PoisonPill.getInstance(), ActorRef.noSender());
-        }
+    public static void main(String[] args) throws InterruptedException {
+        ActorSystem system = ActorSystem.create("MySystem");
 
+        ActorRef supervisor = system.actorOf(Props.create(LifecycleActorSupervisor.class), "lifecycleSupervisor");
+        Inbox inbox = Inbox.create(system);
+        inbox.send(supervisor, new CreateLifeCycleActor());
+
+        ActorRef child = (ActorRef) inbox.receive(Duration.create(1, TimeUnit.MINUTES));
+        child.tell(new RuntimeException("Ay, caramba!"), ActorRef.noSender());
+        child.tell(PoisonPill.getInstance(), ActorRef.noSender());
+
+        // There are better ways to ensure message are received before termination
+        Thread.sleep(100);
+        system.shutdown();
     }
 
 }
