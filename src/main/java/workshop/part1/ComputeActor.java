@@ -11,7 +11,6 @@ import static workshop.work.Work.RiskyWork;
 import static workshop.work.Work.RiskyWorkResult;
 
 public class ComputeActor extends AbstractActor {
-    private int numCompletedTasks = 0;
     private ActorRef numCompletedTaskActor;
     private FiniteDuration logCompletedTasksInterval;
 
@@ -21,39 +20,9 @@ public class ComputeActor extends AbstractActor {
     }
 
     @Override
-    public void preStart() throws Exception {
-        scheduleLogging();
-    }
-
-    @Override
     public PartialFunction<Object, BoxedUnit> receive() {
-        return ReceiveBuilder.
-                match(String.class, s -> {
-                    numCompletedTasks += 1;
-                    sender().tell(s.length(), self());
-                }).
-                match(Division.class, d -> {
-                    int result = d.dividend / d.divisor;
-                    numCompletedTasks += 1;
-                    sender().tell(result, self());
-                }).
-                match(RiskyWork.class, work -> {
-                    RiskyWorkResult result = work.perform();
-                    numCompletedTasks += 1;
-                    sender().tell(result, self());
-                }).
-                match(GetNumCompletedTasks.class, m -> {
-                    sender().tell(new NumCompletedTasks(numCompletedTasks), self());
-                }).
-                match(SendNumCompletedTasks.class, m -> {
-                    numCompletedTaskActor.tell(new NumCompletedTasks(numCompletedTasks), self());
-                    scheduleLogging();
-                }).build();
-    }
-
-    private void scheduleLogging() {
-        context().system().scheduler().scheduleOnce(logCompletedTasksInterval, self(),
-                new SendNumCompletedTasks(), context().system().dispatcher(), self());
+        //TODO
+        return ReceiveBuilder.matchAny(x -> {}).build();
     }
 
     public static class GetNumCompletedTasks {}
@@ -73,5 +42,4 @@ public class ComputeActor extends AbstractActor {
             this.divisor = divisor;
         }
     }
-    private class SendNumCompletedTasks {}
 }

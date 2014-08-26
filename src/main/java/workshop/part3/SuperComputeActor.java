@@ -16,25 +16,9 @@ public class SuperComputeActor extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);
 
-    private SupervisorStrategy strategy =
-            new OneForOneStrategy(10, Duration.create(1, MINUTES),
-                    t -> {
-                        log.info("Stopping problem actor!");
-                        return stop();
-                    });
-
-    @Override
-    public SupervisorStrategy supervisorStrategy() {
-        return strategy;
-    }
-
     @Override
     public PartialFunction<Object, BoxedUnit> receive() {
-        return ReceiveBuilder
-                .match(Work.RiskyWork.class, r -> {
-                    ActorRef worker = context().actorOf(Props.create(Worker.class));
-                    worker.tell(r, sender());
-                })
-                .build();
+        //TODO
+        return ReceiveBuilder.matchAny(x -> {}).build();
     }
 }
