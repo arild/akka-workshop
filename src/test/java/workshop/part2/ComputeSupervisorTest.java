@@ -6,6 +6,7 @@ import akka.actor.Props;
 import akka.actor.Terminated;
 import akka.testkit.TestActorRef;
 import org.junit.Test;
+import workshop.helpers.AkkaTestHelper;
 import workshop.work.RiskyWorkException;
 import workshop.AkkaTest;
 
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static workshop.helpers.AkkaTestHelper.getResult;
 
 public class ComputeSupervisorTest extends AkkaTest {
 
@@ -26,7 +28,7 @@ public class ComputeSupervisorTest extends AkkaTest {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
         computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
 
-        ActorRef actorRef = probe.expectMsgClass(ActorRef.class);
+        ActorRef actorRef = getResult(probe, ActorRef.class);
         assertTrue("Should reference same mocked object", computeActor == actorRef);
     }
 
@@ -34,35 +36,35 @@ public class ComputeSupervisorTest extends AkkaTest {
     public void shouldResumeComputeActorOnArithmeticException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
         computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
-        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
+        ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         computeTestActor.tell(new ArithmeticException(), probe.ref());
 
         probe.send(computeTestActor, new ComputeTestActor.IsRestarted());
-        assertFalse(probe.expectMsgClass(Boolean.class));
+        assertFalse(getResult(probe, Boolean.class));
     }
 
     @Test
     public void shouldRestartComputeActorOnRiskyWorkException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
         computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
-        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
+        ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         computeTestActor.tell(new RiskyWorkException("test exception"), probe.ref());
 
         probe.send(computeTestActor, new ComputeTestActor.IsRestarted());
-        assertTrue(probe.expectMsgClass(Boolean.class));
+        assertTrue(getResult(probe, Boolean.class));
     }
 
     @Test
     public void shouldStopComputeActorOnAnyExceptionOtherThanArithmeticAndRiskyWorkException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
         computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
-        ActorRef computeTestActor = probe.expectMsgClass(ActorRef.class);
+        ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         probe.watch(computeTestActor);
         computeTestActor.tell(new NumberFormatException("test exception"), probe.ref());
 
-        probe.expectMsgClass(Terminated.class);
+        getResult(probe, Terminated.class);
     }
 }

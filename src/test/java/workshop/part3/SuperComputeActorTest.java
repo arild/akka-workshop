@@ -4,9 +4,9 @@ import akka.actor.Actor;
 import akka.actor.Props;
 import akka.testkit.TestActorRef;
 import org.junit.Test;
+import workshop.AkkaTest;
 import workshop.work.RiskyWorkException;
 import workshop.work.Work;
-import workshop.AkkaTest;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,8 +15,9 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static workshop.work.Work.*;
 import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
+import static workshop.helpers.AkkaTestHelper.getResult;
+import static workshop.work.Work.*;
 
 public class SuperComputeActorTest extends AkkaTest {
 
@@ -25,7 +26,7 @@ public class SuperComputeActorTest extends AkkaTest {
         TestActorRef<Actor> superComputeActor = createSuperComputeActor();
 
         superComputeActor.tell(new RiskyAddition(1, 3), probe.ref());
-        RiskyAdditionResult result = probe.expectMsgClass(RiskyAdditionResult.class);
+        RiskyAdditionResult result = getResult(probe, RiskyAdditionResult.class);
         assertThat(result, is(new RiskyAdditionResult(4)));
     }
 

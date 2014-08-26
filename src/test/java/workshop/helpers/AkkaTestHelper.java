@@ -1,6 +1,7 @@
 package workshop.helpers;
 
 import akka.testkit.TestProbe;
+import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.util.List;
@@ -23,8 +24,15 @@ public class AkkaTestHelper {
         return result;
     }
 
-    public static <T> List<T> getGivenNumberOfResultsWithin(final TestProbe probe, final int numberOfResults, final long duration, final Class<T> expectedResultType) {
-        FiniteDuration maxDurationPerResult = FiniteDuration.apply(duration + 100, MILLISECONDS);
-        return expectParallel(duration, () -> rangeClosed(1, numberOfResults).mapToObj(i -> probe.expectMsgClass(maxDurationPerResult, expectedResultType)).collect(toList()));
+    public static <T> List<T> getGivenNumberOfResultsWithin(final TestProbe probe, final int numberOfResults, final long maxDuration, final Class<T> expectedResultType) {
+        return expectParallel(maxDuration, () -> rangeClosed(1, numberOfResults).mapToObj(i -> getResultWithin(probe, maxDuration, expectedResultType)).collect(toList()));
+    }
+
+    public static <T> T getResultWithin(final TestProbe probe, final long maxDuration, final Class<T> expectedResultType) {
+        return probe.expectMsgClass(Duration.create(maxDuration, MILLISECONDS), expectedResultType);
+    }
+
+    public static <T> T getResult(final TestProbe probe, final Class<T> expectedResultType) {
+        return getResultWithin(probe, 100, expectedResultType);
     }
 }

@@ -4,8 +4,8 @@ import akka.actor.*;
 import akka.testkit.TestActorRef;
 import akka.testkit.TestProbe;
 import org.junit.Test;
-import workshop.work.RiskyWorkException;
 import workshop.AkkaTest;
+import workshop.work.RiskyWorkException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +13,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static workshop.work.Work.*;
+import static workshop.helpers.AkkaTestHelper.getResult;
 import static workshop.part2.ComputeSupervisor.StartComputeActor;
+import static workshop.work.Work.*;
 
 public class ClientActorTest extends AkkaTest {
 
@@ -26,7 +27,7 @@ public class ClientActorTest extends AkkaTest {
         List riskyWork = new ArrayList<RiskyWork>();
         createClientActor(computeSupervisorProbe.ref(), resultProbe.ref(), riskyWork);
 
-        computeSupervisorProbe.expectMsgClass(StartComputeActor.class);
+        getResult(computeSupervisorProbe, StartComputeActor.class);
     }
 
     @Test
@@ -36,14 +37,14 @@ public class ClientActorTest extends AkkaTest {
         TestProbe computeSupervisorProbe = TestProbe.apply(system);
         TestActorRef<Actor> clientActor = createClientActor(computeSupervisorProbe.ref(), mock(ActorRef.class), new ArrayList<RiskyWork>());
 
-        computeSupervisorProbe.expectMsgClass(StartComputeActor.class);
+        getResult(computeSupervisorProbe, StartComputeActor.class);
         computeSupervisorProbe.reply(computeTestActor);
 
         TestProbe probe = TestProbe.apply(system);
         probe.watch(clientActor);
 
         computeTestActor.tell(PoisonPill.getInstance(), ActorRef.noSender()); // Poison pill makes actor terminate
-        probe.expectMsgClass(Terminated.class);
+        getResult(probe, Terminated.class);
 
     }
 
@@ -55,8 +56,8 @@ public class ClientActorTest extends AkkaTest {
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
-        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
-        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
+        assertEquals(5, getResult(resultProbe, RiskyAdditionResult.class).result);
+        assertEquals(6, getResult(resultProbe, RiskyAdditionResult.class).result);
     }
 
     @Test
@@ -67,8 +68,8 @@ public class ClientActorTest extends AkkaTest {
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
-        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
-        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
+        assertEquals(5, getResult(resultProbe, RiskyAdditionResult.class).result);
+        assertEquals(6, getResult(resultProbe, RiskyAdditionResult.class).result);
     }
 
     public class WorkWithFailure extends RiskyWork {
