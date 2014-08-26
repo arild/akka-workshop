@@ -2,8 +2,6 @@ package workshop.part1;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.concurrent.duration.FiniteDuration;
@@ -13,7 +11,6 @@ import static workshop.work.Work.RiskyWork;
 import static workshop.work.Work.RiskyWorkResult;
 
 public class ComputeActor extends AbstractActor {
-    private final LoggingAdapter log = Logging.getLogger(context().system(), this);
     private int numCompletedTasks = 0;
     private ActorRef numCompletedTaskActor;
     private FiniteDuration logCompletedTasksInterval;

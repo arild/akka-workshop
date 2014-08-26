@@ -19,9 +19,7 @@ public class ComputeTestActor extends AbstractActor {
                 match(Exception.class, e -> {
                     throw e;
                 }).
-                match(IsRestarted.class, m -> {
-                    sender().tell(restarted, self());
-                }).build();
+                match(IsRestarted.class, m -> sender().tell(restarted, self())).build();
     }
 
     static class IsRestarted {}
