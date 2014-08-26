@@ -12,8 +12,7 @@ class SuperComputeActor() extends Actor {
   val log = Logging(context.system, this)
 
   def receive = {
-    case riskyWork : RiskyWork => {
-
-    }
+    //TODO
+    case _ => {}
   }
 }
