@@ -1,4 +1,4 @@
-package workshop.examples;
+package examples;
 
 import akka.actor.AbstractActor;
 import akka.japi.pf.ReceiveBuilder;

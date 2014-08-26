@@ -8,7 +8,7 @@ import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.runtime.BoxedUnit;
-import work.Work;
+import workshop.work.Work;
 
 import java.util.List;
 

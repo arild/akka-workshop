@@ -1,4 +1,4 @@
-package work;
+package workshop.work;
 
 public class RiskyWorkException extends Exception {
 

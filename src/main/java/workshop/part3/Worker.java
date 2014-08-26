@@ -5,7 +5,7 @@ import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.runtime.BoxedUnit;
 
-import static work.Work.RiskyWork;
+import static workshop.work.Work.RiskyWork;
 
 public class Worker extends AbstractActor {
 

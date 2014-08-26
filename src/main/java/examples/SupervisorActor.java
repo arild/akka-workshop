@@ -1,4 +1,4 @@
-package workshop.examples;
+package examples;
 
 import akka.actor.*;
 import akka.japi.pf.ReceiveBuilder;
@@ -6,7 +6,10 @@ import scala.PartialFunction;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
 
-import static akka.actor.SupervisorStrategy.*;
+import static akka.actor.SupervisorStrategy.resume;
+import static akka.actor.SupervisorStrategy.restart;
+import static akka.actor.SupervisorStrategy.stop;
+import static akka.actor.SupervisorStrategy.escalate;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class SupervisorActor extends AbstractActor {

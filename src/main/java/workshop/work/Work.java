@@ -1,4 +1,4 @@
-package work;
+package workshop.work;
 
 public class Work {
     public static abstract class RiskyWork {

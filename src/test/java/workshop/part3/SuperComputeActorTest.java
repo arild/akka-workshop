@@ -4,8 +4,8 @@ import akka.actor.Actor;
 import akka.actor.Props;
 import akka.testkit.TestActorRef;
 import org.junit.Test;
-import work.RiskyWorkException;
-import work.Work;
+import workshop.work.RiskyWorkException;
+import workshop.work.Work;
 import workshop.AkkaTest;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static work.Work.*;
+import static workshop.work.Work.*;
 import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
 
 public class SuperComputeActorTest extends AkkaTest {

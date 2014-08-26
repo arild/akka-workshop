@@ -18,8 +18,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static work.Work.RiskyAddition;
-import static work.Work.RiskyAdditionResult;
+import static workshop.work.Work.RiskyAddition;
+import static workshop.work.Work.RiskyAdditionResult;
 import static workshop.part1.ComputeActor.*;
 
 public class ComputeActorTest extends AkkaTest {

@@ -9,8 +9,8 @@ import scala.PartialFunction;
 import scala.concurrent.duration.FiniteDuration;
 import scala.runtime.BoxedUnit;
 
-import static work.Work.RiskyWork;
-import static work.Work.RiskyWorkResult;
+import static workshop.work.Work.RiskyWork;
+import static workshop.work.Work.RiskyWorkResult;
 
 public class ComputeActor extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);

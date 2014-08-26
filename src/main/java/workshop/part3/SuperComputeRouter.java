@@ -10,7 +10,7 @@ import scala.runtime.BoxedUnit;
 
 import static akka.actor.SupervisorStrategy.resume;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static work.Work.RiskyWork;
+import static workshop.work.Work.RiskyWork;
 
 public class SuperComputeRouter extends AbstractActor {
 

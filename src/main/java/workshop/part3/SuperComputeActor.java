@@ -7,7 +7,7 @@ import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
-import work.Work;
+import workshop.work.Work;
 
 import static akka.actor.SupervisorStrategy.stop;
 import static java.util.concurrent.TimeUnit.MINUTES;

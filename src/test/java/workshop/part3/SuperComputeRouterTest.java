@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static work.Work.RiskyAddition;
-import static work.Work.RiskyAdditionResult;
+import static workshop.work.Work.RiskyAddition;
+import static workshop.work.Work.RiskyAdditionResult;
 import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
 
 public class SuperComputeRouterTest extends AkkaTest {

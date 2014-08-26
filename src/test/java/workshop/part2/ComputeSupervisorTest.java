@@ -6,7 +6,7 @@ import akka.actor.Props;
 import akka.actor.Terminated;
 import akka.testkit.TestActorRef;
 import org.junit.Test;
-import work.RiskyWorkException;
+import workshop.work.RiskyWorkException;
 import workshop.AkkaTest;
 
 import static junit.framework.TestCase.assertFalse;

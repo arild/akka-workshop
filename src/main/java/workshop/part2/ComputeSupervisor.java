@@ -7,7 +7,7 @@ import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.concurrent.duration.Duration;
 import scala.runtime.BoxedUnit;
-import work.RiskyWorkException;
+import workshop.work.RiskyWorkException;
 
 import static akka.actor.SupervisorStrategy.resume;
 import static akka.actor.SupervisorStrategy.restart;

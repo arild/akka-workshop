@@ -4,7 +4,7 @@ import akka.actor.*;
 import akka.testkit.TestActorRef;
 import akka.testkit.TestProbe;
 import org.junit.Test;
-import work.RiskyWorkException;
+import workshop.work.RiskyWorkException;
 import workshop.AkkaTest;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static work.Work.*;
+import static workshop.work.Work.*;
 import static workshop.part2.ComputeSupervisor.StartComputeActor;
 
 public class ClientActorTest extends AkkaTest {
