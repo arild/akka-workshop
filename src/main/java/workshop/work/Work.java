@@ -8,7 +8,6 @@ public class Work {
     public static abstract class RiskyWorkResult {}
 
     public static class RiskyAddition extends RiskyWork {
-
         private final int a;
         private final int b;
         private final int delay;
@@ -34,15 +33,10 @@ public class Work {
         }
     }
     public static class RiskyAdditionResult extends RiskyWorkResult {
-
-        private int result;
+        public final int result;
 
         public RiskyAdditionResult(int result) {
             this.result = result;
-        }
-
-        public int getResult() {
-            return result;
         }
 
         @Override

@@ -45,7 +45,7 @@ public class ComputeActorTest extends AkkaTest {
         createComputeActor().tell(new RiskyAddition(3, 2), probe.ref());
 
         RiskyAdditionResult result = probe.expectMsgClass(RiskyAdditionResult.class);
-        assertEquals(result.getResult(), 5);
+        assertEquals(result.result, 5);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ComputeActorTest extends AkkaTest {
         createComputeActor().tell(new GetNumCompletedTasks(), probe.ref());
 
         NumCompletedTasks result = probe.expectMsgClass(NumCompletedTasks.class);
-        assertEquals(0, result.getNumCompletedTasks());
+        assertEquals(0, result.numCompletedTasks);
 
     }
 
@@ -65,19 +65,19 @@ public class ComputeActorTest extends AkkaTest {
         probe.expectMsgClass(Integer.class); // Result from length of string
 
         computeActor.tell(new GetNumCompletedTasks(), probe.ref());
-        assertEquals(1, probe.expectMsgClass(NumCompletedTasks.class).getNumCompletedTasks());
+        assertEquals(1, probe.expectMsgClass(NumCompletedTasks.class).numCompletedTasks);
 
         computeActor.tell(new Division(1, 1), probe.ref());
         probe.expectMsgClass(Integer.class); // Result from division
 
         computeActor.tell(new GetNumCompletedTasks(), probe.ref());
-        assertEquals(2, probe.expectMsgClass(NumCompletedTasks.class).getNumCompletedTasks());
+        assertEquals(2, probe.expectMsgClass(NumCompletedTasks.class).numCompletedTasks);
 
         computeActor.tell(new RiskyAddition(3, 5), probe.ref());
         probe.expectMsgClass(RiskyAdditionResult.class); // Result from risky addition
 
         computeActor.tell(new GetNumCompletedTasks(), probe.ref());
-        assertEquals(3, probe.expectMsgClass(NumCompletedTasks.class).getNumCompletedTasks());
+        assertEquals(3, probe.expectMsgClass(NumCompletedTasks.class).numCompletedTasks);
     }
 
     @Rule public ExpectedException exception = ExpectedException.none();
@@ -89,7 +89,7 @@ public class ComputeActorTest extends AkkaTest {
         computeActor.receive(new Division(1, 0));
 
         computeActor.tell(new GetNumCompletedTasks(), probe.ref());
-        assertEquals(0, probe.expectMsgClass(NumCompletedTasks.class).getNumCompletedTasks());
+        assertEquals(0, probe.expectMsgClass(NumCompletedTasks.class).numCompletedTasks);
     }
 
     @Test
@@ -98,13 +98,13 @@ public class ComputeActorTest extends AkkaTest {
         TestActorRef<ComputeActor> computeActor = createComputeActor(numCompletedTasksActor.ref(), Duration.create(100, MILLISECONDS));
 
         NumCompletedTasks numCompletedTasks = numCompletedTasksActor.expectMsgClass(Duration.create(200, MILLISECONDS), NumCompletedTasks.class);
-        assertEquals(0, numCompletedTasks.getNumCompletedTasks());
+        assertEquals(0, numCompletedTasks.numCompletedTasks);
 
         computeActor.tell(new Division(1, 1), probe.ref());
         probe.expectMsgClass(Integer.class); // Result from division
 
         numCompletedTasks = numCompletedTasksActor.expectMsgClass(Duration.create(200, MILLISECONDS), NumCompletedTasks.class);
-        assertEquals(1, numCompletedTasks.getNumCompletedTasks());
+        assertEquals(1, numCompletedTasks.numCompletedTasks);
     }
 
     private TestActorRef<ComputeActor> createComputeActor() {

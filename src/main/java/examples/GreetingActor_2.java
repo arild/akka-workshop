@@ -11,8 +11,7 @@ import scala.runtime.BoxedUnit;
 public class GreetingActor_2 extends AbstractActor {
 
     static class SayHello {
-        String name;
-
+        public final String name;
         public SayHello(String n){
             name = n;
         }

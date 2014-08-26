@@ -55,8 +55,8 @@ public class ClientActorTest extends AkkaTest {
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
-        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).getResult());
-        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).getResult());
+        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
+        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
     }
 
     @Test
@@ -67,8 +67,8 @@ public class ClientActorTest extends AkkaTest {
         TestProbe resultProbe = TestProbe.apply(system);
         createClientActor(computeSupervisor, resultProbe.ref(), work);
 
-        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).getResult());
-        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).getResult());
+        assertEquals(5, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
+        assertEquals(6, resultProbe.expectMsgClass(RiskyAdditionResult.class).result);
     }
 
     public class WorkWithFailure extends RiskyWork {

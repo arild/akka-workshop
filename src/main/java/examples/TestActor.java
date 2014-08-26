@@ -10,6 +10,7 @@ class TestActor extends AbstractActor {
     public void preStart() throws Exception {
         System.out.println("Created TestActor");
     }
+
     @Override
     public PartialFunction<Object, BoxedUnit> receive() {
         return ReceiveBuilder.match(String.class, System.out::println).build();

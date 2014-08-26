@@ -56,7 +56,7 @@ public class ComputeSupervisor extends AbstractActor {
     }
 
     static class StartComputeActor{
-        String actorName;
+        final String actorName;
         StartComputeActor(String actorName){
             this.actorName = actorName;
         }

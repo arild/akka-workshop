@@ -58,14 +58,10 @@ public class ComputeActor extends AbstractActor {
 
     public static class GetNumCompletedTasks {}
     public static class NumCompletedTasks {
-        private int numCompletedTasks;
+        public final int numCompletedTasks;
 
         public NumCompletedTasks(int numCompletedTasks) {
             this.numCompletedTasks = numCompletedTasks;
-        }
-
-        public int getNumCompletedTasks() {
-            return numCompletedTasks;
         }
     }
     public static class Division {
