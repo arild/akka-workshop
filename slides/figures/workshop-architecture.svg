@@ -14,7 +14,7 @@
    id="svg8743"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="workshop-architecture.png"
+   sodipodi:docname="workshop-architecture.svg"
    inkscape:export-filename="/home/arild/workspace/akka-workshop/slides/figures/workshop-architecture.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -127,7 +127,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="625.20181"
+     inkscape:cx="627.22212"
      inkscape:cy="172.79678"
      inkscape:document-units="px"
      inkscape:current-layer="g10198"
@@ -145,9 +145,9 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1138"
-     inkscape:window-x="1592"
-     inkscape:window-y="-8"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -161,7 +161,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -232,24 +232,6 @@
          id="path7510-3"
          style="fill:#ffaaaa;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc" />
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path5736-6-7-8-0-2-1-74"
-         d="m -179.0344,252.21335 c -71.75023,-31.58824 -145.27217,98.33039 33.88493,81.91543"
-         style="color:#000000;fill:none;stroke:#000000;stroke-width:2.15632224;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-start:url(#TriangleInL-02);visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text3371"
-         y="305.25613"
-         x="-236.4687"
-         style="font-size:25.23574829px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           y="305.25613"
-           x="-236.4687"
-           id="tspan3373"
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Monospace;-inkscape-font-specification:Monospace;font-size:21.6900802px">Tick</tspan></text>
       <path
          transform="matrix(0.97457163,0,0,1.0862413,200.09934,-247.59569)"
          d="m 355.71428,219.50504 c 0,37.87095 -34.21824,68.57142 -76.42857,68.57142 -42.21034,0 -76.42858,-30.70047 -76.42858,-68.57142 0,-37.87096 34.21824,-68.57143 76.42858,-68.57143 42.21033,0 76.42857,30.70047 76.42857,68.57143 z"
