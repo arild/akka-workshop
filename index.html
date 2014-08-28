@@ -292,20 +292,35 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
     <slide>
         <hgroup>
-            <h2>Part 1 - Exercises - Running tests in sbt</h2>
+            <h2>Exercises - Running tests in SBT</h2>
         </hgroup>
         <article class="large">
             <ul>
-                <li>The testOnly task accepts a whitespace separated list of test names to run<br /><br />
+                <li>Running multiple test classes<br /><br />
                 <pre class="prettyprint">$ ./sbt
-> test-only workshop.part1.ComputeActorTest workshop.part1.AnotherTest</pre>
+> test-only workshop.part1.ComputeActorTest workshop.part2.ComputeSupervisorTest</pre>
                 </li>
-                <li>The testOnly task supports wildcards and ~ (autorun) as well<br /><br />
+                <li>Using wildcards and ~ (autorun)<br /><br />
                     <pre class="prettyprint">$ ./sbt
-> ~test-only workshop.part*Test</pre></li>
+> ~test-only workshop.part2*Test</pre></li>
                 <li>Continuously run the part1 tests<br /><br />
                     <pre class="prettyprint">$ ./sbt
 > ~test-only workshop.part1.ComputeActorTest</pre></li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Exercises - Running tests in Maven</h2>
+        </hgroup>
+        <article class="large">
+            <ul>
+                <li>Running multiple test classes<br /><br />
+                <pre class="prettyprint">$ mvn test -Dtest=workshop.part1.ComputeActorTest,ComputeSupervisorTest</pre>
+                </li>
+                <li>Using wildcards<br /><br />
+                    <pre class="prettyprint">$ mvn test -Dtest="workshop.part2.*"</pre></li>
             </ul>
         </article>
     </slide>
@@ -426,6 +441,7 @@ class DeathWatchActor extends Actor {
                 </hgroup>
                 <article>
         <p><a href="http://doc.akka.io/docs/akka/2.3.5/general/supervision.html#what-restarting-means">What restarting means</a></p>
+        <p><a href="http://doc.akka.io/docs/akka/2.3.5/scala/actors.html#Actor_Lifecycle">Actor Lifecycle</a></p>
         </article>
         </slide>
 
