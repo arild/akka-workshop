@@ -9,14 +9,14 @@ import workshop.work.RiskyWork
 case class Division(dividend: Int, divisor: Int)
 object GetNumCompletedTasks
 case class NumCompletedTasks(numCompleted: Int)
-object Tick
+object LogNumCompletedTasks
 
 class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
   var numCompletedTasks: Int = 0
 
   override def preStart() = {
-    scheduleTick()
+    scheduleLogNumCompletedTasks()
   }
 
   def receive = {
@@ -37,9 +37,9 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
     case GetNumCompletedTasks =>  {
       sender ! NumCompletedTasks(numCompletedTasks)
     }
-    case Tick => {
+    case LogNumCompletedTasks => {
       log.info("Num completed tasks: {}", numCompletedTasks)
-      scheduleTick()
+      scheduleLogNumCompletedTasks()
     }
   }
 
@@ -47,8 +47,8 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
     numCompletedTasks += 1
   }
 
-  def scheduleTick() {
+  def scheduleLogNumCompletedTasks() {
     import context.dispatcher
-    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, Tick)
+    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, LogNumCompletedTasks)
   }
 }
