@@ -14,20 +14,36 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static workshop.helpers.AkkaTestHelper.getResult;
-import static workshop.part2.ComputeSupervisor.StartComputeActor;
+import static workshop.part2.ComputeSupervisor.CreateComputeActor;
 import static workshop.work.Work.*;
 
 public class ClientActorTest extends AkkaTest {
 
     @Test
-    public void shouldStartComputeActorAtStartup() {
+    public void shouldTellTheSupervisorToCreateANewComputeActorAtStartup() {
         TestProbe resultProbe = TestProbe.apply(system);
         TestProbe computeSupervisorProbe = TestProbe.apply(system);
 
         List riskyWork = new ArrayList<RiskyWork>();
         createClientActor(computeSupervisorProbe.ref(), resultProbe.ref(), riskyWork);
 
-        getResult(computeSupervisorProbe, StartComputeActor.class);
+        getResult(computeSupervisorProbe, CreateComputeActor.class);
+    }
+
+    @Test
+    public void shouldReceiveComputeActorRefFromSupervisorAndDelegateAllRiskyWorkToIt() {
+        List<RiskyWork> work = Arrays.asList(new RiskyAddition(1, 3), new RiskyAddition(1, 5), new RiskyAddition(6, 3));
+
+        TestProbe computeSupervisorProbe = TestProbe.apply(system);
+        TestProbe computeActorProbe = TestProbe.apply(system);
+        TestActorRef<Actor> clientActor = createClientActor(computeSupervisorProbe.ref(), mock(ActorRef.class), work);
+
+        getResult(computeSupervisorProbe, CreateComputeActor.class);
+        clientActor.tell(computeActorProbe.ref(), computeSupervisorProbe.ref());
+
+        getResult(computeActorProbe, RiskyAddition.class);
+        getResult(computeActorProbe, RiskyAddition.class);
+        getResult(computeActorProbe, RiskyAddition.class);
     }
 
     @Test
@@ -37,7 +53,7 @@ public class ClientActorTest extends AkkaTest {
         TestProbe computeSupervisorProbe = TestProbe.apply(system);
         TestActorRef<Actor> clientActor = createClientActor(computeSupervisorProbe.ref(), mock(ActorRef.class), new ArrayList<RiskyWork>());
 
-        getResult(computeSupervisorProbe, StartComputeActor.class);
+        getResult(computeSupervisorProbe, CreateComputeActor.class);
         computeSupervisorProbe.reply(computeTestActor);
 
         TestProbe probe = TestProbe.apply(system);
@@ -80,7 +96,7 @@ public class ClientActorTest extends AkkaTest {
     }
 
     private TestActorRef<Actor> createComputeSupervisor() {
-        ComputeActorFactory computeActorFactory = new ComputeActorFactory(TestProbe.apply(system).ref());
+        ComputeActorFactory computeActorFactory = new ComputeActorFactory(mock(ActorRef.class));
         return TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
     }
 

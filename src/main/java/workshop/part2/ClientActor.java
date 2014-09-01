@@ -27,7 +27,7 @@ public class ClientActor extends AbstractActor {
 
     @Override
     public void preStart() throws Exception {
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor"), self());
+        computeSupervisor.tell(new ComputeSupervisor.CreateComputeActor("computeActor"), self());
     }
 
     @Override

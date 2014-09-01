@@ -48,16 +48,16 @@ public class ComputeSupervisor extends AbstractActor {
     @Override
     public PartialFunction<Object, BoxedUnit> receive() {
         return ReceiveBuilder.
-                match(StartComputeActor.class, s -> {
+                match(CreateComputeActor.class, s -> {
                     ActorRef computeActor = computeActorFactory.create(context(), s.actorName);
                     sender().tell(computeActor, self());
                     log.info("Started compute actor with name {}", s.actorName);
                 }).build();
     }
 
-    static class StartComputeActor{
+    static class CreateComputeActor {
         final String actorName;
-        StartComputeActor(String actorName){
+        CreateComputeActor(String actorName){
             this.actorName = actorName;
         }
     }
