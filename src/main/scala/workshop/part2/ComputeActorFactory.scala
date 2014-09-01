@@ -5,8 +5,8 @@ import akka.actor.{Props, ActorRef, ActorContext}
 import workshop.part1.ComputeActor
 
 
-class ComputeActorFactory(logCompletedTasksInterval: FiniteDuration = 1 second) {
+class ComputeActorFactory(numCompletedTaskActor: ActorRef, logCompletedTasksInterval: FiniteDuration = 1 second) {
   def create(context: ActorContext, actorName: String): ActorRef = {
-    context.actorOf(Props(classOf[ComputeActor], logCompletedTasksInterval), actorName)
+    context.actorOf(Props(classOf[ComputeActor], numCompletedTaskActor, logCompletedTasksInterval), actorName)
   }
 }

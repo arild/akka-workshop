@@ -62,8 +62,8 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
 
   def createAndWatchComputeActor() = {
     suppressStackTraceNoise {
-      val computeSupervisor = system.actorOf(Props(classOf[ComputeSupervisor], new ComputeActorFactory))
-      computeSupervisor ! StartComputeActor("computeActor-1")
+      val computeSupervisor = system.actorOf(Props(classOf[ComputeSupervisor], new ComputeActorFactory(mock[ActorRef])))
+      computeSupervisor ! CreateComputeActor("computeActor-1")
 
       val computeActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
 

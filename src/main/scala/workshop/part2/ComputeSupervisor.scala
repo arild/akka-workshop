@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 import workshop.work.RiskyWorkException
 
 
-case class StartComputeActor(actorName: String)
+case class CreateComputeActor(actorName: String)
 
 class ComputeSupervisor(computeActorFactory: ComputeActorFactory) extends Actor {
   val log = Logging(context.system, this)
