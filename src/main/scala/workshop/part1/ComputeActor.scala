@@ -1,6 +1,6 @@
 package workshop.part1
 
-import akka.actor.Actor
+import akka.actor.{ActorRef, Actor}
 import akka.event.Logging
 import scala.concurrent.duration._
 import workshop.work.RiskyWork
@@ -9,14 +9,14 @@ import workshop.work.RiskyWork
 case class Division(dividend: Int, divisor: Int)
 object GetNumCompletedTasks
 case class NumCompletedTasks(numCompleted: Int)
-object LogNumCompletedTasks
+object SendNumCompletedTasks
 
-class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
+class ComputeActor(numCompletedTaskActor: ActorRef, logCompletedTasksInterval: FiniteDuration) extends Actor {
   val log = Logging(context.system, this)
   var numCompletedTasks: Int = 0
 
   override def preStart() = {
-    scheduleLogNumCompletedTasks()
+    scheduleSendingNumCompletedTasks()
   }
 
   def receive = {
@@ -37,9 +37,9 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
     case GetNumCompletedTasks =>  {
       sender ! NumCompletedTasks(numCompletedTasks)
     }
-    case LogNumCompletedTasks => {
-      log.info("Num completed tasks: {}", numCompletedTasks)
-      scheduleLogNumCompletedTasks()
+    case SendNumCompletedTasks => {
+      numCompletedTaskActor ! NumCompletedTasks(numCompletedTasks)
+      scheduleSendingNumCompletedTasks()
     }
   }
 
@@ -47,8 +47,8 @@ class ComputeActor(logCompletedTasksInterval: FiniteDuration) extends Actor {
     numCompletedTasks += 1
   }
 
-  def scheduleLogNumCompletedTasks() {
+  def scheduleSendingNumCompletedTasks() {
     import context.dispatcher
-    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, LogNumCompletedTasks)
+    context.system.scheduler.scheduleOnce(logCompletedTasksInterval, self, SendNumCompletedTasks)
   }
 }

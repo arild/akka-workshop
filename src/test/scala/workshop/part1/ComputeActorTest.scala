@@ -4,14 +4,14 @@ import scala.concurrent.duration.Duration.Zero
 import scala.language.postfixOps
 import workshop.work._
 import akka.actor._
-import akka.testkit.{EventFilter, TestActorRef}
+import akka.testkit.{TestProbe, EventFilter, TestActorRef}
 import scala.concurrent.duration._
 import workshop.AkkaSpec
 
 class ComputeActorTest extends AkkaSpec {
 
   trait Actor {
-    val computeActor = TestActorRef(Props(classOf[ComputeActor], 1 second))
+    val computeActor = TestActorRef(Props(classOf[ComputeActor], TestProbe().ref, 1 second))
   }
 
   it should "compute length of a string and return the result" in new Actor {
@@ -76,14 +76,17 @@ class ComputeActorTest extends AkkaSpec {
     }
   }
 
-  it should "log num completed tasks every configured interval on format 'Num completed tasks: <num_completed>'" in {
+  it should "send number of completed tasks to the numCompletedTaskActor every interval given by the logCompletedTasksInterval" in {
     suppressStackTraceNoise {
-      TestActorRef(Props(classOf[ComputeActor], 100 millis))
+      val numCompletedTasksActor = TestProbe()
+      val computeActor = TestActorRef(Props(classOf[ComputeActor], numCompletedTasksActor.ref, 100 millis))
 
-      // Throws timeout exception after 3 seconds if filter does not match
-      EventFilter.info(start = "Num completed tasks", occurrences = 2).intercept( {
+      numCompletedTasksActor.expectMsg(150 millis, NumCompletedTasks(0))
 
-      })
+      computeActor ! Division(1, 1)
+      expectMsgClass(Zero, classOf[Int]) // Result from division
+
+      numCompletedTasksActor.expectMsg(150 millis, NumCompletedTasks(1))
     }
   }
 }
