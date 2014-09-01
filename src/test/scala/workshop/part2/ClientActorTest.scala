@@ -14,13 +14,28 @@ class ClientActorTest extends AkkaSpec {
 
   val timeout: FiniteDuration = 75 millis
 
-  it should "start compute actor at startup" in {
+  it should "tell the supervisor to create a new compute actor at startup" in {
     suppressStackTraceNoise {
       val resultProbe = TestProbe()
       val computeSupervisorProbe = TestProbe()
       createClientActor(computeSupervisorProbe.ref, resultProbe.ref, List())
-      computeSupervisorProbe.expectMsgClass(Zero, classOf[StartComputeActor])
+      computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
     }
+  }
+
+  it should "receive a computeActor ref from the supervisor and delegate all risky work to it" in {
+    val work = List(RiskyAddition(1, 3), RiskyAddition(1, 5), RiskyAddition(6, 3))
+
+    val computeSupervisorProbe = TestProbe()
+    val computeActorProbe = TestProbe()
+    val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], work)
+
+    computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
+    clientActor.tell(computeActorProbe.ref, computeSupervisorProbe.ref)
+
+    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
   }
 
   it should "stop if compute actor terminates" in {
@@ -29,7 +44,7 @@ class ClientActorTest extends AkkaSpec {
       val computeSupervisorProbe = TestProbe()
       val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], List())
 
-      computeSupervisorProbe.expectMsgClass(Zero, classOf[StartComputeActor])
+      computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
       computeSupervisorProbe.reply(computeTestActor)
 
       watch(clientActor)
@@ -42,7 +57,7 @@ class ClientActorTest extends AkkaSpec {
     suppressStackTraceNoise {
       val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
 
-      val computeSupervisor = createComputeSupervisor(new ComputeActorFactory)
+      val computeSupervisor = createComputeSupervisor
       val resultProbe = TestProbe()
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
@@ -59,7 +74,7 @@ class ClientActorTest extends AkkaSpec {
 
       val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
 
-      val computeSupervisor = createComputeSupervisor(new ComputeActorFactory)
+      val computeSupervisor = createComputeSupervisor
       val resultProbe = TestProbe()
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
@@ -68,7 +83,8 @@ class ClientActorTest extends AkkaSpec {
     }
   }
 
-  def createComputeSupervisor(computeActorFactory: ComputeActorFactory): TestActorRef[Nothing] = {
+  def createComputeSupervisor: TestActorRef[Nothing] = {
+    val computeActorFactory = new ComputeActorFactory(mock[ActorRef])
     TestActorRef(Props(classOf[ComputeSupervisor], computeActorFactory))
   }
 

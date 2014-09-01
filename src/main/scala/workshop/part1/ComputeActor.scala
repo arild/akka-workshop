@@ -1,9 +1,9 @@
 package workshop.part1
 
-import akka.actor.{ActorRef, Actor}
-import akka.event.Logging
-import scala.concurrent.duration._
+import akka.actor.{Actor, ActorRef}
 import workshop.work.RiskyWork
+
+import scala.concurrent.duration._
 
 
 case class Division(dividend: Int, divisor: Int)
@@ -12,7 +12,6 @@ case class NumCompletedTasks(numCompleted: Int)
 object SendNumCompletedTasks
 
 class ComputeActor(numCompletedTaskActor: ActorRef, logCompletedTasksInterval: FiniteDuration) extends Actor {
-  val log = Logging(context.system, this)
   var numCompletedTasks: Int = 0
 
   override def preStart() = {

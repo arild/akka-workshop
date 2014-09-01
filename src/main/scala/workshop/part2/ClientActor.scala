@@ -9,7 +9,7 @@ class ClientActor(computeSupervisor: ActorRef, resultActor: ActorRef, work: List
   val log = Logging(context.system, this)
 
   override def preStart() = {
-    computeSupervisor ! StartComputeActor("computeActor")
+    computeSupervisor ! CreateComputeActor("computeActor")
   }
 
   def receive = {
