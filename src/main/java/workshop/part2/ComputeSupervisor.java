@@ -29,9 +29,9 @@ public class ComputeSupervisor extends AbstractActor {
         return ReceiveBuilder.matchAny(x -> {}).build();
     }
 
-    static class StartComputeActor{
+    static class CreateComputeActor {
         final String actorName;
-        StartComputeActor(String actorName){
+        CreateComputeActor(String actorName){
             this.actorName = actorName;
         }
     }

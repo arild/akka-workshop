@@ -6,7 +6,6 @@ import akka.actor.Props;
 import akka.actor.Terminated;
 import akka.testkit.TestActorRef;
 import org.junit.Test;
-import workshop.helpers.AkkaTestHelper;
 import workshop.work.RiskyWorkException;
 import workshop.AkkaTest;
 
@@ -26,7 +25,7 @@ public class ComputeSupervisorTest extends AkkaTest {
         when(computeActorFactory.create(any(ActorContext.class), any(String.class))).thenReturn(computeActor);
 
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, computeActorFactory));
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        computeSupervisor.tell(new ComputeSupervisor.CreateComputeActor("computeActor-1"), probe.ref());
 
         ActorRef actorRef = getResult(probe, ActorRef.class);
         assertTrue("Should reference same mocked object", computeActor == actorRef);
@@ -35,7 +34,7 @@ public class ComputeSupervisorTest extends AkkaTest {
     @Test
     public void shouldResumeComputeActorOnArithmeticException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        computeSupervisor.tell(new ComputeSupervisor.CreateComputeActor("computeActor-1"), probe.ref());
         ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         computeTestActor.tell(new ArithmeticException(), probe.ref());
@@ -47,7 +46,7 @@ public class ComputeSupervisorTest extends AkkaTest {
     @Test
     public void shouldRestartComputeActorOnRiskyWorkException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        computeSupervisor.tell(new ComputeSupervisor.CreateComputeActor("computeActor-1"), probe.ref());
         ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         computeTestActor.tell(new RiskyWorkException("test exception"), probe.ref());
@@ -59,7 +58,7 @@ public class ComputeSupervisorTest extends AkkaTest {
     @Test
     public void shouldStopComputeActorOnAnyExceptionOtherThanArithmeticAndRiskyWorkException() {
         TestActorRef<ComputeSupervisor> computeSupervisor = TestActorRef.create(system, Props.create(ComputeSupervisor.class, new ComputeActorTestFactory()));
-        computeSupervisor.tell(new ComputeSupervisor.StartComputeActor("computeActor-1"), probe.ref());
+        computeSupervisor.tell(new ComputeSupervisor.CreateComputeActor("computeActor-1"), probe.ref());
         ActorRef computeTestActor = getResult(probe, ActorRef.class);
 
         probe.watch(computeTestActor);
