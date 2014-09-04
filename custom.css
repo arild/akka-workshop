@@ -24,8 +24,39 @@ slides > slide:not(.nobackground):before {
     text-decoration: none;
 }
 
+.title-slide hgroup h1 {
+	color: #000;
+}
+
+.title-slide hgroup h2 {
+	color: #786762;
+}
+
+slides slide h2 {
+    color: #786762;
+}
+
+slides slide {
+	font-family: 'Georgia';
+    color: #000;
+}
+
 slides slide.thank-you-slide {
-    background: #797979 !important;
+    background: #000 !important;
+	color: #C9C0B5 !important;
+}
+
+a, .quoteLink a, .thank-you-slide a {
+    color: #FF5555;
+    border-bottom: 2px solid #FF5555;
+}
+
+a:hover {
+	color: #000 !important;
+}
+
+.quoteLink a, .thank-you-slide a:hover {
+    color: #FFF !important;
 }
 
 slides slide.restartslide ol li {
@@ -93,7 +124,7 @@ slides slide h3 {
 aside.gdbar {
     width: 265px !important;
     height: 83px !important;
-    background: #797979 !important;
+    background: #ff5555 !important;
 }
 
 aside.gdbar img {
