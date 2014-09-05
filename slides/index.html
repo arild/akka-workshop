@@ -159,8 +159,6 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
     </slide>
 
-
-
     <slide>
         <hgroup>
             <h2>Outline</h2>
@@ -579,6 +577,68 @@ object ComputeRouterExample extends App {
                     </ul>
                 </li>
             </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Gathering traffic data with Akka</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="images/measurement_station.png" style="max-height: 480px" />
+                <a href="http://www.tu.no/it/2014/06/19/vegvesenet-skal-hoste-10.000-datameldinger-om-trafikken-hvert-sekund-hele-aret">Vegvesenet skal høste 10.000 datameldinger om trafikken hvert sekund hele året</a>
+            </p>
+        </article>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Where does Akka fit in?</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="figures/datainn-architecture.png" style="max-height: 530px" />
+            </p>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Actor Design</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="figures/dataimport-architecture.png" style="max-height: 530px" />
+            </p>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Lessons learned with Akka</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li></li>
+                <li>Keep actors small and simple</li>
+                <li>Hard to understand actor hierarchy</li>
+                <li>High performance, but can be difficult to configure</li>
+                <li>Abstractions often low-level, despite being a large "toolkit"</li>
+                <li>Actor supervision create boiler plate code</li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Performance dashboard</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="images/datainn-ytelse.png" style="max-height: 520px" />
+            </p>
         </article>
     </slide>
 
