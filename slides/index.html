@@ -113,19 +113,22 @@ URL: https://code.google.com/p/io-2012-slides
             <section>
                 <ul>
                     <li>Akka is an open-source toolkit and runtime for simplifying the construction of concurrent and distributed applications on the JVM.</li>
-                    <li>Asynchronous and concurrency through high-level abstranctions like Actors, Futures and Software Transactional Memory</li>
+                    <li>Asynchronous, concurrent, non-blocking and highly performant event-driven programming model.</li>
+                    <li>Removes the need for explicit thread management and synchronization.</li>
+                    <li>High-level abstractions like Actors, Futures and Software Transactional Memory</li>
                     <li>Self-healing with supervisor hierarchies.<li>
                     <li>Capable of handling up to 50 million msg/sec on a single machine.</li>
                     <li>Small memory footprint; ~2.5 million actors per GB of heap.</li>
                     <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
                     <li>Written in Scala, and as of Scala 2.10 included as part of the Scala standard library.</li>
+                    <li>Created by Jonas Bonér back in 2008, and is now maintained by TypeSafe</li>
                     <li>Language bindings exist for both Java and Scala</li>
                     <li>Inspired by Erlang</li>
                 </ul>
             </section>
         </aside>
         <hgroup>
-            <h2>What is Akka</h2>
+            <h2>What is Akka?</h2>
         </hgroup>
         <article class="build">
             <ul>
@@ -141,15 +144,14 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <aside class="note">
-            <ul>
-            <li>Scale up, scale out, fault-tolerance / HA</li>
-            <li>Service REST, SOAP, Cometd, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance / HA</li>
-            <li>Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</li>
-            <li>Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</li>
-            </ul>
+            <section>
+                <ul>
+                    <li>Any concurrent system that have the need for high-throughput and low latency should consider using Akka.</li>
+                </ul>
+            </section>
         </aside>
         <hgroup>
-            <h2>Where should you use Akka</h2>
+            <h2>Where should you use Akka?</h2>
         </hgroup>
         <article class="build">
             <ul>
@@ -162,6 +164,14 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The points in the radar were selected based on the challenges our customers, experiences from our projects, and the work we do in our practice groups.</li>
+                    <li>The radar paints a picture of how we look at today's landscape, in view of the technology's potential, maturity and available expertise - all in a Norwegian context.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>BEKK's Technology Radar</h2>
         </hgroup>
@@ -189,10 +199,16 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <aside class="note">
-            <ul>
-                <li>Actors er hovedabstraksjonen i Akka</li>
-                <li>Hver Actor prosesserer sekvensielt, noe som gir en håndterbar kompleksitet isolert sett</li>
-            </ul>
+            <section>
+                <ul>
+                    <li>Actors are objects which encapsulate state and behavior.</li>
+                    <li>They communicate exclusively by exchanging messages which are placed into the recipient’s mailbox.</li>
+                    <li>Typically no mutable data are shared between actors.</li>
+                    <li>At-most-once delivery, i.e. no guaranteed delivery (message is delivered zero or one times, which means messages can be lost)</li>
+                    <li>Fire-and-forget</li>
+                    <li>The only guarantee that Akka provides about messages sent between a given pair of actors is that their order is always preserved.</li>
+                </ul>
+            </section>
         </aside>
         <hgroup><h2>The Actor Model</h2></hgroup>
         <article>
@@ -207,6 +223,17 @@ URL: https://code.google.com/p/io-2012-slides
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The Actor trait defines only one abstract method, the previous mentioned receive, which implements the behavior of the actor.</li>
+                    <li>You need to provide a pattern match for all messages that it can accept and if you want to be able to handle unknown messages then you need to have a default case.</li>
+                    <li>Actors are created by passing a Props instance into the actorOf factory method which is available on ActorSystem and ActorContext.</li>
+                    <li>Props is a configuration class to specify options for the creation of actors, think of it as an immutable and thus freely shareable recipe for creating an actor including associated deployment information.</li>
+                    <li>The call to actorOf returns an instance of ActorRef. This is a handle to the actor instance and the only way to interact with it. The ActorRef is immutable and has a one to one relationship with the Actor it represents. The ActorRef is also serializable and network-aware. This means that you can serialize it, send it over the wire and use it on a remote host and it will still be representing the same Actor on the original node, across the network.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Hello Actor</h2>
         </hgroup>
@@ -230,6 +257,14 @@ object GreetingActor extends App {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Sender reference sender Actor of the last received message</li>
+                    <li>Do not pass mutable objects between actors. Prefer immutable messages.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Sending Messages</h2>
         </hgroup>
@@ -253,12 +288,18 @@ object GreetingActor extends App {
 }</pre>
             </article>
         <span class="example">GreetingActor_2.java|scala</span>
-
-
     </slide>
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Self reference to the ActorRef of the actor</li>
+                    <li>Internal context exposes contextual information for the actor and the current message.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Scheduling Work</h2>
         </hgroup>
