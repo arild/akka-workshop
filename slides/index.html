@@ -262,6 +262,7 @@ object GreetingActor extends App {
                 <ul>
                     <li>Sender reference sender Actor of the last received message</li>
                     <li>Do not pass mutable objects between actors. Prefer immutable messages.</li>
+                    <li>If the encapsulation of actors is broken by exposing their mutable state to the outside, you are back in normal Java concurrency land with all the drawbacks.</li>
                 </ul>
             </section>
         </aside>
@@ -406,6 +407,16 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Akka enforces parental supervision, which means that each actor is created and supervised by its parent actor.</li>
+                    <li>All actors has a parent.</li>
+                    <li>Fault-tolerant systems that self-heal.</li>
+                    <li>If one actor carries very important data, this actor should source out any possibly dangerous sub-tasks to children it supervises and handle failures of these children as appropriate.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Supervision through hierarchies</h2>
         </hgroup>
@@ -422,6 +433,13 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The overridable SupervisorStrategy defines the strategy to use for supervising child actors.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Creating a supervisor</h2>
         </hgroup>
@@ -450,6 +468,14 @@ class Supervisor extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>If one actor depends on another actor for carrying out its duty, it should watch that other actor’s liveness and act upon receiving a termination notice.</li>
+                    <li>The watching party has no influence on the supervisor strategy.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Using Death Watch</h2>
         </hgroup>
@@ -475,10 +501,37 @@ class DeathWatchActor extends Actor {
 
 
     <slide>
-            <hgroup>
-                <h2>Life-cycle of Actors</h2>
-            </hgroup>
-            <article>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Start Hook
+                        <ul>
+                            <li>Right after starting the actor, its preStart method is invoked.</li>
+                            <li>This method is called when the actor is first created.</li>
+                            <li>During restarts it is called by the default implementation of postRestart.</li>
+                        </ul>
+                    </li>
+                    <li>Restart Hooks
+                        <ul>
+                            <li>The old actor is informed by calling preRestart with the exception which caused the restart and the message which triggered that exception.</li>
+                            <li>The initial factory from the actorOf call is used to produce the fresh instance.</li>
+                            <li>The new actor’s postRestart method is invoked with the exception which caused the restart.</li>
+                            <li>By default the preStart is called (by postRestart), just as in the normal start-up case.</li>
+                            <li>An actor restart replaces only the actual actor object; the contents of the mailbox is unaffected by the restart, so processing of messages will resume after the postRestart hook returns. The message that triggered the exception will not be received again. Any message sent to an actor while it is being restarted will be queued to its mailbox as usual.</li>
+                        </ul>
+                    </li>
+                    <li>Stop Hook
+                        <ul>
+                            <li>After stopping an actor, its postStop hook is called, which may be used e.g. for deregistering this actor from other services. This hook is guaranteed to run after message queuing has been disabled for this actor, i.e. messages sent to a stopped actor will be redirected to the deadLetters of the ActorSystem.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <hgroup>
+            <h2>Life-cycle of Actors</h2>
+        </hgroup>
+        <article>
         <pre class="prettyprint">class LifeCycleActor extends Actor {
   def receive = {
     case e: Exception => throw e
@@ -496,20 +549,20 @@ class DeathWatchActor extends Actor {
     println("postRestart() - called on a NEW INSTANCE of this actor after restart")
   }
 }</pre>
-                </article>
-        <span class="example">LifeCycleActor.java|scala</span>
-            </slide>
-
-
-        <slide class="restartslide">
-                <hgroup>
-                    <h2>What happens on an actor restart</h2>
-                </hgroup>
-                <article>
-        <p><a href="http://doc.akka.io/docs/akka/2.3.5/general/supervision.html#what-restarting-means">What restarting means</a></p>
-        <p><a href="http://doc.akka.io/docs/akka/2.3.5/scala/actors.html#Actor_Lifecycle">Actor Lifecycle</a></p>
         </article>
-        </slide>
+        <span class="example">LifeCycleActor.java|scala</span>
+    </slide>
+
+
+    <slide class="restartslide">
+        <hgroup>
+            <h2>What happens on an actor restart</h2>
+        </hgroup>
+        <article>
+            <p><a href="http://doc.akka.io/docs/akka/2.3.5/general/supervision.html#what-restarting-means">What restarting means</a></p>
+            <p><a href="http://doc.akka.io/docs/akka/2.3.5/scala/actors.html#Actor_Lifecycle">Actor Lifecycle</a></p>
+        </article>
+    </slide>
 
 
 
@@ -574,6 +627,14 @@ class DeathWatchActor extends Actor {
     </slide>
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Scale up (Concurrency)</li>
+                    <li>Scale out (Remoting)</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup><h2>Routers</h2></hgroup>
         <article>
             <ul>
