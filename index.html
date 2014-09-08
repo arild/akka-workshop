@@ -113,19 +113,22 @@ URL: https://code.google.com/p/io-2012-slides
             <section>
                 <ul>
                     <li>Akka is an open-source toolkit and runtime for simplifying the construction of concurrent and distributed applications on the JVM.</li>
-                    <li>Asynchronous and concurrency through high-level abstranctions like Actors, Futures and Software Transactional Memory</li>
+                    <li>Asynchronous, concurrent, non-blocking and highly performant event-driven programming model.</li>
+                    <li>Removes the need for explicit thread management and synchronization.</li>
+                    <li>High-level abstractions like Actors, Futures and Software Transactional Memory</li>
                     <li>Self-healing with supervisor hierarchies.<li>
                     <li>Capable of handling up to 50 million msg/sec on a single machine.</li>
                     <li>Small memory footprint; ~2.5 million actors per GB of heap.</li>
                     <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
                     <li>Written in Scala, and as of Scala 2.10 included as part of the Scala standard library.</li>
+                    <li>Created by Jonas Bonér back in 2008, and is now maintained by TypeSafe</li>
                     <li>Language bindings exist for both Java and Scala</li>
-                    <li>Inspired by Erlang</li>
+                    <li>Inspired by the Erlang actor model</li>
                 </ul>
             </section>
         </aside>
         <hgroup>
-            <h2>What is Akka</h2>
+            <h2>What is Akka?</h2>
         </hgroup>
         <article class="build">
             <ul>
@@ -141,15 +144,14 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <aside class="note">
-            <ul>
-            <li>Scale up, scale out, fault-tolerance / HA</li>
-            <li>Service REST, SOAP, Cometd, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance / HA</li>
-            <li>Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</li>
-            <li>Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</li>
-            </ul>
+            <section>
+                <ul>
+                    <li>Any concurrent system that have the need for high-throughput and low latency should consider using Akka.</li>
+                </ul>
+            </section>
         </aside>
         <hgroup>
-            <h2>Where should you use Akka</h2>
+            <h2>Where should you use Akka?</h2>
         </hgroup>
         <article class="build">
             <ul>
@@ -162,6 +164,14 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The points in the radar were selected based on the challenges of our customers, experiences from our projects, and the work we do in our practice groups.</li>
+                    <li>The radar paints a picture of how we look at today's landscape, in view of the technology's potential, maturity and available expertise - all in a Norwegian context.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>BEKK's Technology Radar</h2>
         </hgroup>
@@ -189,10 +199,16 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <aside class="note">
-            <ul>
-                <li>Actors er hovedabstraksjonen i Akka</li>
-                <li>Hver Actor prosesserer sekvensielt, noe som gir en håndterbar kompleksitet isolert sett</li>
-            </ul>
+            <section>
+                <ul>
+                    <li>Actors are objects which encapsulate state and behavior.</li>
+                    <li>They communicate exclusively by exchanging messages which are placed into the recipient’s mailbox.</li>
+                    <li>Typically no mutable data are shared between actors.</li>
+                    <li>At-most-once delivery, i.e. no guaranteed delivery (message is delivered zero or one times, which means messages can be lost)</li>
+                    <li>Fire-and-forget</li>
+                    <li>The only guarantee that Akka provides about messages sent between a given pair of actors is that their order is always preserved.</li>
+                </ul>
+            </section>
         </aside>
         <hgroup><h2>The Actor Model</h2></hgroup>
         <article>
@@ -207,6 +223,17 @@ URL: https://code.google.com/p/io-2012-slides
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The Actor trait defines only one abstract method, receive, which implements the behavior of the actor.</li>
+                    <li>You need to provide a pattern match for all messages that it can accept and if you want to be able to handle unknown messages then you need to have a default case.</li>
+                    <li>Actors are created by passing a Props instance into the actorOf factory method which is available on ActorSystem and ActorContext.</li>
+                    <li>Props is a configuration class to specify options for the creation of actors, think of it as an immutable and thus freely shareable recipe for creating an actor including associated deployment information.</li>
+                    <li>The call to actorOf returns an instance of ActorRef. This is a handle to the actor instance and the only way to interact with it. The ActorRef is immutable and has a one to one relationship with the Actor it represents. The ActorRef is also serializable and network-aware. This means that you can serialize it, send it over the wire and use it on a remote host and it will still be representing the same Actor on the original node, across the network.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Hello Actor</h2>
         </hgroup>
@@ -230,6 +257,15 @@ object GreetingActor extends App {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>«sender» reference sender Actor of the last received message</li>
+                    <li>Do not pass mutable objects between actors. Prefer immutable messages.</li>
+                    <li>If the encapsulation of actors is broken by exposing their mutable state to the outside, you are back in normal Java concurrency land with all the drawbacks.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Sending Messages</h2>
         </hgroup>
@@ -253,12 +289,21 @@ object GreetingActor extends App {
 }</pre>
             </article>
         <span class="example">GreetingActor_2.java|scala</span>
-
-
     </slide>
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>«self» reference to the ActorRef of the actor</li>
+                    <li>«context» exposes contextual information for the actor and the current message.</li>
+                    <li>The default implementation of Scheduler used by Akka is based on job buckets which are emptied according to a fixed schedule. It does not execute tasks at the exact time, but on every tick, it will run everything that is (over)due.</li>
+                    <li>If you schedule Runnable instances you should be extra careful to not pass or close over unstable references.</li>
+                    <li>If you need to schedule an invocation it is better to use the schedule() variant accepting a message and an ActorRef to schedule a message to self (containing the necessary parameters) and then call the method when the message is received.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Scheduling Work</h2>
         </hgroup>
@@ -365,6 +410,16 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Akka enforces parental supervision, which means that each actor is created and supervised by its parent actor.</li>
+                    <li>All actors has a parent.</li>
+                    <li>Fault-tolerant systems that self-heal.</li>
+                    <li>If one actor carries very important data, this actor should source out any possibly dangerous sub-tasks to children it supervises and handle failures of these children as appropriate.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Supervision through hierarchies</h2>
         </hgroup>
@@ -381,6 +436,23 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>The overridable SupervisorStrategy defines the strategy to use for supervising child actors.</li>
+                    <li>OneForOneStrategy - applies only to the failed child</li>
+                    <li>AllForOneStrategy - applies to all children</li>
+                    <li>The supervisor has a choice of the following four options
+                        <ul>
+                            <li>Resume the subordinate, keeping its accumulated internal state</li>
+                            <li>Restart the subordinate, clearing out its accumulated internal state</li>
+                            <li>Stop the subordinate permanently</li>
+                            <li>Escalate the failure, thereby failing itself</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Creating a supervisor</h2>
         </hgroup>
@@ -409,6 +481,15 @@ class Supervisor extends Actor {
 
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>In order to be notified when another actor terminates, an actor may register itself for reception of the Terminated message dispatched by the other actor upon termination.</li>
+                    <li>If one actor depends on another actor for carrying out its duty, it should watch that other actor’s liveness and act upon receiving a termination notice.</li>
+                    <li>The watching party has no influence on the supervisor strategy.</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup>
             <h2>Using Death Watch</h2>
         </hgroup>
@@ -434,10 +515,37 @@ class DeathWatchActor extends Actor {
 
 
     <slide>
-            <hgroup>
-                <h2>Life-cycle of Actors</h2>
-            </hgroup>
-            <article>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Start Hook
+                        <ul>
+                            <li>Right after starting the actor, its preStart method is invoked.</li>
+                            <li>This method is called when the actor is first created.</li>
+                            <li>During restarts it is called by the default implementation of postRestart.</li>
+                        </ul>
+                    </li>
+                    <li>Restart Hooks
+                        <ul>
+                            <li>The old actor is informed by calling preRestart with the exception which caused the restart and the message which triggered that exception.</li>
+                            <li>The initial factory from the actorOf call is used to produce the fresh instance.</li>
+                            <li>The new actor’s postRestart method is invoked with the exception which caused the restart.</li>
+                            <li>By default the preStart is called (by postRestart), just as in the normal start-up case.</li>
+                            <li>An actor restart replaces only the actual actor object; the contents of the mailbox is unaffected by the restart, so processing of messages will resume after the postRestart hook returns. The message that triggered the exception will not be received again. Any message sent to an actor while it is being restarted will be queued to its mailbox as usual.</li>
+                        </ul>
+                    </li>
+                    <li>Stop Hook
+                        <ul>
+                            <li>After stopping an actor, its postStop hook is called, which may be used e.g. for deregistering this actor from other services. This hook is guaranteed to run after message queuing has been disabled for this actor, i.e. messages sent to a stopped actor will be redirected to the deadLetters of the ActorSystem.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <hgroup>
+            <h2>Life-cycle of Actors</h2>
+        </hgroup>
+        <article>
         <pre class="prettyprint">class LifeCycleActor extends Actor {
   def receive = {
     case e: Exception => throw e
@@ -455,20 +563,20 @@ class DeathWatchActor extends Actor {
     println("postRestart() - called on a NEW INSTANCE of this actor after restart")
   }
 }</pre>
-                </article>
-        <span class="example">LifeCycleActor.java|scala</span>
-            </slide>
-
-
-        <slide class="restartslide">
-                <hgroup>
-                    <h2>What happens on an actor restart</h2>
-                </hgroup>
-                <article>
-        <p><a href="http://doc.akka.io/docs/akka/2.3.5/general/supervision.html#what-restarting-means">What restarting means</a></p>
-        <p><a href="http://doc.akka.io/docs/akka/2.3.5/scala/actors.html#Actor_Lifecycle">Actor Lifecycle</a></p>
         </article>
-        </slide>
+        <span class="example">LifeCycleActor.java|scala</span>
+    </slide>
+
+
+    <slide class="restartslide">
+        <hgroup>
+            <h2>What happens on an actor restart</h2>
+        </hgroup>
+        <article>
+            <p><a href="http://doc.akka.io/docs/akka/2.3.5/general/supervision.html#what-restarting-means">What restarting means</a></p>
+            <p><a href="http://doc.akka.io/docs/akka/2.3.5/scala/actors.html#Actor_Lifecycle">Actor Lifecycle</a></p>
+        </article>
+    </slide>
 
 
 
@@ -533,6 +641,14 @@ class DeathWatchActor extends Actor {
     </slide>
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Scale up (Concurrency)</li>
+                    <li>Scale out (Remoting)</li>
+                </ul>
+            </section>
+        </aside>
         <hgroup><h2>Routers</h2></hgroup>
         <article>
             <ul>
