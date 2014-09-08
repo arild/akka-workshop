@@ -123,7 +123,7 @@ URL: https://code.google.com/p/io-2012-slides
                     <li>Written in Scala, and as of Scala 2.10 included as part of the Scala standard library.</li>
                     <li>Created by Jonas Bonér back in 2008, and is now maintained by TypeSafe</li>
                     <li>Language bindings exist for both Java and Scala</li>
-                    <li>Inspired by Erlang</li>
+                    <li>Inspired by the Erlang actor model</li>
                 </ul>
             </section>
         </aside>
@@ -167,7 +167,7 @@ URL: https://code.google.com/p/io-2012-slides
         <aside class="note">
             <section>
                 <ul>
-                    <li>The points in the radar were selected based on the challenges our customers, experiences from our projects, and the work we do in our practice groups.</li>
+                    <li>The points in the radar were selected based on the challenges of our customers, experiences from our projects, and the work we do in our practice groups.</li>
                     <li>The radar paints a picture of how we look at today's landscape, in view of the technology's potential, maturity and available expertise - all in a Norwegian context.</li>
                 </ul>
             </section>
@@ -226,7 +226,7 @@ URL: https://code.google.com/p/io-2012-slides
         <aside class="note">
             <section>
                 <ul>
-                    <li>The Actor trait defines only one abstract method, the previous mentioned receive, which implements the behavior of the actor.</li>
+                    <li>The Actor trait defines only one abstract method, receive, which implements the behavior of the actor.</li>
                     <li>You need to provide a pattern match for all messages that it can accept and if you want to be able to handle unknown messages then you need to have a default case.</li>
                     <li>Actors are created by passing a Props instance into the actorOf factory method which is available on ActorSystem and ActorContext.</li>
                     <li>Props is a configuration class to specify options for the creation of actors, think of it as an immutable and thus freely shareable recipe for creating an actor including associated deployment information.</li>
@@ -260,7 +260,7 @@ object GreetingActor extends App {
         <aside class="note">
             <section>
                 <ul>
-                    <li>Sender reference sender Actor of the last received message</li>
+                    <li>«sender» reference sender Actor of the last received message</li>
                     <li>Do not pass mutable objects between actors. Prefer immutable messages.</li>
                     <li>If the encapsulation of actors is broken by exposing their mutable state to the outside, you are back in normal Java concurrency land with all the drawbacks.</li>
                 </ul>
@@ -296,8 +296,11 @@ object GreetingActor extends App {
         <aside class="note">
             <section>
                 <ul>
-                    <li>Self reference to the ActorRef of the actor</li>
-                    <li>Internal context exposes contextual information for the actor and the current message.</li>
+                    <li>«self» reference to the ActorRef of the actor</li>
+                    <li>«context» exposes contextual information for the actor and the current message.</li>
+                    <li>The default implementation of Scheduler used by Akka is based on job buckets which are emptied according to a fixed schedule. It does not execute tasks at the exact time, but on every tick, it will run everything that is (over)due.</li>
+                    <li>If you schedule Runnable instances you should be extra careful to not pass or close over unstable references.</li>
+                    <li>If you need to schedule an invocation it is better to use the schedule() variant accepting a message and an ActorRef to schedule a message to self (containing the necessary parameters) and then call the method when the message is received.</li>
                 </ul>
             </section>
         </aside>
@@ -437,6 +440,16 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
             <section>
                 <ul>
                     <li>The overridable SupervisorStrategy defines the strategy to use for supervising child actors.</li>
+                    <li>OneForOneStrategy - applies only to the failed child</li>
+                    <li>AllForOneStrategy - applies to all children</li>
+                    <li>The supervisor has a choice of the following four options
+                        <ul>
+                            <li>Resume the subordinate, keeping its accumulated internal state</li>
+                            <li>Restart the subordinate, clearing out its accumulated internal state</li>
+                            <li>Stop the subordinate permanently</li>
+                            <li>Escalate the failure, thereby failing itself</li>
+                        </ul>
+                    </li>
                 </ul>
             </section>
         </aside>
@@ -471,6 +484,7 @@ class Supervisor extends Actor {
         <aside class="note">
             <section>
                 <ul>
+                    <li>In order to be notified when another actor terminates, an actor may register itself for reception of the Terminated message dispatched by the other actor upon termination.</li>
                     <li>If one actor depends on another actor for carrying out its duty, it should watch that other actor’s liveness and act upon receiving a termination notice.</li>
                     <li>The watching party has no influence on the supervisor strategy.</li>
                 </ul>
