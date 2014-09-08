@@ -7,6 +7,6 @@ Setup for Java exercises that should be done before the workshop:
 3. Install Git (http://git-scm.com/)
 4. Fetch the project: `git clone https://github.com/arild/akka-workshop.git`
 4. Import project to IDE and verify there are no errors. Eclipse or IntelliJ works fine.
-5. Verify that tests run: run `mvn test` from project root, or run tests via your IDE (tests are expected to fail in this branch, in the "java-solution" all tests are expected to pass)
+5. Verify that tests run: run `mvn test` from project root, or run tests via your IDE (tests are expected to fail in the "java" branch, in the "java-solution" all tests are expected to pass)
 
 If you experience any problems during setup, feel free to send email to arild.nilsen (at) bekk.no and oyvind.nerbraten (at) bekk.no
