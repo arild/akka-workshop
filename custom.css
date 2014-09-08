@@ -51,6 +51,10 @@ a, .quoteLink a, .thank-you-slide a {
     border-bottom: 2px solid #FF5555;
 }
 
+slides slide.thank-you-slide aside {
+    color: #000;
+}
+
 a:hover {
 	color: #000 !important;
 }

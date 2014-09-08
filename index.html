@@ -39,6 +39,14 @@ URL: https://code.google.com/p/io-2012-slides
     </slide>
 
     <slide class="thank-you-slide">
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>Example code presented in the slides will be in scala.</li>
+                    <li>All the example code can be found in both the Scala and Java branch.</li>
+                </ul>
+            </section>
+        </aside>
         <article class="flexbox vleft">
             <ul>
                 <li>Code: <a href="https://github.com/arild/akka-workshop">https://github.com/arild/akka-workshop</a></li>
@@ -102,19 +110,25 @@ URL: https://code.google.com/p/io-2012-slides
 
     <slide>
         <aside class="note">
-            <ul>
-            <li>Build concurrent & distributed applications more easily</li>
-            <li>Asynchronous and concurrency through high-level abstranctions like Actors, Futures and Software Transactional Memory (STM not covered in this workshop)</li>>
-            <li>Self-healing with supervisor hierarchys<li>
-            <li>Small memory footprint, a node capable of thousands of Threads can handle millions of actors. Msg throughput as high as 60 million msg/sec</li>
-            <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
-            </ul>
+            <section>
+                <ul>
+                    <li>Akka is an open-source toolkit and runtime for simplifying the construction of concurrent and distributed applications on the JVM.</li>
+                    <li>Asynchronous and concurrency through high-level abstranctions like Actors, Futures and Software Transactional Memory</li>
+                    <li>Self-healing with supervisor hierarchies.<li>
+                    <li>Capable of handling up to 50 million msg/sec on a single machine.</li>
+                    <li>Small memory footprint; ~2.5 million actors per GB of heap.</li>
+                    <li>Adaptive load balancing, routing, partitioning and configuration-driven remoting (deploy first without topology-config, and configure this remotely later)</li>
+                    <li>Written in Scala, and as of Scala 2.10 included as part of the Scala standard library.</li>
+                    <li>Language bindings exist for both Java and Scala</li>
+                    <li>Inspired by Erlang</li>
+                </ul>
+            </section>
         </aside>
         <hgroup>
             <h2>What is Akka</h2>
         </hgroup>
-        <article>
-            <ul class="build">
+        <article class="build">
+            <ul>
                 <li>"Toolkit" for the JVM</li>
                 <li>Extensive documentation (~460 pages for Java)</li>
                 <li>Concurrency & Distribution</li>
@@ -137,8 +151,8 @@ URL: https://code.google.com/p/io-2012-slides
         <hgroup>
             <h2>Where should you use Akka</h2>
         </hgroup>
-        <article>
-            <ul class="build">
+        <article class="build">
+            <ul>
                 <li>Transaction processing (banking, gaming, statistics)</li>
                 <li>Service backend (SOAP, REST, WebSockets)</li>
                 <li>Batch processing</li>
@@ -147,6 +161,17 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
     </slide>
 
+    <slide>
+        <hgroup>
+            <h2>BEKK's Technology Radar</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="figures/teknologiradar.png" style="max-height: 500px" />
+                <a href="https://radar.bekk.no/techradar">https://radar.bekk.no/techradar</a>
+            </p>
+        </article>
+    </slide>
 
     <slide>
         <hgroup>
@@ -566,6 +591,68 @@ object ComputeRouterExample extends App {
                     </ul>
                 </li>
             </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Gathering traffic data with Akka</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="images/measurement_station.png" style="max-height: 480px" />
+                <a href="http://www.tu.no/it/2014/06/19/vegvesenet-skal-hoste-10.000-datameldinger-om-trafikken-hvert-sekund-hele-aret">Vegvesenet skal høste 10.000 datameldinger om trafikken hvert sekund hele året</a>
+            </p>
+        </article>
+    </slide>
+
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Where does Akka fit in?</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="figures/datainn-architecture.png" style="max-height: 530px" />
+            </p>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Actor Design</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="figures/dataimport-architecture.png" style="max-height: 530px" />
+            </p>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Lessons learned with Akka</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li></li>
+                <li>Keep actors small and simple</li>
+                <li>Hard to understand actor hierarchy</li>
+                <li>High performance, but can be difficult to configure</li>
+                <li>Abstractions often low-level, despite being a large "toolkit"</li>
+                <li>Actor supervision create boiler plate code</li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Datainn - Performance dashboard</h2>
+        </hgroup>
+        <article>
+            <p class="flexbox vcenter">
+                <img src="images/datainn-ytelse.png" style="max-height: 520px" />
+            </p>
         </article>
     </slide>
 
