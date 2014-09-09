@@ -1,8 +1,7 @@
 package workshop.part3;
 
-import akka.actor.Actor;
+import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.testkit.TestActorRef;
 import org.junit.Test;
 import workshop.AkkaTest;
 import workshop.work.RiskyWorkException;
@@ -23,7 +22,7 @@ public class SuperComputeActorTest extends AkkaTest {
 
     @Test
     public void shouldComputeRiskyWorkWhenWorksHasNoFailures() {
-        TestActorRef<Actor> superComputeActor = createSuperComputeActor();
+        ActorRef superComputeActor = createSuperComputeActor();
 
         superComputeActor.tell(new RiskyAddition(1, 3), probe.ref());
         RiskyAdditionResult result = getResult(probe, RiskyAdditionResult.class);
@@ -32,7 +31,7 @@ public class SuperComputeActorTest extends AkkaTest {
 
     @Test
     public void shouldComputeRiskyWorkInParallelWhenWorkHasNoFailures() {
-        TestActorRef<Actor> superComputeActor = createSuperComputeActor();
+		ActorRef superComputeActor = createSuperComputeActor();
 
         List<RiskyWork> workList = Arrays.asList(new RiskyAddition(1, 3, 150), new RiskyAddition(2, 3, 150), new RiskyAddition(4, 2, 150));
         List<RiskyAdditionResult> workListResults = new LinkedList<>(Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(5), new RiskyAdditionResult(6)));
@@ -56,7 +55,7 @@ public class SuperComputeActorTest extends AkkaTest {
             }
         }
 
-        TestActorRef<Actor> superComputeActor = createSuperComputeActor();
+        ActorRef superComputeActor = createSuperComputeActor();
 
         List<RiskyWork> workList = Arrays.asList(new RiskyAddition(1, 3, 150), new WorkWithFailure(), new RiskyAddition(4, 2, 150));
         List<RiskyAdditionResult> workListResults = new LinkedList<>(Arrays.asList(new RiskyAdditionResult(4), new RiskyAdditionResult(6)));
@@ -67,8 +66,8 @@ public class SuperComputeActorTest extends AkkaTest {
 		results.forEach(result -> assertResult(result, workListResults));
     }
 
-    private TestActorRef<Actor> createSuperComputeActor() {
-        return TestActorRef.create(system, Props.create(SuperComputeActor.class));
+    private ActorRef createSuperComputeActor() {
+        return system.actorOf(Props.create(SuperComputeActor.class));
     }
 
 	private void assertResult(final RiskyAdditionResult result, List<RiskyAdditionResult> expectedResults) {
