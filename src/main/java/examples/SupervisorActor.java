@@ -1,6 +1,7 @@
 package examples;
 
 import akka.actor.*;
+import akka.japi.pf.DeciderBuilder;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.concurrent.duration.Duration;
@@ -17,18 +18,11 @@ public class SupervisorActor extends AbstractActor {
     @Override
     public SupervisorStrategy supervisorStrategy() {
         boolean loggingEnabled = false;
-        return new OneForOneStrategy(10, Duration.create(1, MINUTES),
-                t -> {
-                    if (t instanceof ArithmeticException) {
-                        return resume();
-                    } else if (t instanceof NullPointerException) {
-                        return restart();
-                    } else if (t instanceof IllegalArgumentException) {
-                        return stop();
-                    } else {
-                        return escalate();
-                    }
-                }, loggingEnabled);
+        return new OneForOneStrategy(10, Duration.create(1, MINUTES), loggingEnabled, DeciderBuilder.
+                match(ArithmeticException.class, e -> resume()).
+                match(NullPointerException.class, e -> restart()).
+                match(IllegalArgumentException.class, e -> stop()).
+                matchAny(o -> escalate()).build());
     }
 
     @Override
