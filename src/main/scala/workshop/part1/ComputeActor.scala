@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 case class Division(dividend: Int, divisor: Int)
 object GetNumCompletedTasks
 case class NumCompletedTasks(numCompleted: Int)
-object SendNumCompletedTasks
+
 
 class ComputeActor(numCompletedTaskActor: ActorRef, logCompletedTasksInterval: FiniteDuration) extends Actor {
 
