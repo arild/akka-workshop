@@ -23,7 +23,6 @@ class ComputeSupervisorTest extends AkkaSpec {
       when(computeActorFactory.create(any[ActorContext], anyString())).thenReturn(computeActor)
 
       val computeSupervisor = TestActorRef(Props(classOf[ComputeSupervisor], computeActorFactory))
-
       computeSupervisor ! CreateComputeActor("computeActor-1")
 
       val actor: ActorRef = expectMsgClass(Zero, classOf[ActorRef])
@@ -37,8 +36,7 @@ class ComputeSupervisorTest extends AkkaSpec {
       computeSupervisor ! CreateComputeActor("computeActor-1")
 
       val computeTestActor: ActorRef = expectMsgClass(Zero, classOf[ActorRef])
-      val exception: ArithmeticException = new ArithmeticException
-      computeTestActor ! exception
+      computeTestActor ! new ArithmeticException
 
       computeTestActor ! IsRestarted
       expectMsg(timeout, false)
@@ -51,10 +49,9 @@ class ComputeSupervisorTest extends AkkaSpec {
       computeSupervisor ! CreateComputeActor("computeActor-1")
 
       val computeTestActor: ActorRef = expectMsgClass(Zero, classOf[ActorRef])
-
       computeTestActor ! RiskyWorkException("test exception")
-
       computeTestActor ! IsRestarted
+
       expectMsg(timeout, true)
     }
   }
@@ -66,7 +63,6 @@ class ComputeSupervisorTest extends AkkaSpec {
 
       val computeTestActor: ActorRef = expectMsgClass(Zero, classOf[ActorRef])
       watch(computeTestActor)
-
       computeTestActor ! new NumberFormatException("test exception")
 
       expectMsgClass(timeout, classOf[Terminated])
