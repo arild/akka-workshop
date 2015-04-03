@@ -22,7 +22,7 @@ var SLIDE_CONFIG = {
 
   // Author information
   presenters: [{
-    name: 'Arild Nilsen & Øyvind Nerbråten',
+    name: 'Arild Nilsen',
     company: 'BEKK',
     gplus: '',
     twitter: '',
