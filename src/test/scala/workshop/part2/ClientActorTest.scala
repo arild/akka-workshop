@@ -24,10 +24,9 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "receive a computeActor ref from the supervisor and delegate all risky work to it" in {
-    val work = List(RiskyAddition(1, 3), RiskyAddition(1, 5), RiskyAddition(6, 3))
-
     val computeSupervisorProbe = TestProbe()
     val computeActorProbe = TestProbe()
+    val work = List(RiskyAddition(1, 3), RiskyAddition(1, 5), RiskyAddition(6, 3))
     val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], work)
 
     computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
@@ -55,10 +54,9 @@ class ClientActorTest extends AkkaSpec {
 
   it should "compute and send risky work result to ResultActor when work throws no exceptions" in {
     suppressStackTraceNoise {
-      val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
-
       val computeSupervisor = createComputeSupervisor
       val resultProbe = TestProbe()
+      val work = List(RiskyAddition(2, 3), RiskyAddition(3, 3))
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
       resultProbe.expectMsg(timeout, RiskyAdditionResult(5))
@@ -71,11 +69,9 @@ class ClientActorTest extends AkkaSpec {
       class WorkWithFailure extends RiskyWork {
         override def perform() = throw new RiskyWorkException("test exception")
       }
-
-      val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
-
       val computeSupervisor = createComputeSupervisor
       val resultProbe = TestProbe()
+      val work = List(RiskyAddition(2, 3), new WorkWithFailure(), RiskyAddition(3, 3))
       createClientActor(computeSupervisor, resultProbe.ref, work)
 
       resultProbe.expectMsg(timeout, RiskyAdditionResult(5))

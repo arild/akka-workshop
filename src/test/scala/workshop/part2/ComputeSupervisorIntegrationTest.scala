@@ -19,9 +19,7 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       expectMsg(timeout, 3) // Result from length of string
 
       computeActor ! Division(1, 0)
-
-      // Should maintain state when being resumed
-      computeActor ! GetNumCompletedTasks
+      computeActor ! GetNumCompletedTasks // Should maintain state when being resumed
       expectMsg(timeout, NumCompletedTasks(1))
     }
   }
@@ -33,14 +31,11 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       }
 
       val computeActor: ActorRef = createAndWatchComputeActor()
-
       computeActor ! "abc"
       expectMsg(timeout, 3) // Result from length of string
-
+      
       computeActor ! new TestWork
-
-      // Should NOT maintain state when being restarted
-      computeActor ! GetNumCompletedTasks
+      computeActor ! GetNumCompletedTasks // Should NOT maintain state when being restarted
       expectMsg(timeout, NumCompletedTasks(0))
     }
   }
@@ -52,7 +47,6 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
       }
 
       val computeActor: ActorRef = createAndWatchComputeActor()
-
       watch(computeActor)
       computeActor ! new TestWork
 
@@ -60,14 +54,11 @@ class ComputeSupervisorIntegrationTest extends AkkaSpec {
     }
   }
 
-  def createAndWatchComputeActor() = {
+  def createAndWatchComputeActor(): ActorRef = {
     suppressStackTraceNoise {
       val computeSupervisor = system.actorOf(Props(classOf[ComputeSupervisor], new ComputeActorFactory(mock[ActorRef])))
       computeSupervisor ! CreateComputeActor("computeActor-1")
-
-      val computeActor: ActorRef = expectMsgClass(timeout, classOf[ActorRef])
-
-      computeActor
+      expectMsgClass(timeout, classOf[ActorRef])
     }
   }
 }
