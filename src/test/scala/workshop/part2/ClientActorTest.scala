@@ -24,17 +24,19 @@ class ClientActorTest extends AkkaSpec {
   }
 
   it should "receive a computeActor ref from the supervisor and delegate all risky work to it" in {
-    val computeSupervisorProbe = TestProbe()
-    val computeActorProbe = TestProbe()
-    val work = List(RiskyAddition(1, 3), RiskyAddition(1, 5), RiskyAddition(6, 3))
-    val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], work)
+    suppressStackTraceNoise {
+      val computeSupervisorProbe = TestProbe()
+      val computeActorProbe = TestProbe()
+      val work = List(RiskyAddition(1, 3), RiskyAddition(1, 5), RiskyAddition(6, 3))
+      val clientActor = createClientActor(computeSupervisorProbe.ref, mock[ActorRef], work)
 
-    computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
-    clientActor.tell(computeActorProbe.ref, computeSupervisorProbe.ref)
+      computeSupervisorProbe.expectMsgClass(Zero, classOf[CreateComputeActor])
+      clientActor.tell(computeActorProbe.ref, computeSupervisorProbe.ref)
 
-    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
-    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
-    computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+      computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+      computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+      computeActorProbe.expectMsgClass(timeout, classOf[RiskyAddition])
+    }
   }
 
   it should "stop if compute actor terminates" in {
