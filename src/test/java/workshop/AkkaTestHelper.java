@@ -1,4 +1,4 @@
-package workshop.helpers;
+package workshop;
 
 import akka.testkit.TestProbe;
 import scala.concurrent.duration.Duration;

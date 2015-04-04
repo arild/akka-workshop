@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static workshop.helpers.AkkaTestHelper.getResult;
+import static workshop.AkkaTestHelper.getResult;
 import static workshop.part2.ComputeSupervisor.CreateComputeActor;
 import static workshop.work.Work.*;
 

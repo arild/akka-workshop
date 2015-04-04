@@ -14,7 +14,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static workshop.work.Work.RiskyAddition;
 import static workshop.work.Work.RiskyAdditionResult;
-import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
+import static workshop.AkkaTestHelper.getGivenNumberOfResultsWithin;
 
 public class SuperComputeRouterTest extends AkkaTest {
 
