@@ -14,8 +14,8 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static workshop.helpers.AkkaTestHelper.getGivenNumberOfResultsWithin;
-import static workshop.helpers.AkkaTestHelper.getResult;
+import static workshop.AkkaTestHelper.getGivenNumberOfResultsWithin;
+import static workshop.AkkaTestHelper.getResult;
 import static workshop.work.Work.*;
 
 public class SuperComputeActorTest extends AkkaTest {
