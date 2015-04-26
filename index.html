@@ -55,7 +55,7 @@ URL: https://code.google.com/p/io-2012-slides
                         <li>'java' and 'scala' are starting point for exercises</li>
                         <li>'java-solution' and 'scala-solution' for solution</li>
                         <li>E.g. 'git checkout java' for branch with Java exercises</li>
-                        <li>Start downloading dependencies: './sbt test' or mvn 'test'  </li>
+                        <li>Start downloading dependencies: './sbt test' or 'mvn test'  </li>
                     </ul>
                 </li>
             </ul>
@@ -302,6 +302,18 @@ class GreetingActor(delay: FiniteDuration) extends Actor {
                 </li>
                 <li>Using wildcards<br /><br />
                     <pre class="prettyprint">$ mvn test -Dtest="workshop.part2.*"</pre></li>
+            </ul>
+        </article>
+    </slide>
+
+    <slide>
+        <hgroup>
+            <h2>Importing project to Eclipse</h2>
+        </hgroup>
+        <article class="large">
+            <ul>
+                <li>Generate Eclipse metadata<br/><br/><pre class="prettyprint">./sbt eclipse</pre>
+                </li>File -> Import -> "Existing project into workspace" -> Select project's basedir</li>
             </ul>
         </article>
     </slide>
